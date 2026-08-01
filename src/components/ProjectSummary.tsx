@@ -7,6 +7,7 @@ import {
   Columns3,
   Download,
   FileJson,
+  GraduationCap,
   Layers3,
   Minus,
   Pencil,
@@ -19,11 +20,13 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { AlternativesComparator } from "@/components/AlternativesComparator";
 import {
   parseImportedProject,
   useProject,
   type ProjectMetadata,
 } from "@/context/ProjectContext";
+import { taskTemplates } from "@/lib/studyPresets";
 
 const metadataInputClass =
   "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
@@ -162,6 +165,27 @@ export function ProjectSummary() {
     window.setTimeout(() => window.print(), 0);
   }
 
+  function loadTaskTemplate(templateId: string) {
+    const template = taskTemplates.find((item) => item.id === templateId);
+    if (!template) {
+      return;
+    }
+
+    if (
+      project.elements.length > 0 &&
+      !window.confirm(
+        "¿Cargar la plantilla? Se reemplazará el proyecto local actual (metadatos y elementos).",
+      )
+    ) {
+      return;
+    }
+
+    replaceProject(template.build());
+    setMetadataEditing(false);
+    setMessage(`Plantilla cargada: ${template.title}.`);
+    setError("");
+  }
+
   const counts = project.elements.reduce(
     (total, element) => {
       total[element.kind] += 1;
@@ -291,6 +315,40 @@ export function ProjectSummary() {
           {error}
         </p>
       )}
+
+      <section className="no-print rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
+        <div className="flex items-start gap-3">
+          <span className="rounded-lg bg-orange-50 p-2 text-[#E65100]">
+            <GraduationCap aria-hidden="true" size={18} />
+          </span>
+          <div>
+            <h3 className="text-lg font-bold text-[#0B1C30]">
+              Plantillas de tarea
+            </h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Carga un proyecto demo con elementos etiquetados para practicar o
+              entregar una memoria rápida.
+            </p>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          {taskTemplates.map((template) => (
+            <button
+              key={template.id}
+              type="button"
+              onClick={() => loadTaskTemplate(template.id)}
+              className="rounded-xl border border-slate-300 bg-slate-50 p-4 text-left transition hover:border-[#E65100] hover:bg-white"
+            >
+              <span className="block text-sm font-bold text-[#0B1C30]">
+                {template.title}
+              </span>
+              <span className="mt-2 block text-xs leading-5 text-slate-600">
+                {template.summary}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="project-stats grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Total vigas" value={counts.beam} icon={Minus} />
@@ -445,6 +503,10 @@ export function ProjectSummary() {
         )}
         </div>
       </section>
+
+      <div className="no-print">
+        <AlternativesComparator />
+      </div>
 
       <section className="project-notes rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
         <label

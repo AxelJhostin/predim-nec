@@ -33,6 +33,13 @@ archivos JSON.
 - No se incorporaron cookies, Google Analytics ni otros mecanismos de
   seguimiento.
 
+#### Utilidad académica para estudiantes
+
+- Se añadieron ejemplos listos en vigas, columnas y losas.
+- Se incorporaron plantillas de tarea (vivienda y bloque de aulas).
+- Se habilitó un comparador de alternativas en el resumen de proyecto.
+- Se agregó ayuda contextual en los campos principales de cada formulario.
+
 #### Resumen de proyecto y memoria técnica
 
 - Se integró la vista de resumen siguiendo el diseño exportado de Stitch.
@@ -71,6 +78,14 @@ Abra [http://localhost:3000](http://localhost:3000).
   normativas visibles junto a cada resultado.
 - **Proyectos locales:** metadatos, elementos etiquetados y resumen persistente
   mediante `localStorage`.
+- **Ejemplos listos:** casos residencial, aula y voladizo para empezar un
+  cálculo en un clic.
+- **Plantillas de tarea:** proyectos demo con elementos etiquetados para
+  práctica académica o entrega rápida de memoria.
+- **Comparador de alternativas:** contraste de hasta 3 opciones guardadas del
+  mismo tipo, con recomendación preliminar.
+- **Ayuda contextual:** tooltips en campos clave (luz, apoyo, área tributaria,
+  carga, etc.).
 - **Portabilidad:** exportación e importación de proyectos en formato JSON
   versionado.
 - **SEO técnico:** metadatos canónicos, Open Graph, JSON-LD, `robots.txt`,

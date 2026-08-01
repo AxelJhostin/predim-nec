@@ -75,7 +75,7 @@ function createEmptyProject(): LocalProject {
   };
 }
 
-function getDimension(result: CalculationResult) {
+export function getDimension(result: CalculationResult) {
   if (result.kind === "beam") {
     return `${formatNumber(result.widthCm)} × ${formatNumber(result.depthCm)} cm`;
   }
@@ -85,6 +85,24 @@ function getDimension(result: CalculationResult) {
   }
 
   return `h = ${formatNumber(result.thicknessCm)} cm`;
+}
+
+export function createSavedElement(
+  label: string,
+  result: CalculationResult,
+): SavedProjectElement {
+  return {
+    id: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`,
+    label: label.trim(),
+    kind: result.kind,
+    dimension: getDimension(result),
+    status: result.compliance.some((criterion) => criterion.status === "fail")
+      ? "NO PASA"
+      : "PASA",
+    savedAt: new Date().toISOString(),
+    calculationVersion: "2026.1",
+    result,
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -201,18 +219,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
           throw new Error("Ingresa una etiqueta para guardar el elemento.");
         }
 
-        const savedElement: SavedProjectElement = {
-          id: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`,
-          label: normalizedLabel,
-          kind: result.kind,
-          dimension: getDimension(result),
-          status: result.compliance.some((criterion) => criterion.status === "fail")
-            ? "NO PASA"
-            : "PASA",
-          savedAt: new Date().toISOString(),
-          calculationVersion: "2026.1",
-          result,
-        };
+        const savedElement = createSavedElement(normalizedLabel, result);
 
         setProject((current) => ({
           ...current,

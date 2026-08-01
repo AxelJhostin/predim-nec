@@ -1,7 +1,20 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Calculator, Info, Ruler, Save, ShieldCheck } from "lucide-react";
+import {
+  Calculator,
+  CircleHelp,
+  Info,
+  Ruler,
+  Save,
+  ShieldCheck,
+} from "lucide-react";
+import { ExamplePresets } from "@/components/ExamplePresets";
+import {
+  beamExamples,
+  columnExamples,
+  slabExamples,
+} from "@/lib/studyPresets";
 import {
   calculateBeam,
   calculateColumn,
@@ -21,17 +34,35 @@ function Field({
   label,
   unit,
   hint,
+  help,
   children,
 }: {
   label: string;
   unit?: string;
   hint?: string;
+  help?: string;
   children: ReactNode;
 }) {
   return (
     <label className="block text-xs font-bold uppercase tracking-[0.11em] text-slate-600">
       <span className="flex items-center justify-between gap-3">
-        {label}
+        <span className="inline-flex items-center gap-1.5">
+          {label}
+          {help && (
+            <button
+              type="button"
+              className="group relative inline-flex rounded-full text-slate-400 transition hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              aria-label={`Ayuda: ${label}`}
+              title={help}
+              onClick={(event) => event.preventDefault()}
+            >
+              <CircleHelp aria-hidden="true" size={14} />
+              <span className="pointer-events-none absolute left-0 top-6 z-20 hidden w-56 rounded-lg border border-slate-200 bg-white p-3 text-left text-[11px] font-normal normal-case leading-5 tracking-normal text-slate-600 shadow-lg group-hover:block group-focus:block sm:left-auto sm:right-0">
+                {help}
+              </span>
+            </button>
+          )}
+        </span>
         {unit && (
           <span className="font-mono text-[10px] font-medium normal-case tracking-normal text-slate-400">
             {unit}
@@ -163,6 +194,20 @@ export function BeamForm({
   });
   const [error, setError] = useState("");
 
+  function applyExample(id: string) {
+    const example = beamExamples.find((item) => item.id === id);
+    if (!example) {
+      return;
+    }
+    try {
+      setValues(example.values);
+      onCalculate(calculateBeam(example.values));
+      setError("");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Revisa los datos.");
+    }
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
@@ -179,8 +224,13 @@ export function BeamForm({
       subtitle="Predimensionamiento geométrico inicial conforme a NEC-SE-HM."
       error={error}
     >
+      <ExamplePresets options={beamExamples} onSelect={applyExample} />
       <form onSubmit={submit} className="space-y-5">
-        <Field label="Luz de la viga (L)" unit="metros">
+        <Field
+          label="Luz de la viga (L)"
+          unit="metros"
+          help="Distancia entre apoyos o cara a cara de columnas. Usa la luz libre o la luz de cálculo que te indique tu enunciado."
+        >
           <input
             className={inputClass}
             type="number"
@@ -192,7 +242,10 @@ export function BeamForm({
             }
           />
         </Field>
-        <Field label="Tipo de apoyo">
+        <Field
+          label="Tipo de apoyo"
+          help="Define el divisor luz/peralte: simple L/16, un extremo continuo L/18.5, ambos continuos L/21 y voladizo L/8."
+        >
           <select
             className={inputClass}
             value={values.supportType}
@@ -213,6 +266,7 @@ export function BeamForm({
           label="Carga de diseño"
           unit="kN/m"
           hint="Carga lineal mayorada utilizada para estimar Mu ≈ wL²/10."
+          help="Incluye peso propio estimado y sobrecargas lineales del caso. No copies valores de ejemplo sin revisarlos para tu proyecto."
         >
           <input
             className={inputClass}
@@ -309,6 +363,20 @@ export function ColumnForm({
     setValues({ ...values, [key]: Number(value) });
   }
 
+  function applyExample(id: string) {
+    const example = columnExamples.find((item) => item.id === id);
+    if (!example) {
+      return;
+    }
+    try {
+      setValues(example.values);
+      onCalculate(calculateColumn(example.values));
+      setError("");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Revisa los datos.");
+    }
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
@@ -325,8 +393,13 @@ export function ColumnForm({
       subtitle="Carga axial estimada, sección mínima y verificaciones geométricas."
       error={error}
     >
+      <ExamplePresets options={columnExamples} onSelect={applyExample} />
       <form onSubmit={submit} className="grid gap-5 sm:grid-cols-2">
-        <Field label="Área tributaria (At)" unit="m²">
+        <Field
+          label="Área tributaria (At)"
+          unit="m²"
+          help="Superficie de losa o cubierta que descarga sobre la columna. En planta rectangular suele aproximarse como (lx/2)×(ly/2) para interiores."
+        >
           <input
             className={inputClass}
             type="number"
@@ -338,7 +411,11 @@ export function ColumnForm({
             }
           />
         </Field>
-        <Field label="Número de pisos" unit="niveles">
+        <Field
+          label="Número de pisos"
+          unit="niveles"
+          help="Cantidad de niveles que aportan carga a la columna. Incluye el piso superior si también descarga."
+        >
           <input
             className={inputClass}
             type="number"
@@ -348,7 +425,10 @@ export function ColumnForm({
             onChange={(event) => setNumber("floors", event.target.value)}
           />
         </Field>
-        <Field label="Tipo de columna">
+        <Field
+          label="Tipo de columna"
+          help="Central, perimetral o esquina cambian el factor de posición y el factor de área usado en la estimación."
+        >
           <select
             className={inputClass}
             value={values.columnType}
@@ -368,6 +448,7 @@ export function ColumnForm({
           label="Carga de servicio (q)"
           unit="kN/m²"
           hint="Ingrese 0 para aplicar el valor residencial preliminar de 8,0 kN/m²."
+          help="Carga muerta + viva promedio por m². Si dejas 0, PreDim NEC usa 8,0 kN/m² como valor residencial preliminar."
         >
           <input
             className={inputClass}
@@ -393,6 +474,7 @@ export function ColumnForm({
         <Field
           label="Factor de longitud (k)"
           hint="1,0 representa una condición conservadora articulada."
+          help="Relaciona la longitud efectiva con la altura libre. k = 1,0 es una hipótesis conservadora inicial."
         >
           <input
             className={inputClass}
@@ -452,6 +534,20 @@ export function SlabForm({
   });
   const [error, setError] = useState("");
 
+  function applyExample(id: string) {
+    const example = slabExamples.find((item) => item.id === id);
+    if (!example) {
+      return;
+    }
+    try {
+      setValues(example.values);
+      onCalculate(calculateSlab(example.values));
+      setError("");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Revisa los datos.");
+    }
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
@@ -468,8 +564,13 @@ export function SlabForm({
       subtitle="Espesor preliminar por relación de luz para losa maciza o nervada."
       error={error}
     >
+      <ExamplePresets options={slabExamples} onSelect={applyExample} />
       <form onSubmit={submit} className="space-y-5">
-        <Field label="Luz crítica (L)" unit="metros">
+        <Field
+          label="Luz crítica (L)"
+          unit="metros"
+          help="Usa la luz más desfavorable del paño. En losas rectangulares suele ser la menor luz entre apoyos."
+        >
           <input
             className={inputClass}
             type="number"
@@ -481,7 +582,10 @@ export function SlabForm({
             }
           />
         </Field>
-        <Field label="Tipo de losa">
+        <Field
+          label="Tipo de losa"
+          help="Maciza aplica L/25 y nervada L/21 como espesor preliminar de anteproyecto."
+        >
           <select
             className={inputClass}
             value={values.slabType}

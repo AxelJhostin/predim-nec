@@ -26,11 +26,14 @@ export {
   createSavedElement,
   createEmptyProject,
   parseImportedProject,
+  parseImportedProjectWithReport,
+  migrateProject,
 } from "@/project";
 export type {
   ProjectMetadata,
   SavedProjectElement,
   LocalProject,
+  MigrationReport,
 } from "@/project";
 
 interface ProjectContextValue {

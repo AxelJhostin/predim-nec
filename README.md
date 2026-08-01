@@ -21,8 +21,11 @@ permanecen en el navegador y pueden trasladarse mediante archivos JSON.
 
 #### Calidad de software
 
-- Tests unitarios del dominio (`vitest`) para vigas, columnas, losas y parseo
-  de proyecto.
+- Tests unitarios del dominio (`vitest`) para vigas, columnas, losas, casos
+  borde y parseo/migración de proyecto.
+- Tests de formularios con Testing Library (calcular, ejemplos y guardar).
+- Migraciones explícitas: proyectos `schema` 0 o resultados con
+  `calculationVersion` antigua se recalculan o se descartan de forma segura.
 - Pipeline CI en GitHub Actions: `lint` → `test` → `build` en cada push/PR a
   `main`.
 - Script local `npm run check` para la misma verificación.
@@ -160,7 +163,7 @@ solo archivo:
 | Carpeta | Responsabilidad |
 | --- | --- |
 | `src/calculations/` | Dominio puro: tipos, helpers, `beam` / `column` / `slab`, registro |
-| `src/project/` | Modelo de proyecto local, persistencia tipada y parseo JSON |
+| `src/project/` | Modelo local, migraciones, parseo JSON y elementos guardados |
 | `src/presets/` | Ejemplos listos y plantillas de tarea |
 | `src/components/forms/` | Formularios por elemento + primitivas UI compartidas |
 | `src/components/` | Resultados, reportes, dashboard, SEO, PWA |
@@ -197,8 +200,14 @@ npm run build
 npm run check
 ```
 
-Los tests viven junto al dominio (`src/calculations/*.test.ts`,
-`src/project/*.test.ts`). El CI de GitHub Actions ejecuta la misma secuencia.
+Los tests viven junto al código
+(`src/calculations/*.test.ts`, `src/project/*.test.ts`,
+`src/components/forms/*.test.tsx`). El CI de GitHub Actions ejecuta la misma
+secuencia.
+
+Al importar o hidratar un proyecto, `parseImportedProject` aplica
+`migrateProject` (`src/project/migrate.ts`) para subir esquemas antiguos y
+recalcular elementos con forma de resultado obsoleta.
 
 ## Alcance técnico
 

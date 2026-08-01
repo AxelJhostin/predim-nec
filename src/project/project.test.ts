@@ -68,7 +68,12 @@ describe("project model", () => {
     expect(() =>
       parseImportedProject({
         schemaVersion: 999,
-        metadata: {},
+        metadata: {
+          name: "X",
+          responsible: "Y",
+          location: "Z",
+          date: "2026-01-01",
+        },
         elements: [],
       }),
     ).toThrow(/compatible/i);

@@ -13,4 +13,9 @@ export {
   createSavedElement,
   createEmptyProject,
 } from "./savedElement";
-export { parseImportedProject } from "./parse";
+export {
+  parseImportedProject,
+  parseImportedProjectWithReport,
+  type MigrationReport,
+} from "./parse";
+export { migrateProject } from "./migrate";

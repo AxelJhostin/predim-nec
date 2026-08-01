@@ -39,6 +39,7 @@ archivos JSON.
 - Se incorporaron plantillas de tarea (vivienda y bloque de aulas).
 - Se habilitó un comparador de alternativas en el resumen de proyecto.
 - Se agregó ayuda contextual en los campos principales de cada formulario.
+- Se habilitó instalación como PWA (Android/Chrome e instrucciones para iOS).
 
 #### Resumen de proyecto y memoria técnica
 
@@ -86,6 +87,9 @@ Abra [http://localhost:3000](http://localhost:3000).
   mismo tipo, con recomendación preliminar.
 - **Ayuda contextual:** tooltips en campos clave (luz, apoyo, área tributaria,
   carga, etc.).
+- **PWA instalable:** manifiesto web, íconos, service worker y aviso para
+  instalar en pantalla de inicio, con caché offline básico de las rutas
+  principales.
 - **Portabilidad:** exportación e importación de proyectos en formato JSON
   versionado.
 - **SEO técnico:** metadatos canónicos, Open Graph, JSON-LD, `robots.txt`,

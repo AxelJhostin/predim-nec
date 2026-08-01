@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
 import {
   serializeJsonLd,
   SITE_AUTHOR,
@@ -60,6 +61,21 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: SITE_NAME,
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
@@ -89,6 +105,7 @@ const webApplicationJsonLd = {
     "Predimensionamiento de losas macizas y nervadas",
     "Memoria técnica imprimible",
     "Proyectos locales exportables en JSON",
+    "Aplicación instalable (PWA) con soporte offline básico",
   ],
   author: {
     "@type": "Person",
@@ -115,6 +132,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <PwaInstallPrompt />
       </body>
     </html>
   );

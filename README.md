@@ -33,13 +33,20 @@ archivos JSON.
 - No se incorporaron cookies, Google Analytics ni otros mecanismos de
   seguimiento.
 
+#### Identidad visual y PWA
+
+- Se integró el logo SVG de PreDim NEC en la interfaz, reportes y aviso de
+  instalación.
+- Se actualizaron el favicon de la pestaña del navegador, los íconos Apple y
+  los íconos de la PWA a partir del mismo logo.
+- Se habilitó instalación como PWA (Android/Chrome e instrucciones para iOS).
+
 #### Utilidad académica para estudiantes
 
 - Se añadieron ejemplos listos en vigas, columnas y losas.
 - Se incorporaron plantillas de tarea (vivienda y bloque de aulas).
 - Se habilitó un comparador de alternativas en el resumen de proyecto.
 - Se agregó ayuda contextual en los campos principales de cada formulario.
-- Se habilitó instalación como PWA (Android/Chrome e instrucciones para iOS).
 
 #### Resumen de proyecto y memoria técnica
 
@@ -87,6 +94,8 @@ Abra [http://localhost:3000](http://localhost:3000).
   mismo tipo, con recomendación preliminar.
 - **Ayuda contextual:** tooltips en campos clave (luz, apoyo, área tributaria,
   carga, etc.).
+- **Marca visual:** logo propio en la interfaz, favicon del navegador e íconos
+  de instalación.
 - **PWA instalable:** manifiesto web, íconos, service worker y aviso para
   instalar en pantalla de inicio, con caché offline básico de las rutas
   principales.

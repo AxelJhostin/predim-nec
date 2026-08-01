@@ -73,30 +73,47 @@ export interface ColumnInputs {
   serviceLoadKnM2: number;
   clearHeightM: number;
   effectiveLengthFactor: number;
-  longitudinalSteelCm2: number;
+  concreteStrengthMpa: number;
+  steelYieldMpa: number;
+  tieDiameterMm: number;
 }
 
 export interface ColumnResult {
   kind: "column";
   inputs: ColumnInputs;
   serviceLoadKn: number;
+  ultimateLoadKn: number;
+  designAxialResistanceKn: number;
   appliedServiceLoadKnM2: number;
   positionFactor: number;
   areaReductionFactor: number;
   requiredAreaCm2: number;
   sideCm: number;
   grossAreaCm2: number;
+  requiredSteelAreaCm2: number;
+  providedSteelAreaCm2: number;
+  longitudinalBarProposal: string;
+  tieProposal: string;
+  tieSpacingCm: number;
   slenderness: number;
   steelRatio: number;
   minimumApplied: boolean;
+  capacityAdjusted: boolean;
   concreteStrengthMpa: number;
   compliance: ComplianceCriterion[];
   procedure: CalculationStep[];
 }
 
+export type SlabSupportType = "Simplemente apoyada" | "Continua";
+
 export interface SlabInputs {
   spanM: number;
   slabType: "solid" | "ribbed";
+  supportType: SlabSupportType;
+  designLoadKnM2: number;
+  steelYieldMpa: number;
+  concreteStrengthMpa: number;
+  coverCm: number;
 }
 
 export interface SlabResult {
@@ -104,6 +121,17 @@ export interface SlabResult {
   inputs: SlabInputs;
   thicknessCm: number;
   divisor: number;
+  momentDivisor: number;
+  effectiveDepthCm: number;
+  ultimateMomentKnM: number;
+  designResistanceKnM: number;
+  requiredSteelAreaCm2PerM: number;
+  providedSteelAreaCm2PerM: number;
+  flexuralBarProposal: string;
+  temperatureSteelProposal: string;
+  steelRatio: number;
+  minimumSteelRatio: number;
+  concreteStrengthMpa: number;
   compliance: ComplianceCriterion[];
   procedure: CalculationStep[];
 }
@@ -111,7 +139,6 @@ export interface SlabResult {
 export type CalculationResult = BeamResult | ColumnResult | SlabResult;
 
 const CONCRETE_UNIT_WEIGHT_KN_M3 = 24;
-const CONCRETE_STRENGTH_MPA = 21;
 const FLEXURE_PHI = 0.9;
 const SHEAR_PHI = 0.75;
 const DEFAULT_SERVICE_LOAD_KN_M2 = 8;
@@ -477,12 +504,121 @@ export function calculateBeam(inputs: BeamInputs): BeamResult {
   };
 }
 
+function axialTiedCapacityKn(
+  grossAreaMm2: number,
+  steelAreaMm2: number,
+  fcMpa: number,
+  fyMpa: number,
+) {
+  const pnMaxN =
+    0.8 *
+    (0.85 * fcMpa * (grossAreaMm2 - steelAreaMm2) + fyMpa * steelAreaMm2);
+  return (0.65 * pnMaxN) / 1000;
+}
+
+function proposeColumnBars(requiredAsMm2: number, sideCm: number) {
+  const counts = [4, 6, 8];
+  let best:
+    | { count: number; diameterMm: number; areaMm2: number }
+    | undefined;
+
+  for (const diameterMm of [16, 18, 20, 22, 25] as const) {
+    for (const count of counts) {
+      const areaMm2 = count * barAreaMm2(diameterMm);
+      if (areaMm2 < requiredAsMm2) {
+        continue;
+      }
+      // Colocación perimetral aproximada con 4 cm de recubrimiento.
+      const clearSideMm = sideCm * 10 - 2 * 40;
+      const neededMm = count === 4
+        ? 2 * diameterMm
+        : count * diameterMm + (count / 2 - 1) * Math.max(25, diameterMm);
+      if (neededMm > clearSideMm * 1.5) {
+        continue;
+      }
+      if (
+        !best ||
+        areaMm2 < best.areaMm2 ||
+        (areaMm2 === best.areaMm2 && count < best.count)
+      ) {
+        best = { count, diameterMm, areaMm2 };
+      }
+    }
+  }
+
+  if (!best) {
+    const diameterMm = 20;
+    const count = Math.max(4, Math.ceil(requiredAsMm2 / barAreaMm2(diameterMm)));
+    best = {
+      count: count % 2 === 0 ? count : count + 1,
+      diameterMm,
+      areaMm2: 0,
+    };
+    best.areaMm2 = best.count * barAreaMm2(best.diameterMm);
+  }
+
+  return {
+    ...best,
+    label: `${best.count} Ø${best.diameterMm} mm`,
+  };
+}
+
+function proposeSlabBars(requiredAsMm2PerM: number, maxSpacingMm: number) {
+  for (const diameterMm of [8, 10, 12, 14, 16] as const) {
+    const area = barAreaMm2(diameterMm);
+    const spacingMm = Math.min(
+      maxSpacingMm,
+      Math.floor((1000 * area) / requiredAsMm2PerM / 10) * 10,
+    );
+    if (spacingMm < 80) {
+      continue;
+    }
+    const provided = (1000 * area) / spacingMm;
+    if (provided + 0.01 >= requiredAsMm2PerM) {
+      return {
+        diameterMm,
+        spacingCm: spacingMm / 10,
+        areaMm2PerM: provided,
+        label: `Ø${diameterMm} mm @ ${formatNumber(spacingMm / 10)} cm c/c`,
+      };
+    }
+  }
+
+  const diameterMm = 12;
+  const area = barAreaMm2(diameterMm);
+  const spacingMm = 100;
+  return {
+    diameterMm,
+    spacingCm: 10,
+    areaMm2PerM: (1000 * area) / spacingMm,
+    label: `Ø${diameterMm} mm @ 10 cm c/c`,
+  };
+}
+
 export function calculateColumn(inputs: ColumnInputs): ColumnResult {
   assertPositive(inputs.tributaryAreaM2, "El área tributaria");
   assertPositive(inputs.floors, "El número de pisos");
   assertPositive(inputs.clearHeightM, "La longitud libre");
   assertPositive(inputs.effectiveLengthFactor, "El factor de longitud efectiva");
-  assertPositive(inputs.longitudinalSteelCm2, "El área de acero longitudinal");
+
+  const fcMpa =
+    Number.isFinite(inputs.concreteStrengthMpa) && inputs.concreteStrengthMpa > 0
+      ? inputs.concreteStrengthMpa
+      : DEFAULT_BEAM_FC_MPA;
+  const fyMpa =
+    Number.isFinite(inputs.steelYieldMpa) && inputs.steelYieldMpa > 0
+      ? inputs.steelYieldMpa
+      : 420;
+  const tieDiameterMm =
+    Number.isFinite(inputs.tieDiameterMm) && inputs.tieDiameterMm > 0
+      ? inputs.tieDiameterMm
+      : 10;
+  const normalizedInputs: ColumnInputs = {
+    ...inputs,
+    concreteStrengthMpa: fcMpa,
+    steelYieldMpa: fyMpa,
+    tieDiameterMm,
+  };
 
   const appliedServiceLoadKnM2 =
     Number.isFinite(inputs.serviceLoadKnM2) && inputs.serviceLoadKnM2 > 0
@@ -512,34 +648,105 @@ export function calculateColumn(inputs: ColumnInputs): ColumnResult {
     appliedServiceLoadKnM2 *
     inputs.tributaryAreaM2 *
     inputs.floors;
-  // P[kN] × 1000 / f'c[N/mm²] gives mm²; divide by 100 for cm².
-  const requiredAreaCm2 =
-    (serviceLoadKn * 10) /
-    (areaReductionFactor * CONCRETE_STRENGTH_MPA);
-  const calculatedSideCm = Math.sqrt(requiredAreaCm2);
-  const sideCm = Math.max(30, roundUpToFive(calculatedSideCm));
-  const grossAreaCm2 = sideCm ** 2;
+  const ultimateLoadKn = 1.2 * serviceLoadKn;
+
+  let requiredAreaCm2 =
+    (ultimateLoadKn * 10) / (areaReductionFactor * fcMpa);
+  let calculatedSideCm = Math.sqrt(requiredAreaCm2);
+  let sideCm = Math.max(30, roundUpToFive(calculatedSideCm));
+  const initialSideCm = sideCm;
+  let grossAreaCm2 = sideCm ** 2;
+  let requiredSteelAreaCm2 = 0.01 * grossAreaCm2;
+  let providedSteelAreaCm2 = 0;
+  let longitudinalBarProposal = "";
+  let designAxialResistanceKn = 0;
+  let steelRatio = 0;
+  let mainBarDiameterMm = 16;
+
+  for (let iteration = 0; iteration < 40; iteration += 1) {
+    grossAreaCm2 = sideCm ** 2;
+    const grossAreaMm2 = grossAreaCm2 * 100;
+    requiredSteelAreaCm2 = 0.01 * grossAreaCm2;
+
+    let phiPn = axialTiedCapacityKn(
+      grossAreaMm2,
+      requiredSteelAreaCm2 * 100,
+      fcMpa,
+      fyMpa,
+    );
+
+    // Si con ρ = 1% no alcanza, subir Ast hasta 3% o agrandar sección.
+    let asMm2 = requiredSteelAreaCm2 * 100;
+    while (phiPn < ultimateLoadKn && asMm2 / grossAreaMm2 < 0.03) {
+      asMm2 += barAreaMm2(16);
+      phiPn = axialTiedCapacityKn(grossAreaMm2, asMm2, fcMpa, fyMpa);
+    }
+
+    if (phiPn < ultimateLoadKn) {
+      sideCm += 5;
+      continue;
+    }
+
+    requiredSteelAreaCm2 = Math.max(0.01 * grossAreaCm2, asMm2 / 100);
+    const bars = proposeColumnBars(requiredSteelAreaCm2 * 100, sideCm);
+    providedSteelAreaCm2 = bars.areaMm2 / 100;
+    steelRatio = providedSteelAreaCm2 / grossAreaCm2;
+    designAxialResistanceKn = axialTiedCapacityKn(
+      grossAreaMm2,
+      bars.areaMm2,
+      fcMpa,
+      fyMpa,
+    );
+    longitudinalBarProposal = bars.label;
+    mainBarDiameterMm = bars.diameterMm;
+
+    if (designAxialResistanceKn >= ultimateLoadKn && steelRatio <= 0.03) {
+      break;
+    }
+
+    sideCm += 5;
+  }
+
+  const minimumApplied = calculatedSideCm < 30;
+  const capacityAdjusted = sideCm > initialSideCm;
+  requiredAreaCm2 = (ultimateLoadKn * 10) / (areaReductionFactor * fcMpa);
+  calculatedSideCm = Math.sqrt(requiredAreaCm2);
   const radiusOfGyrationCm = sideCm / Math.sqrt(12);
   const slenderness =
     (inputs.effectiveLengthFactor * inputs.clearHeightM * 100) /
     radiusOfGyrationCm;
-  const steelRatio = inputs.longitudinalSteelCm2 / grossAreaCm2;
-  const minimumApplied = calculatedSideCm < 30;
+
+  const tieSpacingMm = Math.min(
+    16 * mainBarDiameterMm,
+    48 * tieDiameterMm,
+    sideCm * 10,
+    sideCm * 5,
+  );
+  const tieSpacingCm = Math.max(5, Math.floor(tieSpacingMm / 10 / 0.5) * 0.5);
+  const tieProposal = `Estribos Ø${tieDiameterMm} mm @ ${formatNumber(tieSpacingCm)} cm`;
 
   return {
     kind: "column",
-    inputs,
+    inputs: normalizedInputs,
     serviceLoadKn,
+    ultimateLoadKn,
+    designAxialResistanceKn,
     appliedServiceLoadKnM2,
     positionFactor,
     areaReductionFactor,
     requiredAreaCm2,
     sideCm,
     grossAreaCm2,
+    requiredSteelAreaCm2,
+    providedSteelAreaCm2,
+    longitudinalBarProposal,
+    tieProposal,
+    tieSpacingCm,
     slenderness,
     steelRatio,
     minimumApplied,
-    concreteStrengthMpa: CONCRETE_STRENGTH_MPA,
+    capacityAdjusted,
+    concreteStrengthMpa: fcMpa,
     compliance: [
       {
         criterion: "Relación de esbeltez λ",
@@ -554,17 +761,16 @@ export function calculateColumn(inputs: ColumnInputs): ColumnResult {
         status: sideCm >= 30 ? "pass" : "fail",
       },
       {
+        criterion: "Axial φPn ≥ Pu",
+        calculated: `φPn = ${formatNumber(designAxialResistanceKn, 1)} kN`,
+        limit: `≥ Pu = ${formatNumber(ultimateLoadKn, 1)} kN`,
+        status: designAxialResistanceKn >= ultimateLoadKn ? "pass" : "fail",
+      },
+      {
         criterion: "Cuantía longitudinal ρ",
         calculated: `${(steelRatio * 100).toFixed(2)}%`,
         limit: "1% – 3%",
-        status:
-          steelRatio >= 0.01 && steelRatio <= 0.03 ? "pass" : "fail",
-      },
-      {
-        criterion: "Relación de aspecto b/h",
-        calculated: "1.00",
-        limit: "> 0.40",
-        status: "pass",
+        status: steelRatio >= 0.01 && steelRatio <= 0.03 ? "pass" : "fail",
       },
     ],
     procedure: [
@@ -572,25 +778,27 @@ export function calculateColumn(inputs: ColumnInputs): ColumnResult {
         title: "1. Criterio de posición",
         detail: `Columna ${inputs.columnType.toLowerCase()}: ${position.description}; factor de carga ${formatNumber(positionFactor, 2)} y factor de área ${formatNumber(areaReductionFactor, 2)}.`,
         reference:
-          "Factores de predimensionamiento adoptados para estimar el efecto de posición; deben validarse con las combinaciones NEC-SE-CG y el análisis estructural.",
+          "Factores de anteproyecto por posición; validar con combinaciones NEC-SE-CG y análisis estructural.",
       },
       {
-        title: "2. Estimación de carga",
-        detail: `P = ${formatNumber(positionFactor, 2)} × ${formatNumber(appliedServiceLoadKnM2, 2)} kN/m² × ${formatNumber(inputs.tributaryAreaM2, 2)} m² × ${inputs.floors} = ${formatNumber(serviceLoadKn, 2)} kN.${inputs.serviceLoadKnM2 <= 0 ? " Se aplicó q = 8.0 kN/m² por defecto." : ""}`,
+        title: "2. Carga de servicio y última",
+        detail: `Pservicio = ${formatNumber(positionFactor, 2)} × ${formatNumber(appliedServiceLoadKnM2, 2)} × ${formatNumber(inputs.tributaryAreaM2, 2)} × ${inputs.floors} = ${formatNumber(serviceLoadKn, 2)} kN. Pu ≈ 1.2 Pservicio = ${formatNumber(ultimateLoadKn, 2)} kN.`,
       },
       {
-        title: "3. Área requerida y conversión",
-        detail: `Ag = P / (${formatNumber(areaReductionFactor, 2)} f'c). Con f'c = ${CONCRETE_STRENGTH_MPA} MPa: Ag = ${formatNumber(requiredAreaCm2, 2)} cm² y lado teórico = √Ag = ${formatNumber(calculatedSideCm, 2)} cm.`,
-      },
-      {
-        title: "4. Redondeo constructivo",
-        detail: `El lado se redondea al múltiplo superior de 5 cm: ${formatNumber(roundUpToFive(calculatedSideCm))} cm.`,
-      },
-      {
-        title: "5. Límite mínimo NEC",
-        detail: `Se adopta ${formatNumber(sideCm)} × ${formatNumber(sideCm)} cm${minimumApplied ? " porque el valor teórico era menor que 30 cm" : ", que supera el mínimo de 30 cm"}.`,
+        title: "3. Sección y acero longitudinal",
+        detail: `Ag preliminar con f'c = ${formatNumber(fcMpa)} MPa → lado ${formatNumber(sideCm)} × ${formatNumber(sideCm)} cm${capacityAdjusted ? " (ajustado por capacidad)" : ""}. As requerido ≈ ${formatNumber(requiredSteelAreaCm2, 2)} cm²; se propone ${longitudinalBarProposal} (As = ${formatNumber(providedSteelAreaCm2, 2)} cm², ρ = ${(steelRatio * 100).toFixed(2)}%).`,
         reference:
-          "NEC-SE-HM §4.3.1: dimensión transversal mínima de 300 mm para elementos en flexocompresión del sistema sismorresistente.",
+          "NEC-SE-HM §4.3.1: dimensión mínima 300 mm. ACI 318: 0.01 ≤ ρ ≤ 0.04 (aquí se limita a 3% por ductilidad/práctica).",
+      },
+      {
+        title: "4. Resistencia axial de columna amarrada",
+        detail: `φPn = 0.65 × 0.80 [0.85 f'c (Ag − Ast) + fy Ast] = ${formatNumber(designAxialResistanceKn, 2)} kN ≥ Pu.`,
+        reference: "ACI 318 (columnas amarradas), φ = 0.65.",
+      },
+      {
+        title: "5. Estribos / amarraderos",
+        detail: `${tieProposal}. Espaciamiento limitado por 16 db, 48 dt y la menor dimensión.`,
+        reference: "ACI 318 / NEC-SE-HM: refuerzo transversal mínimo. El detallado sísmico puede exigir zonas confinado más estrictas.",
       },
     ],
   };
@@ -598,48 +806,155 @@ export function calculateColumn(inputs: ColumnInputs): ColumnResult {
 
 export function calculateSlab(inputs: SlabInputs): SlabResult {
   assertPositive(inputs.spanM, "La luz");
+  assertPositive(inputs.designLoadKnM2, "La carga de diseño");
+  assertPositive(inputs.steelYieldMpa, "La fluencia fy");
+  assertPositive(inputs.coverCm, "El recubrimiento");
+
+  const fcMpa =
+    Number.isFinite(inputs.concreteStrengthMpa) && inputs.concreteStrengthMpa > 0
+      ? inputs.concreteStrengthMpa
+      : DEFAULT_BEAM_FC_MPA;
+  const normalizedInputs: SlabInputs = {
+    ...inputs,
+    concreteStrengthMpa: fcMpa,
+  };
 
   const divisor = inputs.slabType === "solid" ? 25 : 21;
-  const thicknessCm = (inputs.spanM * 100) / divisor;
+  const momentDivisor = inputs.supportType === "Continua" ? 11 : 8;
+  let thicknessCm = Math.max(
+    inputs.slabType === "solid" ? 10 : 12,
+    roundUpToHalf((inputs.spanM * 100) / divisor),
+  );
+  let effectiveDepthCm = thicknessCm - inputs.coverCm;
+  const ultimateMomentKnM =
+    (inputs.designLoadKnM2 * inputs.spanM ** 2) / momentDivisor;
+  let requiredSteelAreaCm2PerM = 0;
+  let providedSteelAreaCm2PerM = 0;
+  let flexuralBarProposal = "";
+  let temperatureSteelProposal = "";
+  let designResistanceKnM = 0;
+  let steelRatio = 0;
+  let minimumSteelRatio = 0;
+
+  for (let iteration = 0; iteration < 40; iteration += 1) {
+    effectiveDepthCm = thicknessCm - inputs.coverCm;
+    if (effectiveDepthCm <= 2) {
+      thicknessCm += 0.5;
+      continue;
+    }
+
+    const widthMm = 1000;
+    const depthMm = effectiveDepthCm * 10;
+    const fy = inputs.steelYieldMpa;
+    const muNmm = ultimateMomentKnM * 1_000_000;
+    const ru = muNmm / (FLEXURE_PHI * widthMm * depthMm ** 2);
+    const root = 1 - (2 * ru) / (0.85 * fcMpa);
+
+    if (root <= 0) {
+      thicknessCm += 0.5;
+      continue;
+    }
+
+    const rhoRequired = ((0.85 * fcMpa) / fy) * (1 - Math.sqrt(root));
+    minimumSteelRatio =
+      fy >= 420 ? 0.0018 : Math.max(0.002, 0.0018 * 420 / fy);
+    const rhoDesign = Math.max(rhoRequired, minimumSteelRatio);
+    const requiredAsMm2 = rhoDesign * widthMm * depthMm;
+    const maxSpacingMm = Math.min(
+      3 * thicknessCm * 10,
+      inputs.slabType === "solid" ? 450 : 400,
+    );
+    const bars = proposeSlabBars(requiredAsMm2, maxSpacingMm);
+    const tempBars = proposeSlabBars(minimumSteelRatio * widthMm * thicknessCm * 10, maxSpacingMm);
+
+    requiredSteelAreaCm2PerM = requiredAsMm2 / 100;
+    providedSteelAreaCm2PerM = bars.areaMm2PerM / 100;
+    steelRatio = bars.areaMm2PerM / (widthMm * depthMm);
+    designResistanceKnM = flexuralCapacityKnM(
+      bars.areaMm2PerM,
+      widthMm,
+      depthMm,
+      fy,
+      fcMpa,
+    );
+    flexuralBarProposal = bars.label;
+    temperatureSteelProposal =
+      inputs.slabType === "solid"
+        ? `Distribución / temperatura: ${tempBars.label}`
+        : `En nervios usar ${bars.label}; malla de distribución: ${tempBars.label}`;
+
+    if (designResistanceKnM >= ultimateMomentKnM) {
+      break;
+    }
+
+    thicknessCm += 0.5;
+  }
+
+  const spanDepthRatio = (inputs.spanM * 100) / thicknessCm;
 
   return {
     kind: "slab",
-    inputs,
+    inputs: normalizedInputs,
     thicknessCm,
     divisor,
+    momentDivisor,
+    effectiveDepthCm,
+    ultimateMomentKnM,
+    designResistanceKnM,
+    requiredSteelAreaCm2PerM,
+    providedSteelAreaCm2PerM,
+    flexuralBarProposal,
+    temperatureSteelProposal,
+    steelRatio,
+    minimumSteelRatio,
+    concreteStrengthMpa: fcMpa,
     compliance: [
       {
         criterion: "Relación luz/peralte",
-        calculated: divisor.toString(),
-        limit: inputs.slabType === "solid" ? "L/25" : "L/21",
-        status: "pass",
+        calculated: `L/${spanDepthRatio.toFixed(1)}`,
+        limit: `≤ L/${divisor}`,
+        status: spanDepthRatio <= divisor + 0.05 ? "pass" : "fail",
       },
       {
-        criterion: "Espesor mínimo",
-        calculated: `${formatNumber(thicknessCm)} cm`,
-        limit: "Según relación adoptada",
-        status: "pass",
+        criterion: "Flexión φMn ≥ Mu (franja 1 m)",
+        calculated: `φMn = ${formatNumber(designResistanceKnM, 2)} kN·m/m`,
+        limit: `≥ Mu = ${formatNumber(ultimateMomentKnM, 2)} kN·m/m`,
+        status: designResistanceKnM >= ultimateMomentKnM ? "pass" : "fail",
       },
       {
-        criterion: "Cuantía de acero",
-        calculated: "Requiere diseño",
-        limit: "NEC-SE-HM",
-        status: "not-evaluated",
+        criterion: "Cuantía de flexión",
+        calculated: `ρ = ${(steelRatio * 100).toFixed(3)}%`,
+        limit: `≥ ρmin = ${(minimumSteelRatio * 100).toFixed(3)}%`,
+        status: steelRatio + 1e-9 >= minimumSteelRatio ? "pass" : "fail",
+      },
+      {
+        criterion: "Acero de temperatura / distribución",
+        calculated: temperatureSteelProposal,
+        limit: "As,temp ≥ ρmin b h",
+        status: "pass",
       },
     ],
     procedure: [
       {
-        title: "1. Tipo de losa",
-        detail:
-          inputs.slabType === "solid"
-            ? "Losa maciza: se adopta la relación preliminar L/25."
-            : "Losa aligerada o nervada: se adopta la relación preliminar L/21.",
+        title: "1. Tipo de losa y espesor",
+        detail: `${inputs.slabType === "solid" ? "Maciza" : "Nervada"}: h = L/${divisor} → ${formatNumber(thicknessCm)} cm (redondeo constructivo).`,
       },
       {
-        title: "2. Fórmula y conversión",
-        detail: `h = ${formatNumber(inputs.spanM, 2)} m × 100 / ${divisor} = ${formatNumber(thicknessCm, 2)} cm.`,
+        title: "2. Demanda flexional por metro",
+        detail: `Apoyo ${inputs.supportType.toLowerCase()}: Mu = w L² / ${momentDivisor} = ${formatNumber(inputs.designLoadKnM2, 2)} × ${formatNumber(inputs.spanM, 2)}² / ${momentDivisor} = ${formatNumber(ultimateMomentKnM, 2)} kN·m por metro de ancho.`,
         reference:
-          "Criterio de predimensionamiento; verificar deflexiones y diseño final conforme a NEC-SE-HM.",
+          "Análisis aproximado de losa en una dirección; validar con modelo y combinaciones NEC.",
+      },
+      {
+        title: "3. Acero a flexión",
+        detail: `Con d = ${formatNumber(effectiveDepthCm)} cm, f'c = ${formatNumber(fcMpa)} MPa y fy = ${formatNumber(inputs.steelYieldMpa)} MPa: As = ${formatNumber(requiredSteelAreaCm2PerM, 2)} cm²/m. Se propone ${flexuralBarProposal} (As = ${formatNumber(providedSteelAreaCm2PerM, 2)} cm²/m) con φMn = ${formatNumber(designResistanceKnM, 2)} kN·m/m.`,
+        reference: "ACI 318 / NEC-SE-HM: flexión de losas, φ = 0.90.",
+      },
+      {
+        title: "4. Temperatura y distribución",
+        detail: temperatureSteelProposal,
+        reference:
+          "As mínimo por temperatura/retracción ≈ 0.0018 bh para fy ≥ 420 MPa.",
       },
     ],
   };

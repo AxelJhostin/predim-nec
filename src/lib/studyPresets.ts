@@ -76,7 +76,9 @@ export const columnExamples: ExamplePreset<ColumnInputs>[] = [
       serviceLoadKnM2: 8,
       clearHeightM: 2.8,
       effectiveLengthFactor: 1,
-      longitudinalSteelCm2: 16,
+      concreteStrengthMpa: 21,
+      steelYieldMpa: 420,
+      tieDiameterMm: 10,
     },
   },
   {
@@ -90,7 +92,9 @@ export const columnExamples: ExamplePreset<ColumnInputs>[] = [
       serviceLoadKnM2: 9,
       clearHeightM: 3,
       effectiveLengthFactor: 1,
-      longitudinalSteelCm2: 18,
+      concreteStrengthMpa: 21,
+      steelYieldMpa: 420,
+      tieDiameterMm: 10,
     },
   },
   {
@@ -104,7 +108,9 @@ export const columnExamples: ExamplePreset<ColumnInputs>[] = [
       serviceLoadKnM2: 9,
       clearHeightM: 3,
       effectiveLengthFactor: 1,
-      longitudinalSteelCm2: 20,
+      concreteStrengthMpa: 21,
+      steelYieldMpa: 420,
+      tieDiameterMm: 10,
     },
   },
 ];
@@ -117,6 +123,11 @@ export const slabExamples: ExamplePreset<SlabInputs>[] = [
     values: {
       spanM: 4.5,
       slabType: "solid",
+      supportType: "Continua",
+      designLoadKnM2: 8,
+      steelYieldMpa: 420,
+      concreteStrengthMpa: 21,
+      coverCm: 2,
     },
   },
   {
@@ -126,6 +137,11 @@ export const slabExamples: ExamplePreset<SlabInputs>[] = [
     values: {
       spanM: 6,
       slabType: "ribbed",
+      supportType: "Continua",
+      designLoadKnM2: 7,
+      steelYieldMpa: 420,
+      concreteStrengthMpa: 21,
+      coverCm: 2.5,
     },
   },
 ];

@@ -43,8 +43,9 @@ function parameterRows(result: CalculationResult) {
       ["Factor de área", formatNumber(result.areaReductionFactor, 2)],
       ["Longitud libre", `${formatNumber(result.inputs.clearHeightM)} m`],
       ["Factor efectivo k", formatNumber(result.inputs.effectiveLengthFactor, 2)],
-      ["Acero longitudinal As", `${formatNumber(result.inputs.longitudinalSteelCm2)} cm²`],
-      ["Resistencia f'c", `${result.concreteStrengthMpa} MPa`],
+      ["f'c", `${formatNumber(result.concreteStrengthMpa)} MPa`],
+      ["fy", `${formatNumber(result.inputs.steelYieldMpa)} MPa`],
+      ["Estribo", `Ø${formatNumber(result.inputs.tieDiameterMm)} mm`],
     ];
   }
   return [
@@ -53,8 +54,12 @@ function parameterRows(result: CalculationResult) {
       "Tipo de losa",
       result.inputs.slabType === "solid" ? "Maciza" : "Aligerada (nervada)",
     ],
-    ["Relación aplicada", `L / ${result.divisor}`],
-    ["Normativa de referencia", "NEC-SE-HM"],
+    ["Apoyo", result.inputs.supportType],
+    ["Carga de diseño", `${formatNumber(result.inputs.designLoadKnM2)} kN/m²`],
+    ["Demanda", `Mu = wL²/${result.momentDivisor}`],
+    ["f'c", `${formatNumber(result.concreteStrengthMpa)} MPa`],
+    ["fy", `${formatNumber(result.inputs.steelYieldMpa)} MPa`],
+    ["Recubrimiento a d", `${formatNumber(result.inputs.coverCm)} cm`],
   ];
 }
 
@@ -76,15 +81,23 @@ function resultRows(result: CalculationResult) {
     return [
       ["Sección recomendada", `${formatNumber(result.sideCm)} × ${formatNumber(result.sideCm)} cm`],
       ["Carga de servicio P", `${formatNumber(result.serviceLoadKn, 1)} kN`],
-      ["Área requerida Ag", `${formatNumber(result.requiredAreaCm2, 0)} cm²`],
-      ["Área bruta adoptada", `${formatNumber(result.grossAreaCm2, 0)} cm²`],
-      ["Esbeltez λ", result.slenderness.toFixed(1)],
+      ["Carga última Pu", `${formatNumber(result.ultimateLoadKn, 1)} kN`],
+      ["Resistencia φPn", `${formatNumber(result.designAxialResistanceKn, 1)} kN`],
+      ["As requerido", `${formatNumber(result.requiredSteelAreaCm2, 2)} cm²`],
+      ["Acero longitudinal", result.longitudinalBarProposal],
       ["Cuantía ρ", `${(result.steelRatio * 100).toFixed(2)}%`],
+      ["Esbeltez λ", result.slenderness.toFixed(1)],
+      ["Estribos", result.tieProposal],
     ];
   }
   return [
     ["Espesor recomendado", `${formatNumber(result.thicknessCm)} cm`],
     ["Relación luz/peralte", `L / ${result.divisor}`],
+    ["Momento Mu", `${formatNumber(result.ultimateMomentKnM, 2)} kN·m/m`],
+    ["Resistencia φMn", `${formatNumber(result.designResistanceKnM, 2)} kN·m/m`],
+    ["As flexión", `${formatNumber(result.requiredSteelAreaCm2PerM, 2)} cm²/m`],
+    ["Propuesta flexión", result.flexuralBarProposal],
+    ["Temperatura / distribución", result.temperatureSteelProposal],
   ];
 }
 

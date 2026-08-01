@@ -76,9 +76,19 @@ const initialColumn = calculateColumn({
   serviceLoadKnM2: 8,
   clearHeightM: 3,
   effectiveLengthFactor: 1,
-  longitudinalSteelCm2: 20,
+  concreteStrengthMpa: 21,
+  steelYieldMpa: 420,
+  tieDiameterMm: 10,
 });
-const initialSlab = calculateSlab({ spanM: 5, slabType: "solid" });
+const initialSlab = calculateSlab({
+  spanM: 5,
+  slabType: "solid",
+  supportType: "Continua",
+  designLoadKnM2: 8,
+  steelYieldMpa: 420,
+  concreteStrengthMpa: 21,
+  coverCm: 2,
+});
 
 export function StructuralDashboard({
   initialTab = "beam",
@@ -264,16 +274,16 @@ export function StructuralDashboard({
                   <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
                     {projectSummaryOpen
                       ? "Resumen de proyecto y memoria técnica"
-                      : activeTab === "beam"
-                        ? "Diseño simplificado de vigas"
-                        : `Predimensionamiento de ${activeDefinition.label.toLowerCase()}`}
+                      : `Diseño simplificado de ${activeDefinition.label.toLowerCase()}`}
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
                     {projectSummaryOpen
                       ? "Inventario consolidado, metadatos y exportación del proyecto local."
                       : activeTab === "beam"
                         ? "Flexión, corte y propuesta de acero para anteproyecto. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
-                        : "Estimación geométrica rápida con criterios de la Norma Ecuatoriana de la Construcción. El diseño final requiere revisión profesional."}
+                        : activeTab === "column"
+                          ? "Carga axial, sección, acero longitudinal y estribos. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
+                          : "Espesor, flexión por metro y acero de temperatura. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."}
                   </p>
                 </div>
                 <p className="font-mono text-xs text-slate-400">Unidades SI</p>

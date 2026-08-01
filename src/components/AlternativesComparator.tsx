@@ -33,18 +33,21 @@ function metricRows(result: CalculationResult): [string, string][] {
   if (result.kind === "column") {
     return [
       ["Sección", `${formatNumber(result.sideCm)} × ${formatNumber(result.sideCm)} cm`],
-      ["Carga P", `${formatNumber(result.serviceLoadKn, 1)} kN`],
-      ["Ag req.", `${formatNumber(result.requiredAreaCm2, 0)} cm²`],
+      ["Pu", `${formatNumber(result.ultimateLoadKn, 1)} kN`],
+      ["φPn", `${formatNumber(result.designAxialResistanceKn, 1)} kN`],
+      ["Acero", result.longitudinalBarProposal ?? "—"],
+      ["Estribos", result.tieProposal ?? "—"],
       ["Esbeltez λ", result.slenderness.toFixed(1)],
-      ["Posición", result.inputs.columnType],
     ];
   }
 
   return [
     ["Espesor", `${formatNumber(result.thicknessCm)} cm`],
-    ["Relación", `L / ${result.divisor}`],
+    ["Mu", `${formatNumber(result.ultimateMomentKnM, 2)} kN·m/m`],
+    ["φMn", `${formatNumber(result.designResistanceKnM, 2)} kN·m/m`],
+    ["Acero flexión", result.flexuralBarProposal ?? "—"],
+    ["Temperatura", result.temperatureSteelProposal ?? "—"],
     ["Sistema", result.inputs.slabType === "solid" ? "Maciza" : "Nervada"],
-    ["Luz", `${formatNumber(result.inputs.spanM, 2)} m`],
   ];
 }
 

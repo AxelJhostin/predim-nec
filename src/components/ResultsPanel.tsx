@@ -82,18 +82,28 @@ function ResultMetrics({ result }: { result: CalculationResult }) {
   if (result.kind === "column") {
     return (
       <div className="grid grid-cols-2 gap-3">
-        <Metric label="Área bruta Ag" value={formatNumber(result.grossAreaCm2, 0)} unit="cm²" />
-        <Metric label="Cuantía ρ" value={(result.steelRatio * 100).toFixed(2)} unit="%" />
-        <Metric label="Carga de servicio P" value={formatNumber(result.serviceLoadKn, 1)} unit="kN" />
+        <Metric label="Pu" value={formatNumber(result.ultimateLoadKn, 1)} unit="kN" />
+        <Metric label="φPn" value={formatNumber(result.designAxialResistanceKn, 1)} unit="kN" />
+        <Metric label="As requerido" value={formatNumber(result.requiredSteelAreaCm2, 2)} unit="cm²" />
+        <Metric label="Acero longitudinal" value={result.longitudinalBarProposal} />
         <Metric label="Esbeltez λ" value={result.slenderness.toFixed(1)} />
+        <Metric label="Cuantía ρ" value={(result.steelRatio * 100).toFixed(2)} unit="%" />
+        <div className="col-span-2">
+          <Metric label="Estribos" value={result.tieProposal} compact />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <Metric label="Espesor h" value={formatNumber(result.thicknessCm)} unit="cm" />
-      <Metric label="Relación aplicada" value={`L/${result.divisor}`} />
+      <Metric label="Mu" value={formatNumber(result.ultimateMomentKnM, 2)} unit="kN·m/m" />
+      <Metric label="φMn" value={formatNumber(result.designResistanceKnM, 2)} unit="kN·m/m" />
+      <Metric label="As flexión" value={formatNumber(result.requiredSteelAreaCm2PerM, 2)} unit="cm²/m" />
+      <Metric label="Propuesta" value={result.flexuralBarProposal} />
+      <div className="col-span-2">
+        <Metric label="Temperatura / distribución" value={result.temperatureSteelProposal} compact />
+      </div>
     </div>
   );
 }
@@ -143,16 +153,18 @@ export function ResultsPanel({
     result.kind === "beam"
       ? "Sección y refuerzo sugeridos"
       : result.kind === "column"
-        ? "Dimensiones sugeridas"
-        : "Espesor sugerido";
+        ? "Sección y refuerzo sugeridos"
+        : "Espesor y refuerzo sugeridos";
   const minimumApplied =
     result.kind === "beam" || result.kind === "column"
       ? result.minimumApplied
       : false;
-  const resultEyebrow =
+  const reinforcementLine =
     result.kind === "beam"
-      ? "Diseño simplificado NEC / ACI"
-      : "Resultado preliminar";
+      ? `${result.flexuralBarProposal} · ${result.stirrupProposal}`
+      : result.kind === "column"
+        ? `${result.longitudinalBarProposal} · ${result.tieProposal}`
+        : `${result.flexuralBarProposal}`;
 
   return (
     <section className="structural-card overflow-hidden">
@@ -160,7 +172,7 @@ export function ResultsPanel({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.15em] text-sky-700">
-              {resultEyebrow}
+              Diseño simplificado NEC / ACI
             </p>
             <h2 className="mt-1 text-xl font-bold text-slate-950">{title}</h2>
           </div>
@@ -170,11 +182,9 @@ export function ResultsPanel({
         <p className="mt-5 font-mono text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
           {section}
         </p>
-        {result.kind === "beam" && (
-          <p className="mt-2 font-mono text-sm font-semibold text-slate-600">
-            {result.flexuralBarProposal} · {result.stirrupProposal}
-          </p>
-        )}
+        <p className="mt-2 font-mono text-sm font-semibold text-slate-600">
+          {reinforcementLine}
+        </p>
 
         <div className="mt-6 grid gap-5 md:grid-cols-[1.15fr_1fr]">
           <SectionSchematic result={result} />
@@ -182,9 +192,9 @@ export function ResultsPanel({
             <ResultMetrics result={result} />
             <div className="mt-3 flex gap-2 rounded-lg border-l-4 border-[#FACC15] bg-amber-50 p-3.5 text-xs leading-5 text-amber-950">
               <Info aria-hidden="true" className="mt-0.5 shrink-0" size={16} />
-              {result.kind === "beam"
-                ? "Diseño simplificado útil para anteproyecto. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
-                : "Resultado preliminar. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."}
+              Diseño simplificado útil para anteproyecto. El diseño final
+              requiere análisis estructural, combinaciones de carga, detallado y
+              revisión de un profesional.
             </div>
           </div>
         </div>

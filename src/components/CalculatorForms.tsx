@@ -4,7 +4,6 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import {
   Calculator,
   CircleHelp,
-  Info,
   Ruler,
   Save,
   ShieldCheck,
@@ -401,7 +400,9 @@ export function ColumnForm({
     serviceLoadKnM2: 8,
     clearHeightM: 3,
     effectiveLengthFactor: 1,
-    longitudinalSteelCm2: 20,
+    concreteStrengthMpa: 21,
+    steelYieldMpa: 420,
+    tieDiameterMm: 10,
   });
   const [error, setError] = useState("");
 
@@ -436,7 +437,7 @@ export function ColumnForm({
   return (
     <FormCard
       title="Parámetros de la columna"
-      subtitle="Carga axial estimada, sección mínima y verificaciones geométricas."
+      subtitle="Diseño simplificado a carga axial, acero longitudinal y estribos."
       error={error}
     >
       <ExamplePresets options={columnExamples} onSelect={applyExample} />
@@ -533,24 +534,49 @@ export function ColumnForm({
             }
           />
         </Field>
-        <div className="sm:col-span-2">
-          <Field
-            label="Acero longitudinal provisto (As)"
-            unit="cm²"
-            hint="Se usa únicamente para verificar la cuantía preliminar."
-          >
-            <input
-              className={inputClass}
-              type="number"
-              min="0.1"
-              step="0.1"
-              value={values.longitudinalSteelCm2}
-              onChange={(event) =>
-                setNumber("longitudinalSteelCm2", event.target.value)
-              }
-            />
-          </Field>
-        </div>
+        <details className="sm:col-span-2 rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <summary className="cursor-pointer text-xs font-bold uppercase tracking-[0.1em] text-slate-700">
+            Parámetros avanzados
+          </summary>
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            <Field label="f'c" unit="MPa">
+              <input
+                className={inputClass}
+                type="number"
+                min="17"
+                step="1"
+                value={values.concreteStrengthMpa}
+                onChange={(event) =>
+                  setNumber("concreteStrengthMpa", event.target.value)
+                }
+              />
+            </Field>
+            <Field label="fy" unit="MPa">
+              <input
+                className={inputClass}
+                type="number"
+                min="100"
+                step="10"
+                value={values.steelYieldMpa}
+                onChange={(event) =>
+                  setNumber("steelYieldMpa", event.target.value)
+                }
+              />
+            </Field>
+            <Field label="Diámetro de estribo" unit="mm">
+              <input
+                className={inputClass}
+                type="number"
+                min="6"
+                step="1"
+                value={values.tieDiameterMm}
+                onChange={(event) =>
+                  setNumber("tieDiameterMm", event.target.value)
+                }
+              />
+            </Field>
+          </div>
+        </details>
         <div className="sm:col-span-2">
           <SubmitButton />
           <SaveElementControl
@@ -577,6 +603,11 @@ export function SlabForm({
   const [values, setValues] = useState<SlabInputs>({
     spanM: 5,
     slabType: "solid",
+    supportType: "Continua",
+    designLoadKnM2: 8,
+    steelYieldMpa: 420,
+    concreteStrengthMpa: 21,
+    coverCm: 2,
   });
   const [error, setError] = useState("");
 
@@ -607,7 +638,7 @@ export function SlabForm({
   return (
     <FormCard
       title="Parámetros de la losa"
-      subtitle="Espesor preliminar por relación de luz para losa maciza o nervada."
+      subtitle="Diseño simplificado de espesor, flexión por metro y acero de temperatura."
       error={error}
     >
       <ExamplePresets options={slabExamples} onSelect={applyExample} />
@@ -630,7 +661,7 @@ export function SlabForm({
         </Field>
         <Field
           label="Tipo de losa"
-          help="Maciza aplica L/25 y nervada L/21 como espesor preliminar de anteproyecto."
+          help="Maciza aplica L/25 y nervada L/21 como espesor de anteproyecto."
         >
           <select
             className={inputClass}
@@ -646,15 +677,95 @@ export function SlabForm({
             <option value="ribbed">Aligerada (nervada)</option>
           </select>
         </Field>
-        <div className="rounded-lg border-l-4 border-[#FACC15] bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-          <div className="flex gap-2">
-            <Info aria-hidden="true" className="mt-0.5 shrink-0" size={17} />
-            <p>
-              Se aplicará <strong>L/25</strong> para losa maciza y{" "}
-              <strong>L/21</strong> para losa nervada.
-            </p>
+        <Field
+          label="Condición de apoyo"
+          help="Simple usa Mu = wL²/8; continua usa Mu = wL²/11 por metro de ancho."
+        >
+          <select
+            className={inputClass}
+            value={values.supportType}
+            onChange={(event) =>
+              setValues({
+                ...values,
+                supportType: event.target.value as SlabInputs["supportType"],
+              })
+            }
+          >
+            <option>Simplemente apoyada</option>
+            <option>Continua</option>
+          </select>
+        </Field>
+        <Field
+          label="Carga de diseño"
+          unit="kN/m²"
+          help="Carga uniformemente distribuida mayorada o de diseño sobre la losa."
+        >
+          <input
+            className={inputClass}
+            type="number"
+            min="0.1"
+            step="0.1"
+            value={values.designLoadKnM2}
+            onChange={(event) =>
+              setValues({
+                ...values,
+                designLoadKnM2: Number(event.target.value),
+              })
+            }
+          />
+        </Field>
+        <details className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <summary className="cursor-pointer text-xs font-bold uppercase tracking-[0.1em] text-slate-700">
+            Parámetros avanzados
+          </summary>
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            <Field label="f'c" unit="MPa">
+              <input
+                className={inputClass}
+                type="number"
+                min="17"
+                step="1"
+                value={values.concreteStrengthMpa}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    concreteStrengthMpa: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
+            <Field label="fy" unit="MPa">
+              <input
+                className={inputClass}
+                type="number"
+                min="100"
+                step="10"
+                value={values.steelYieldMpa}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    steelYieldMpa: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
+            <Field label="Recubrimiento a d" unit="cm">
+              <input
+                className={inputClass}
+                type="number"
+                min="1"
+                step="0.5"
+                value={values.coverCm}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    coverCm: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
           </div>
-        </div>
+        </details>
         <SubmitButton />
         <SaveElementControl
           defaultLabel="L-1"
@@ -677,8 +788,8 @@ export function TechnicalDisclaimer() {
         <div className="leading-6">
           <p>
             <strong>Alcance técnico:</strong> esta herramienta calcula
-            dimensiones y, en vigas, un refuerzo simplificado a flexión y corte
-            para anteproyecto o práctica académica.
+            dimensiones y refuerzo simplificado de vigas, columnas y losas para
+            anteproyecto o práctica académica.
           </p>
           <p className="mt-2 font-semibold">{SCOPE_SHORT}</p>
         </div>

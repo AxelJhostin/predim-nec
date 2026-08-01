@@ -1,8 +1,8 @@
 # PreDim NEC
 
-Calculadora web gratuita para predimensionamiento preliminar de vigas, columnas
-y losas según criterios de la Norma Ecuatoriana de la Construcción (NEC).
-Funciona completamente en el navegador, sin cuentas ni base de datos.
+Calculadora web gratuita de predimensionamiento y diseño simplificado de vigas,
+columnas y losas según criterios de la Norma Ecuatoriana de la Construcción
+(NEC). Funciona completamente en el navegador, sin cuentas ni base de datos.
 
 Desarrollada por **Hernández Axel · PUCE sede Portoviejo**.
 
@@ -12,12 +12,25 @@ Desarrollada por **Hernández Axel · PUCE sede Portoviejo**.
 
 ## Estado actual
 
-La aplicación incluye tres calculadoras interactivas, trazabilidad normativa,
-reportes imprimibles y gestión de proyectos sin servidor. Los metadatos y
-elementos guardados permanecen en el navegador y pueden trasladarse mediante
-archivos JSON.
+La aplicación incluye tres calculadoras con diseño simplificado académico
+(sección + refuerzo propuesto), trazabilidad normativa, reportes imprimibles y
+gestión de proyectos sin servidor. Los metadatos y elementos guardados
+permanecen en el navegador y pueden trasladarse mediante archivos JSON.
 
 ### Cambios recientes
+
+#### Diseño simplificado en vigas, columnas y losas
+
+Los tres módulos proponen geometría y refuerzo preliminar, con criterios de
+cumplimiento, procedimiento trazable y el mismo alcance técnico (anteproyecto /
+uso académico; no sustituye diseño definitivo).
+
+- **Vigas:** peralte según apoyo; flexión (As, cuantías, varillas, φMn ≥ Mu);
+  corte (Vu, Vc, estribos).
+- **Columnas:** Pu a partir de área tributaria y pisos; sección y φPn amarrada;
+  acero longitudinal propuesto; estribos; revisión de cuantía y esbeltez.
+- **Losas:** espesor `L/25` (maciza) o `L/21` (nervada); Mu por metro según
+  apoyo; barras a flexión; acero de temperatura / distribución.
 
 #### Posicionamiento orgánico y páginas indexables
 
@@ -32,13 +45,6 @@ archivos JSON.
   frecuentes, enlaces internos y advertencias sobre el alcance técnico.
 - No se incorporaron cookies, Google Analytics ni otros mecanismos de
   seguimiento.
-
-#### Diseño simplificado de vigas
-
-- Las vigas ahora calculan As requerido, cuantías mín/máx, propuesta de varillas
-  y verificación φMn ≥ Mu.
-- Se añadió diseño a corte con Vu, Vc, Vs y propuesta de estribos.
-- Mu y Vu dependen del tipo de apoyo (simple, continuo o voladizo).
 
 #### Identidad visual y PWA
 
@@ -91,11 +97,15 @@ npm run dev
 
 ## Módulos
 
-- **Vigas:** peralte según condición de apoyo, diseño simplificado a flexión
-  (As, cuantías, propuesta de varillas, φMn) y a corte (Vu, Vc, estribos).
-- **Columnas:** carga y área ajustadas por posición, dimensión mínima de 30 cm,
-  esbeltez y cuantía longitudinal preliminar.
-- **Losas:** relaciones `L/25` para maciza y `L/21` para nervada.
+- **Vigas:** peralte según apoyo, flexión (As, varillas, φMn) y corte (Vu, Vc,
+  estribos). Entradas: luz, apoyo, carga lineal, f'c, fy, recubrimiento y Ø
+  estribo.
+- **Columnas:** Pu, sección mínima, φPn, propuesta de acero longitudinal y
+  estribos, con revisión de esbeltez y cuantía. Entradas: área tributaria,
+  pisos, posición, carga de servicio, altura libre, k, f'c, fy y Ø estribo.
+- **Losas:** espesor `L/25` o `L/21`, flexión por metro, propuesta de barras y
+  acero de temperatura/distribución. Entradas: luz, sistema, apoyo, carga
+  superficial, f'c, fy y recubrimiento.
 - **Reportes:** vista técnica imprimible o guardable como PDF para cada módulo,
   con membrete de proyecto, formato A4 de bajo consumo de tinta y espacios para
   firma responsable y revisión estructural.
@@ -108,7 +118,7 @@ npm run dev
 - **Plantillas de tarea:** proyectos demo con elementos etiquetados para
   práctica académica o entrega rápida de memoria.
 - **Comparador de alternativas:** contraste de hasta 3 opciones guardadas del
-  mismo tipo, con recomendación preliminar.
+  mismo tipo (incluye Mu/φMn o Pu/φPn y propuestas de acero).
 - **Ayuda contextual:** tooltips en campos clave (luz, apoyo, área tributaria,
   carga, etc.).
 - **Marca visual:** logo propio en la interfaz, favicon del navegador e íconos
@@ -128,11 +138,14 @@ npm run dev
 
 La lógica de cálculo está centralizada en
 `src/utils/necCalculations.ts`. Los componentes de interfaz se encuentran en
-`src/components/`.
+`src/components/`. El alcance técnico compartido vive en `src/lib/scope.ts`.
 
 El proyecto activo se almacena con la clave
 `predim_nec_active_project`. Los datos permanecen únicamente en el navegador
 del usuario, salvo que se exporten manualmente a un archivo JSON.
+
+> Nota: elementos guardados con versiones anteriores del esquema de columnas o
+> losas pueden requerir recalcularse para ver las nuevas propuestas de acero.
 
 ## Verificación
 
@@ -143,8 +156,8 @@ npm run build
 
 ## Alcance técnico
 
-PreDim NEC calcula dimensiones y, en vigas, un refuerzo simplificado a flexión
-y corte para anteproyecto o uso académico.
+PreDim NEC calcula dimensiones y refuerzo simplificado de vigas, columnas y
+losas para anteproyecto o uso académico.
 
 **El diseño final requiere análisis estructural, combinaciones de carga,
 detallado y revisión de un profesional.** Los resultados no constituyen una

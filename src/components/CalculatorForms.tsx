@@ -10,6 +10,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { ExamplePresets } from "@/components/ExamplePresets";
+import { SCOPE_SHORT } from "@/lib/scope";
 import {
   beamExamples,
   columnExamples,
@@ -191,6 +192,8 @@ export function BeamForm({
     designLoadKnM: 8.5,
     steelYieldMpa: 420,
     coverCm: 4,
+    concreteStrengthMpa: 21,
+    stirrupDiameterMm: 10,
   });
   const [error, setError] = useState("");
 
@@ -221,7 +224,7 @@ export function BeamForm({
   return (
     <FormCard
       title="Parámetros de la viga"
-      subtitle="Predimensionamiento geométrico inicial conforme a NEC-SE-HM."
+      subtitle="Diseño simplificado a flexión y corte conforme a NEC-SE-HM / ACI 318."
       error={error}
     >
       <ExamplePresets options={beamExamples} onSelect={applyExample} />
@@ -265,7 +268,7 @@ export function BeamForm({
         <Field
           label="Carga de diseño"
           unit="kN/m"
-          hint="Carga lineal mayorada utilizada para estimar Mu ≈ wL²/10."
+          hint="Carga lineal mayorada. Mu y Vu dependen del tipo de apoyo."
           help="Incluye peso propio estimado y sobrecargas lineales del caso. No copies valores de ejemplo sin revisarlos para tu proyecto."
         >
           <input
@@ -306,7 +309,30 @@ export function BeamForm({
                 }
               />
             </Field>
-            <Field label="Recubrimiento efectivo" unit="cm">
+            <Field
+              label="Resistencia del hormigón (f'c)"
+              unit="MPa"
+              help="Resistencia especificada a compresión. 21 MPa es un valor típico de anteproyecto en Ecuador."
+            >
+              <input
+                className={inputClass}
+                type="number"
+                min="17"
+                step="1"
+                value={values.concreteStrengthMpa}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    concreteStrengthMpa: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
+            <Field
+              label="Recubrimiento a centroide (d = h − c)"
+              unit="cm"
+              help="Distancia desde la fibra extrema a tracción hasta el centroide del acero longitudinal."
+            >
               <input
                 className={inputClass}
                 type="number"
@@ -321,10 +347,30 @@ export function BeamForm({
                 }
               />
             </Field>
+            <Field
+              label="Diámetro de estribo"
+              unit="mm"
+              help="Diámetro del acero transversal. Por defecto Ø10 mm a dos ramas."
+            >
+              <input
+                className={inputClass}
+                type="number"
+                min="6"
+                step="1"
+                value={values.stirrupDiameterMm}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    stirrupDiameterMm: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
           </div>
           <p className="mt-3 text-[11px] leading-5 text-slate-500">
-            La capacidad aproximada usa ρ = 1% y φ = 0,90. Estos valores no
-            reemplazan el diseño del refuerzo.
+            El cálculo propone As y estribos con φ = 0,90 (flexión) y φ = 0,75
+            (corte). El diseño final requiere análisis estructural,
+            combinaciones de carga, detallado y revisión de un profesional.
           </p>
         </details>
         <SubmitButton />
@@ -628,11 +674,14 @@ export function TechnicalDisclaimer() {
     <aside className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
       <div className="flex items-start gap-3">
         <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0" size={19} />
-        <p className="leading-6">
-          <strong>Predimensionamiento:</strong> estos resultados orientan la
-          geometría inicial. El diseño final requiere análisis estructural,
-          combinaciones de carga, detallado y revisión de un profesional.
-        </p>
+        <div className="leading-6">
+          <p>
+            <strong>Alcance técnico:</strong> esta herramienta calcula
+            dimensiones y, en vigas, un refuerzo simplificado a flexión y corte
+            para anteproyecto o práctica académica.
+          </p>
+          <p className="mt-2 font-semibold">{SCOPE_SHORT}</p>
+        </div>
       </div>
     </aside>
   );

@@ -24,8 +24,9 @@ function metricRows(result: CalculationResult): [string, string][] {
       ["Sección", `${formatNumber(result.widthCm)} × ${formatNumber(result.depthCm)} cm`],
       ["Mu", `${formatNumber(result.ultimateMomentKnM, 2)} kN·m`],
       ["φMn", `${formatNumber(result.designResistanceKnM, 2)} kN·m`],
-      ["Apoyo", result.inputs.supportType],
-      ["Carga w", `${formatNumber(result.inputs.designLoadKnM)} kN/m`],
+      ["Acero flexión", result.flexuralBarProposal ?? "—"],
+      ["Estribos", result.stirrupProposal ?? "—"],
+      ["Vu", `${formatNumber(result.ultimateShearKn ?? 0, 1)} kN`],
     ];
   }
 

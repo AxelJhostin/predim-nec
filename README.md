@@ -33,6 +33,13 @@ archivos JSON.
 - No se incorporaron cookies, Google Analytics ni otros mecanismos de
   seguimiento.
 
+#### Diseño simplificado de vigas
+
+- Las vigas ahora calculan As requerido, cuantías mín/máx, propuesta de varillas
+  y verificación φMn ≥ Mu.
+- Se añadió diseño a corte con Vu, Vc, Vs y propuesta de estribos.
+- Mu y Vu dependen del tipo de apoyo (simple, continuo o voladizo).
+
 #### Identidad visual y PWA
 
 - Se integró el logo SVG de PreDim NEC en la interfaz, reportes y aviso de
@@ -40,6 +47,8 @@ archivos JSON.
 - Se actualizaron el favicon de la pestaña del navegador, los íconos Apple y
   los íconos de la PWA a partir del mismo logo.
 - Se habilitó instalación como PWA (Android/Chrome e instrucciones para iOS).
+- Se fijó `turbopack.root` para evitar conflictos con lockfiles del directorio
+  padre (causa frecuente del error `Connection closed` en desarrollo).
 
 #### Utilidad académica para estudiantes
 
@@ -72,10 +81,18 @@ npm run dev
 
 Abra [http://localhost:3000](http://localhost:3000).
 
+Si aparece `Connection closed` o hay dos servidores Next a la vez:
+
+```bash
+# Detener procesos previos de Next y reiniciar
+pkill -f "next dev" || true
+npm run dev
+```
+
 ## Módulos
 
-- **Vigas:** peralte según condición de apoyo, ancho mínimo de 25 cm y
-  verificación flexional aproximada con carga lineal.
+- **Vigas:** peralte según condición de apoyo, diseño simplificado a flexión
+  (As, cuantías, propuesta de varillas, φMn) y a corte (Vu, Vc, estribos).
 - **Columnas:** carga y área ajustadas por posición, dimensión mínima de 30 cm,
   esbeltez y cuantía longitudinal preliminar.
 - **Losas:** relaciones `L/25` para maciza y `L/21` para nervada.
@@ -126,9 +143,12 @@ npm run build
 
 ## Alcance técnico
 
-Los resultados son únicamente de predimensionamiento. No sustituyen el análisis
-estructural, las combinaciones de carga, el detallado del refuerzo ni una
-memoria de cálculo revisada y firmada por un profesional competente.
+PreDim NEC calcula dimensiones y, en vigas, un refuerzo simplificado a flexión
+y corte para anteproyecto o uso académico.
+
+**El diseño final requiere análisis estructural, combinaciones de carga,
+detallado y revisión de un profesional.** Los resultados no constituyen una
+memoria de cálculo firmable.
 
 La aplicación está desplegada en Vercel:
 [predim-nec.vercel.app](https://predim-nec.vercel.app).

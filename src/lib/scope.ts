@@ -1,0 +1,9 @@
+/** Alcance técnico compartido en UI, reportes y SEO. */
+export const SCOPE_SHORT =
+  "El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional.";
+
+export const SCOPE_BEAM =
+  "Diseño simplificado académico de vigas (flexión y corte). Orientá geometría y refuerzo preliminar; no sustituye el diseño definitivo.";
+
+export const SCOPE_FULL =
+  "PreDim NEC es una herramienta educativa de anteproyecto. Sus resultados orientan dimensiones y refuerzo preliminar, pero no constituyen una memoria de cálculo firmable. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional competente conforme a la NEC vigente.";

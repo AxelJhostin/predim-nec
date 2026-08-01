@@ -25,9 +25,12 @@ function parameterRows(result: CalculationResult) {
       ["Luz de la viga", `${formatNumber(result.inputs.spanM, 2)} m`],
       ["Tipo de apoyo", result.inputs.supportType],
       ["Carga de diseño", `${formatNumber(result.inputs.designLoadKnM)} kN/m`],
-      ["Regla aplicada", `h = L / ${result.supportDivisor}`],
+      ["Regla de peralte", `h = L / ${result.supportDivisor}`],
+      ["Demanda flexional", `Mu = wL²/${result.momentDivisor}`],
+      ["f'c", `${formatNumber(result.concreteStrengthMpa)} MPa`],
       ["Fluencia fy", `${formatNumber(result.inputs.steelYieldMpa)} MPa`],
-      ["Recubrimiento", `${formatNumber(result.inputs.coverCm)} cm`],
+      ["Recubrimiento a d", `${formatNumber(result.inputs.coverCm)} cm`],
+      ["Estribo", `Ø${formatNumber(result.inputs.stirrupDiameterMm)} mm`],
     ];
   }
   if (result.kind === "column") {
@@ -59,10 +62,14 @@ function resultRows(result: CalculationResult) {
   if (result.kind === "beam") {
     return [
       ["Sección recomendada", `${formatNumber(result.widthCm)} × ${formatNumber(result.depthCm)} cm`],
-      ["Inercia Ix", `${formatNumber(result.inertiaCm4, 0)} cm⁴`],
-      ["Peso propio estimado", `${formatNumber(result.selfWeightKnM, 2)} kN/m`],
       ["Momento último Mu", `${formatNumber(result.ultimateMomentKnM, 2)} kN·m`],
       ["Resistencia φMn", `${formatNumber(result.designResistanceKnM, 2)} kN·m`],
+      ["As requerido", `${formatNumber(result.requiredSteelAreaCm2, 2)} cm²`],
+      ["Acero a flexión", result.flexuralBarProposal],
+      ["Cuantía ρ", `${(result.steelRatio * 100).toFixed(3)}%`],
+      ["Cortante Vu", `${formatNumber(result.ultimateShearKn, 2)} kN`],
+      ["Vc hormigón", `${formatNumber(result.concreteShearKn, 2)} kN`],
+      ["Estribos", result.stirrupProposal],
     ];
   }
   if (result.kind === "column") {
@@ -231,10 +238,22 @@ export function TechnicalReport({ result, onClose }: TechnicalReportProps) {
           <div className="flex gap-3 rounded-xl border-l-4 border-[#FACC15] bg-amber-50 p-5 text-sm leading-6 text-amber-950">
             <TriangleAlert aria-hidden="true" className="mt-0.5 shrink-0" size={20} />
             <ul className="list-disc space-y-1 pl-4">
-              <li>Este documento corresponde únicamente a un predimensionamiento.</li>
-              <li>Las cargas ingresadas y las condiciones de apoyo deben verificarse en el modelo estructural.</li>
-              <li>Los criterios “No evaluado” requieren diseño y detallado de acero conforme a NEC-SE-HM.</li>
-              <li>El diseño definitivo debe ser revisado y firmado por un profesional competente.</li>
+              <li>
+                Este documento es de anteproyecto / práctica académica. No es una
+                memoria de cálculo firmable.
+              </li>
+              <li>
+                El diseño final requiere análisis estructural, combinaciones de
+                carga, detallado y revisión de un profesional.
+              </li>
+              <li>
+                Las cargas, apoyos y materiales deben verificarse en el modelo
+                estructural conforme a la NEC vigente.
+              </li>
+              <li>
+                Anclajes, traslapos, deflexiones, sismo y constructibilidad
+                quedan fuera del alcance automático de esta herramienta.
+              </li>
             </ul>
           </div>
         </ReportSection>

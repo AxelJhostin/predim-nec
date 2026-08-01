@@ -66,10 +66,15 @@ function ResultMetrics({ result }: { result: CalculationResult }) {
   if (result.kind === "beam") {
     return (
       <div className="grid grid-cols-2 gap-3">
-        <Metric label="Inercia Ix" value={formatNumber(result.inertiaCm4, 0)} unit="cm⁴" />
-        <Metric label="Peso propio" value={formatNumber(result.selfWeightKnM, 2)} unit="kN/m" />
         <Metric label="Momento Mu" value={formatNumber(result.ultimateMomentKnM, 1)} unit="kN·m" />
         <Metric label="Resistencia φMn" value={formatNumber(result.designResistanceKnM, 1)} unit="kN·m" />
+        <Metric label="As requerido" value={formatNumber(result.requiredSteelAreaCm2, 2)} unit="cm²" />
+        <Metric label="Acero flexión" value={result.flexuralBarProposal} />
+        <Metric label="Cortante Vu" value={formatNumber(result.ultimateShearKn, 1)} unit="kN" />
+        <Metric label="φVc hormigón" value={formatNumber(0.75 * result.concreteShearKn, 1)} unit="kN" />
+        <div className="col-span-2">
+          <Metric label="Estribos" value={result.stirrupProposal} compact />
+        </div>
       </div>
     );
   }
@@ -97,17 +102,23 @@ function Metric({
   label,
   value,
   unit,
+  compact = false,
 }: {
   label: string;
   value: string;
   unit?: string;
+  compact?: boolean;
 }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-slate-50 p-3.5">
       <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
         {label}
       </p>
-      <p className="mt-1 font-mono text-lg font-bold text-slate-950">
+      <p
+        className={`mt-1 font-mono font-bold text-slate-950 ${
+          compact ? "text-sm leading-5" : "text-lg"
+        }`}
+      >
         {value}
         {unit && <span className="ml-1 text-xs font-medium text-slate-500">{unit}</span>}
       </p>
@@ -130,7 +141,7 @@ export function ResultsPanel({
         : `${formatNumber(result.thicknessCm)} cm`;
   const title =
     result.kind === "beam"
-      ? "Sección sugerida"
+      ? "Sección y refuerzo sugeridos"
       : result.kind === "column"
         ? "Dimensiones sugeridas"
         : "Espesor sugerido";
@@ -138,6 +149,10 @@ export function ResultsPanel({
     result.kind === "beam" || result.kind === "column"
       ? result.minimumApplied
       : false;
+  const resultEyebrow =
+    result.kind === "beam"
+      ? "Diseño simplificado NEC / ACI"
+      : "Resultado preliminar";
 
   return (
     <section className="structural-card overflow-hidden">
@@ -145,7 +160,7 @@ export function ResultsPanel({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.15em] text-sky-700">
-              Resultado preliminar
+              {resultEyebrow}
             </p>
             <h2 className="mt-1 text-xl font-bold text-slate-950">{title}</h2>
           </div>
@@ -155,6 +170,11 @@ export function ResultsPanel({
         <p className="mt-5 font-mono text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
           {section}
         </p>
+        {result.kind === "beam" && (
+          <p className="mt-2 font-mono text-sm font-semibold text-slate-600">
+            {result.flexuralBarProposal} · {result.stirrupProposal}
+          </p>
+        )}
 
         <div className="mt-6 grid gap-5 md:grid-cols-[1.15fr_1fr]">
           <SectionSchematic result={result} />
@@ -162,8 +182,9 @@ export function ResultsPanel({
             <ResultMetrics result={result} />
             <div className="mt-3 flex gap-2 rounded-lg border-l-4 border-[#FACC15] bg-amber-50 p-3.5 text-xs leading-5 text-amber-950">
               <Info aria-hidden="true" className="mt-0.5 shrink-0" size={16} />
-              Revise cargas, derivas, deflexiones y detallado antes del diseño
-              definitivo.
+              {result.kind === "beam"
+                ? "Diseño simplificado útil para anteproyecto. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
+                : "Resultado preliminar. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."}
             </div>
           </div>
         </div>

@@ -66,6 +66,8 @@ const initialBeam = calculateBeam({
   designLoadKnM: 8.5,
   steelYieldMpa: 420,
   coverCm: 4,
+  concreteStrengthMpa: 21,
+  stirrupDiameterMm: 10,
 });
 const initialColumn = calculateColumn({
   tributaryAreaM2: 25,
@@ -262,12 +264,16 @@ export function StructuralDashboard({
                   <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
                     {projectSummaryOpen
                       ? "Resumen de proyecto y memoria técnica"
-                      : `Predimensionamiento de ${activeDefinition.label.toLowerCase()}`}
+                      : activeTab === "beam"
+                        ? "Diseño simplificado de vigas"
+                        : `Predimensionamiento de ${activeDefinition.label.toLowerCase()}`}
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
                     {projectSummaryOpen
                       ? "Inventario consolidado, metadatos y exportación del proyecto local."
-                      : "Estimación geométrica rápida con criterios de la Norma Ecuatoriana de la Construcción."}
+                      : activeTab === "beam"
+                        ? "Flexión, corte y propuesta de acero para anteproyecto. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
+                        : "Estimación geométrica rápida con criterios de la Norma Ecuatoriana de la Construcción. El diseño final requiere revisión profesional."}
                   </p>
                 </div>
                 <p className="font-mono text-xs text-slate-400">Unidades SI</p>
@@ -312,7 +318,10 @@ export function StructuralDashboard({
             </span>
             Hernández Axel · PUCE sede Portoviejo
           </p>
-          <p>Los resultados no sustituyen una memoria de cálculo firmada.</p>
+          <p>
+            El diseño final requiere análisis estructural, combinaciones de
+            carga, detallado y revisión profesional.
+          </p>
         </div>
       </footer>
     </div>

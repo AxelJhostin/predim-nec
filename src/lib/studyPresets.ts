@@ -30,6 +30,8 @@ export const beamExamples: ExamplePreset<BeamInputs>[] = [
       designLoadKnM: 7.5,
       steelYieldMpa: 420,
       coverCm: 4,
+      concreteStrengthMpa: 21,
+      stirrupDiameterMm: 10,
     },
   },
   {
@@ -42,6 +44,8 @@ export const beamExamples: ExamplePreset<BeamInputs>[] = [
       designLoadKnM: 12,
       steelYieldMpa: 420,
       coverCm: 4,
+      concreteStrengthMpa: 21,
+      stirrupDiameterMm: 10,
     },
   },
   {
@@ -54,6 +58,8 @@ export const beamExamples: ExamplePreset<BeamInputs>[] = [
       designLoadKnM: 6,
       steelYieldMpa: 420,
       coverCm: 4,
+      concreteStrengthMpa: 21,
+      stirrupDiameterMm: 10,
     },
   },
 ];

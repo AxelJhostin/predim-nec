@@ -23,27 +23,27 @@ interface CalculatorContent {
 export const calculatorContent: Record<ElementType, CalculatorContent> = {
   beam: {
     eyebrow: "Calculadora NEC para vigas",
-    title: "Predimensionamiento de vigas de hormigón armado",
+    title: "Diseño simplificado de vigas de hormigón armado",
     description:
-      "Obtén una sección preliminar b × h a partir de la luz, el tipo de apoyo y la carga lineal. La herramienta verifica de forma aproximada que la resistencia flexional supere el momento solicitado.",
+      "Obtén sección b × h, acero a flexión y estribos a partir de la luz, el apoyo y la carga. Es un cálculo de anteproyecto: el diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional.",
     initialTab: "beam",
     inputs: [
       "Luz libre de la viga en metros.",
       "Condición de apoyo: simple, continua o voladizo.",
       "Carga de diseño lineal en kN/m.",
-      "Resistencia del acero y recubrimiento para la estimación.",
+      "f'c, fy, recubrimiento a d y diámetro de estribo.",
     ],
     criteria: [
       "Relaciones luz/peralte adoptadas por NEC-SE-HM mediante ACI 318.",
-      "Ancho preliminar igual a la mitad del peralte, con mínimo de 25 cm.",
-      "Redondeo conservador al siguiente múltiplo de 5 cm.",
-      "Comprobación preliminar de φMn ≥ Mu con cuantía de acero estimada.",
+      "Diseño a flexión con As, cuantías y φMn ≥ Mu.",
+      "Diseño a corte con Vu, Vc y propuesta de estribos.",
+      "Alcance académico: no sustituye memoria firmada ni detallado sísmico.",
     ],
     steps: [
       "Selecciona Vigas y completa las condiciones del elemento.",
-      "Revisa la sección recomendada y la tabla de cumplimiento.",
-      "Abre el procedimiento para comprobar fórmulas, unidades y referencias.",
-      "Guarda el elemento en el proyecto o imprime su memoria técnica.",
+      "Revisa sección, acero longitudinal y estribos propuestos.",
+      "Abre el procedimiento para comprobar fórmulas y referencias.",
+      "Guarda el elemento o imprime la memoria, recordando el alcance técnico.",
     ],
   },
   column: {
@@ -144,10 +144,10 @@ export function CalculatorSeoPage({
           </div>
 
           <div className="mt-10 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-950">
-            <strong>Alcance técnico:</strong> este cálculo es una estimación
-            preliminar con fines académicos y de anteproyecto. No sustituye el
-            análisis, diseño, detallado ni revisión de un ingeniero estructural
-            responsable conforme a la NEC vigente.
+            <strong>Alcance técnico:</strong> esta herramienta sirve para
+            anteproyecto y práctica académica. El diseño final requiere análisis
+            estructural, combinaciones de carga, detallado y revisión de un
+            profesional competente conforme a la NEC vigente.
           </div>
 
           <nav

@@ -16,7 +16,7 @@ import {
   ColumnForm,
   SlabForm,
   TechnicalDisclaimer,
-} from "@/components/CalculatorForms";
+} from "@/components/forms";
 import { BrandLogo } from "@/components/BrandLogo";
 import { ResultsPanel } from "@/components/ResultsPanel";
 import { ProjectSummary } from "@/components/ProjectSummary";
@@ -30,7 +30,7 @@ import {
   type ColumnResult,
   type ElementType,
   type SlabResult,
-} from "@/utils/necCalculations";
+} from "@/calculations";
 
 interface TabDefinition {
   id: ElementType;

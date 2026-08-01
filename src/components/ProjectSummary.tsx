@@ -26,7 +26,7 @@ import {
   useProject,
   type ProjectMetadata,
 } from "@/context/ProjectContext";
-import { taskTemplates } from "@/lib/studyPresets";
+import { taskTemplates } from "@/presets";
 
 const metadataInputClass =
   "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-600 focus:ring-4 focus:ring-sky-100";

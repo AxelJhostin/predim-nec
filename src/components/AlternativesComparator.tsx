@@ -10,7 +10,7 @@ import {
   formatNumber,
   type CalculationResult,
   type ElementType,
-} from "@/utils/necCalculations";
+} from "@/calculations";
 
 const kindLabels: Record<ElementType, string> = {
   beam: "Vigas",

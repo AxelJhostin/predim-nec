@@ -1,5 +1,5 @@
 import { CheckCircle2, CircleMinus, XCircle } from "lucide-react";
-import type { ComplianceCriterion } from "@/utils/necCalculations";
+import type { ComplianceCriterion } from "@/calculations";
 
 interface ComplianceTableProps {
   criteria: ComplianceCriterion[];

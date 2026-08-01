@@ -11,7 +11,7 @@ import { ComplianceTable } from "@/components/ComplianceTable";
 import {
   formatNumber,
   type CalculationResult,
-} from "@/utils/necCalculations";
+} from "@/calculations";
 import { useProject } from "@/context/ProjectContext";
 
 interface TechnicalReportProps {

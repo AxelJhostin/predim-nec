@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { StructuralDashboard } from "@/components/StructuralDashboard";
-import type { ElementType } from "@/utils/necCalculations";
+import type { ElementType } from "@/calculations";
 
 interface CalculatorContent {
   eyebrow: string;

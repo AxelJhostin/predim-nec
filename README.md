@@ -19,6 +19,14 @@ permanecen en el navegador y pueden trasladarse mediante archivos JSON.
 
 ### Cambios recientes
 
+#### Modularización del dominio
+
+- El cálculo dejó de vivir en un único archivo: ahora está en
+  `src/calculations/` (tipos, helpers, vigas, columnas, losas y registro).
+- El modelo de proyecto local está en `src/project/`; presets en `src/presets/`;
+  formularios por elemento en `src/components/forms/`.
+- Se mantienen barrels de compatibilidad (`@/utils/necCalculations`, etc.).
+
 #### Diseño simplificado en vigas, columnas y losas
 
 Los tres módulos proponen geometría y refuerzo preliminar, con criterios de
@@ -136,13 +144,37 @@ npm run dev
   [losas](https://predim-nec.vercel.app/calculadora-losas-nec) y una
   [guía con preguntas frecuentes](https://predim-nec.vercel.app/guia-predimensionamiento-nec).
 
-La lógica de cálculo está centralizada en
-`src/utils/necCalculations.ts`. Los componentes de interfaz se encuentran en
-`src/components/`. El alcance técnico compartido vive en `src/lib/scope.ts`.
+## Arquitectura
 
-El proyecto activo se almacena con la clave
-`predim_nec_active_project`. Los datos permanecen únicamente en el navegador
-del usuario, salvo que se exporten manualmente a un archivo JSON.
+El código se organiza por dominio para poder añadir módulos NEC sin inflar un
+solo archivo:
+
+| Carpeta | Responsabilidad |
+| --- | --- |
+| `src/calculations/` | Dominio puro: tipos, helpers, `beam` / `column` / `slab`, registro |
+| `src/project/` | Modelo de proyecto local, persistencia tipada y parseo JSON |
+| `src/presets/` | Ejemplos listos y plantillas de tarea |
+| `src/components/forms/` | Formularios por elemento + primitivas UI compartidas |
+| `src/components/` | Resultados, reportes, dashboard, SEO, PWA |
+| `src/context/` | Provider React del proyecto activo |
+| `src/lib/` | SEO, alcance técnico y barrels de compatibilidad |
+
+**API estable (preferida):** `@/calculations`, `@/project`, `@/presets`,
+`@/components/forms`.
+
+**Compatibilidad:** `@/utils/necCalculations`, `@/lib/studyPresets` y
+`@/components/CalculatorForms` reexportan los módulos nuevos.
+
+Para un módulo de cálculo nuevo:
+
+1. Añadir tipos y `calculateX` en `src/calculations/`.
+2. Registrarlo en `src/calculations/registry.ts`.
+3. Crear formulario en `src/components/forms/` y presets en `src/presets/`.
+4. Conectar la pestaña en `StructuralDashboard` y, si aplica, página SEO.
+
+El alcance técnico compartido vive en `src/lib/scope.ts`. El proyecto activo se
+almacena con la clave `predim_nec_active_project`. Los datos permanecen en el
+navegador, salvo exportación JSON.
 
 > Nota: elementos guardados con versiones anteriores del esquema de columnas o
 > losas pueden requerir recalcularse para ver las nuevas propuestas de acero.

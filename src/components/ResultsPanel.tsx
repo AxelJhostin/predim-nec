@@ -3,7 +3,7 @@ import { ComplianceTable } from "@/components/ComplianceTable";
 import {
   formatNumber,
   type CalculationResult,
-} from "@/utils/necCalculations";
+} from "@/calculations";
 
 function StatusBadge({ applied }: { applied: boolean }) {
   return (

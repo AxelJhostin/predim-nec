@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Building2, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import {
   createPageMetadata,
   serializeJsonLd,
@@ -97,9 +98,7 @@ export default function GuidePage() {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3 font-black">
-            <span className="rounded-lg bg-[#E65100] p-2 text-white">
-              <Building2 aria-hidden="true" size={20} />
-            </span>
+            <BrandLogo size={36} priority />
             PreDim NEC
           </Link>
           <Link

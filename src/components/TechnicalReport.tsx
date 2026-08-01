@@ -2,11 +2,11 @@
 
 import {
   ArrowLeft,
-  Building2,
   FileCheck2,
   Printer,
   TriangleAlert,
 } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ComplianceTable } from "@/components/ComplianceTable";
 import {
   formatNumber,
@@ -133,7 +133,7 @@ export function TechnicalReport({ result, onClose }: TechnicalReportProps) {
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
               <div className="flex items-center gap-2 text-[#E65100]">
-                <Building2 aria-hidden="true" size={22} />
+                <BrandLogo size={32} />
                 <span className="text-sm font-extrabold uppercase tracking-[0.18em]">
                   PreDim NEC
                 </span>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, X } from "lucide-react";
+import { X } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -76,9 +77,7 @@ export function PwaInstallPrompt() {
   return (
     <div className="no-print fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:left-auto">
       <div className="flex items-start gap-3">
-        <span className="rounded-xl bg-orange-50 p-2 text-[#E65100]">
-          <Download aria-hidden="true" size={18} />
-        </span>
+        <BrandLogo size={40} />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-bold text-slate-950">
             Instalar PreDim NEC

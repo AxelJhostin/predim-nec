@@ -2,7 +2,6 @@
 
 import { useRef, useState, type ChangeEvent } from "react";
 import {
-  Building2,
   CheckCircle2,
   Columns3,
   Download,
@@ -21,6 +20,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { AlternativesComparator } from "@/components/AlternativesComparator";
+import { BrandLogo } from "@/components/BrandLogo";
 import {
   parseImportedProject,
   useProject,
@@ -259,7 +259,7 @@ export function ProjectSummary() {
         <header className="mb-5 flex items-start justify-between gap-6 border-b-2 border-[#E65100] pb-4">
           <div>
             <div className="flex items-center gap-2 text-[#E65100]">
-              <Building2 aria-hidden="true" size={20} />
+              <BrandLogo size={28} />
               <span className="text-xs font-extrabold uppercase tracking-[0.18em]">
                 PreDim NEC
               </span>

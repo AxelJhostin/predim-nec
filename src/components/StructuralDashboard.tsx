@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   BookOpen,
-  Building2,
   Columns3,
   FolderKanban,
   Layers3,
@@ -18,6 +17,7 @@ import {
   SlabForm,
   TechnicalDisclaimer,
 } from "@/components/CalculatorForms";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ResultsPanel } from "@/components/ResultsPanel";
 import { ProjectSummary } from "@/components/ProjectSummary";
 import { TechnicalReport } from "@/components/TechnicalReport";
@@ -134,9 +134,7 @@ export function StructuralDashboard({
             >
               {mobileMenuOpen ? <X size={21} /> : <Menu size={21} />}
             </button>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E65100] text-white">
-              <Building2 aria-hidden="true" size={20} />
-            </div>
+            <BrandLogo size={36} priority />
             <div>
               <p className="text-base font-black tracking-tight text-slate-950">
                 PreDim NEC

@@ -19,6 +19,14 @@ permanecen en el navegador y pueden trasladarse mediante archivos JSON.
 
 ### Cambios recientes
 
+#### Calidad de software
+
+- Tests unitarios del dominio (`vitest`) para vigas, columnas, losas y parseo
+  de proyecto.
+- Pipeline CI en GitHub Actions: `lint` → `test` → `build` en cada push/PR a
+  `main`.
+- Script local `npm run check` para la misma verificación.
+
 #### Modularización del dominio
 
 - El cálculo dejó de vivir en un único archivo: ahora está en
@@ -183,8 +191,14 @@ navegador, salvo exportación JSON.
 
 ```bash
 npm run lint
+npm test
 npm run build
+# o todo junto:
+npm run check
 ```
+
+Los tests viven junto al dominio (`src/calculations/*.test.ts`,
+`src/project/*.test.ts`). El CI de GitHub Actions ejecuta la misma secuencia.
 
 ## Alcance técnico
 

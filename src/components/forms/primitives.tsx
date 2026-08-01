@@ -130,13 +130,15 @@ export function FormCard({
   children: ReactNode;
 }) {
   return (
-    <section className="structural-card p-5 sm:p-7">
-      <div className="mb-6 flex items-start gap-3">
-        <div className="rounded-lg bg-orange-50 p-2.5 text-orange-700">
-          <Ruler aria-hidden="true" size={20} />
+    <section className="structural-card p-5 sm:p-6">
+      <div className="mb-5 flex items-start gap-3">
+        <div className="rounded-md bg-orange-50 p-2 text-orange-700">
+          <Ruler aria-hidden="true" size={18} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-slate-950">{title}</h2>
+          <h2 className="text-lg font-bold tracking-tight text-slate-950 sm:text-xl">
+            {title}
+          </h2>
           <p className="mt-1 text-sm leading-6 text-slate-500">{subtitle}</p>
         </div>
       </div>
@@ -192,12 +194,12 @@ export function SaveElementControl({
   }
 
   return (
-    <div className="mt-4 rounded-lg border border-sky-200 bg-sky-50/60 p-4">
-      <label className="block text-[10px] font-bold uppercase tracking-[0.12em] text-sky-900">
+    <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
+      <label className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
         Etiqueta del elemento
         <div className="mt-2 flex flex-col gap-2 sm:flex-row">
           <input
-            className="min-w-0 flex-1 rounded-lg border border-sky-200 bg-white px-3 py-2.5 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100"
+            className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100"
             value={label}
             onChange={(event) => {
               setLabel(event.target.value);
@@ -209,7 +211,7 @@ export function SaveElementControl({
           <button
             type="button"
             onClick={save}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-sky-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-sky-800"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-sky-700 px-4 py-2.5 text-xs font-semibold text-white hover:bg-sky-800"
           >
             <Save aria-hidden="true" size={15} />
             Guardar elemento
@@ -220,14 +222,14 @@ export function SaveElementControl({
         <div
           role="status"
           aria-live="polite"
-          className="mt-3 space-y-2 text-[11px] normal-case tracking-normal text-sky-900"
+          className="mt-3 flex flex-col gap-2 border-t border-slate-200 pt-3 text-xs normal-case tracking-normal text-slate-600 sm:flex-row sm:items-center sm:justify-between"
         >
           <p>{feedback}</p>
           {savedLabel && onOpenProjectSummary && (
             <button
               type="button"
               onClick={onOpenProjectSummary}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-sky-300 bg-white px-3 py-2 text-xs font-bold text-sky-800 transition hover:border-sky-500 hover:bg-sky-50"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-sky-900"
             >
               Ver en Resumen & Memoria
               <ArrowRight aria-hidden="true" size={14} />

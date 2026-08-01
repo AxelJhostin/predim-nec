@@ -22,10 +22,13 @@ permanecen en el navegador y pueden trasladarse mediante archivos JSON.
 #### Experiencia de uso
 
 - Tras calcular: scroll a resultados, resaltado breve y aviso accesible.
-- Distinción entre **ejemplo inicial** y **tu cálculo**.
+- Distinción clara entre ejemplo de arranque y cálculo propio, con menos
+  badges y avisos apilados.
 - Tras guardar: CTA a Resumen & Memoria y sugerencia de siguiente etiqueta.
 - Ayuda de campos usable con toque; menú móvil con Escape/`aria-expanded`.
 - Cumplimiento visible (pasa / criterios por revisar); confirmar al eliminar.
+- Pulido visual: tipografía más limpia, métricas más ligeras y disclaimer
+  menos ruidoso.
 
 #### Calidad de software
 

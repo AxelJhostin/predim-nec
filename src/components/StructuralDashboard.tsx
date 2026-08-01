@@ -341,20 +341,20 @@ export function StructuralDashboard({
                       ? "Resumen de proyecto y memoria técnica"
                       : `Diseño simplificado de ${activeDefinition.label.toLowerCase()}`}
                   </h1>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
                     {projectSummaryOpen
-                      ? "Inventario consolidado, metadatos y exportación del proyecto local."
+                      ? "Inventario, metadatos y exportación del proyecto local."
                       : activeTab === "beam"
-                        ? "Flexión, corte y propuesta de acero para anteproyecto. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
+                        ? "Flexión, corte y propuesta de acero para anteproyecto."
                         : activeTab === "column"
-                          ? "Carga axial, sección, acero longitudinal y estribos. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."
-                          : "Espesor, flexión por metro y acero de temperatura. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."}
+                          ? "Carga axial, sección, acero longitudinal y estribos."
+                          : "Espesor, flexión por metro y acero de temperatura."}
                   </p>
                 </div>
                 {!projectSummaryOpen && (
                   <a
                     href="#calculation-results"
-                    className="no-print inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-sky-700 hover:border-sky-400 xl:hidden"
+                    className="no-print inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-sky-400 hover:text-sky-700 xl:hidden"
                     onClick={(event) => {
                       event.preventDefault();
                       focusResults();

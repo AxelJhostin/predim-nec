@@ -254,7 +254,7 @@ export function StructuralDashboard({
 
         <main className="min-w-0 flex-1 px-4 py-7 sm:px-6 lg:px-8 lg:py-9">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-7">
+            <div className="dashboard-heading mb-7">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#E65100]">
                 Proyecto / Estructura principal /{" "}
                 {projectSummaryOpen ? "Resumen & Memoria" : activeDefinition.label}

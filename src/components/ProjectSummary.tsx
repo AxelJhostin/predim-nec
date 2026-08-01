@@ -2,6 +2,7 @@
 
 import { useRef, useState, type ChangeEvent } from "react";
 import {
+  Building2,
   CheckCircle2,
   Columns3,
   Download,
@@ -190,7 +191,7 @@ export function ProjectSummary() {
   }
 
   return (
-    <div className="project-print-container space-y-4">
+    <div className="project-summary project-print-container space-y-4">
       <div className="no-print flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div className="flex items-center gap-2 font-mono text-xs text-[#5A4138]">
           <span>Proyectos</span>
@@ -230,8 +231,24 @@ export function ProjectSummary() {
         </div>
       </div>
 
-      <section className="rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+      <section className="project-letterhead rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
+        <header className="mb-5 flex items-start justify-between gap-6 border-b-2 border-[#E65100] pb-4">
+          <div>
+            <div className="flex items-center gap-2 text-[#E65100]">
+              <Building2 aria-hidden="true" size={20} />
+              <span className="text-xs font-extrabold uppercase tracking-[0.18em]">
+                PreDim NEC
+              </span>
+            </div>
+            <h2 className="mt-2 text-xl font-black uppercase tracking-tight text-[#0B1C30]">
+              Memoria técnica de predimensionamiento
+            </h2>
+          </div>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#5A4138]">
+            Norma Ecuatoriana de la Construcción
+          </p>
+        </header>
+        <div className="project-metadata-grid grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           <MetadataField
             label="Proyecto"
             field="name"
@@ -275,7 +292,7 @@ export function ProjectSummary() {
         </p>
       )}
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="project-stats grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Total vigas" value={counts.beam} icon={Minus} />
         <StatCard label="Total columnas" value={counts.column} icon={Columns3} />
         <StatCard label="Total losas" value={counts.slab} icon={Layers3} />
@@ -308,7 +325,7 @@ export function ProjectSummary() {
           </label>
         </div>
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[720px] border-collapse text-left">
+        <table className="project-elements-table w-full min-w-[720px] border-collapse text-left">
           <thead>
             <tr className="border-b border-[#E3BFB2] bg-[#DCE9FF] font-mono text-[10px] uppercase tracking-[0.13em] text-[#5A4138]">
               <th className="px-5 py-3">ID</th>
@@ -316,7 +333,7 @@ export function ProjectSummary() {
               <th className="px-5 py-4">Dimensión</th>
               <th className="px-5 py-4">Norma NEC</th>
               <th className="px-5 py-4">Estado</th>
-              <th className="px-5 py-4 text-right">Acciones</th>
+              <th className="no-print px-5 py-4 text-right">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E3BFB2]">
@@ -365,7 +382,7 @@ export function ProjectSummary() {
                     {element.status}
                   </span>
                 </td>
-                <td className="px-5 py-4">
+                <td className="no-print px-5 py-4">
                   <div className="flex justify-end gap-1">
                     {editingId === element.id ? (
                       <>
@@ -429,7 +446,7 @@ export function ProjectSummary() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
+      <section className="project-notes rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
         <label
           className="block text-lg font-bold text-[#0B1C30]"
           htmlFor="project-notes"
@@ -448,6 +465,17 @@ export function ProjectSummary() {
           Autoguardado local activo.
         </p>
       </section>
+
+      <footer className="print-footer project-signature print-only">
+        <div>
+          <p>Firma del responsable</p>
+          <span>{project.metadata.responsible || "Nombre y firma"}</span>
+        </div>
+        <div>
+          <p>Revisión estructural</p>
+          <span>Nombre, registro profesional y firma</span>
+        </div>
+      </footer>
 
       <section className="no-print flex flex-col items-start justify-between gap-4 rounded-lg border border-[#E3BFB2] bg-[#DCE9FF] p-5 md:flex-row md:items-center">
         <div>

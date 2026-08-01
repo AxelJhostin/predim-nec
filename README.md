@@ -62,7 +62,9 @@ Abra [http://localhost:3000](http://localhost:3000).
 - **Columnas:** carga y área ajustadas por posición, dimensión mínima de 30 cm,
   esbeltez y cuantía longitudinal preliminar.
 - **Losas:** relaciones `L/25` para maciza y `L/21` para nervada.
-- **Reportes:** vista técnica imprimible o guardable como PDF para cada módulo.
+- **Reportes:** vista técnica imprimible o guardable como PDF para cada módulo,
+  con membrete de proyecto, formato A4 de bajo consumo de tinta y espacios para
+  firma responsable y revisión estructural.
 - **Trazabilidad:** procedimiento, conversiones, redondeos y referencias
   normativas visibles junto a cada resultado.
 - **Proyectos locales:** metadatos, elementos etiquetados y resumen persistente

@@ -57,19 +57,47 @@ select {
   border: 1px solid #fed7c2;
 }
 
+.print-only {
+  display: none;
+}
+
 @media print {
   @page {
     size: A4;
-    margin: 12mm;
+    margin: 20mm 15mm;
   }
 
   html,
   body {
+    width: 100% !important;
+    min-height: auto !important;
     background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10pt;
+    print-color-adjust: economy;
+    -webkit-print-color-adjust: economy;
   }
 
-  .no-print {
+  .no-print,
+  button,
+  aside,
+  footer:not(.print-footer),
+  .dashboard-heading {
     display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  main,
+  .project-summary,
+  .project-print-container,
+  .print-container {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .report-screen {
@@ -77,26 +105,142 @@ select {
     background: #ffffff !important;
   }
 
-  .print-container {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  .print-container,
+  .project-print-container {
     box-shadow: none !important;
   }
 
-  .project-print-container {
+  .print-container *,
+  .project-print-container * {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+
+  .print-container svg,
+  .project-print-container svg {
+    color: #000000 !important;
+  }
+
+  .project-letterhead,
+  .report-letterhead {
+    break-after: avoid;
+    break-inside: avoid;
+    border: 1px solid #475569 !important;
+    border-bottom: 2px solid #000000 !important;
+    border-radius: 0 !important;
+    padding: 8mm !important;
+  }
+
+  .project-metadata-grid,
+  .report-metadata-grid {
+    display: grid !important;
+    grid-template-columns: 1.2fr 1.1fr 1.1fr 1fr 0.8fr !important;
+    gap: 0 !important;
+    overflow: visible !important;
+    border: 1px solid #64748b !important;
+    border-radius: 0 !important;
+  }
+
+  .project-metadata-grid > *,
+  .report-metadata-grid > * {
+    min-width: 0;
+    padding: 3mm !important;
+    border-right: 1px solid #94a3b8;
+  }
+
+  .project-metadata-grid > *:last-child,
+  .report-metadata-grid > *:last-child {
+    border-right: 0;
+  }
+
+  .project-stats {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    break-inside: avoid;
+  }
+
+  .project-stats > * {
+    min-width: 0;
+    border-color: #94a3b8 !important;
+  }
+
+  .project-elements-table {
     width: 100% !important;
-    margin: 0 !important;
+    min-width: 0 !important;
+    font-size: 8.5pt;
   }
 
-  .project-print-container section {
+  .project-elements-table th,
+  .project-elements-table td {
+    padding: 2.5mm 2mm !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  th,
+  td {
     break-inside: avoid;
+    page-break-inside: avoid;
   }
 
+  table:not(.project-elements-table),
   .report-section,
-  table,
-  footer {
+  .structural-card,
+  .project-letterhead,
+  .project-stats,
+  .project-notes,
+  .project-signature,
+  .report-signature {
     break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-section {
+    margin-top: 8mm !important;
+  }
+
+  .blueprint-grid {
+    min-height: 45mm !important;
+    border-color: #64748b !important;
+  }
+
+  input,
+  select,
+  textarea {
+    border: 1px solid #94a3b8 !important;
+    background: transparent !important;
+    color: #000000 !important;
+  }
+
+  .project-signature,
+  .report-signature {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18mm !important;
+    margin-top: 22mm !important;
+    padding-top: 12mm !important;
+    border-top: 1px solid #94a3b8 !important;
+  }
+
+  .project-signature > div,
+  .report-signature > div {
+    min-height: 18mm;
+    padding-top: 3mm !important;
+    border-top: 1px solid #000000 !important;
+    font-size: 9pt;
+  }
+
+  p,
+  li,
+  td,
+  dd {
+    orphans: 3;
+    widows: 3;
   }
 }

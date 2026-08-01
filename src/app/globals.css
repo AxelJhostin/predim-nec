@@ -85,6 +85,15 @@ select {
     box-shadow: none !important;
   }
 
+  .project-print-container {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .project-print-container section {
+    break-inside: avoid;
+  }
+
   .report-section,
   table,
   footer {

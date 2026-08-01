@@ -99,6 +99,12 @@ export function StructuralDashboard() {
 
   function selectTab(tab: ElementType) {
     setActiveTab(tab);
+    setProjectSummaryOpen(false);
+    setMobileMenuOpen(false);
+  }
+
+  function openProjectSummary() {
+    setProjectSummaryOpen(true);
     setMobileMenuOpen(false);
   }
 
@@ -113,7 +119,7 @@ export function StructuralDashboard() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <header className="no-print sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <button
@@ -139,7 +145,7 @@ export function StructuralDashboard() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => setProjectSummaryOpen((open) => !open)}
+              onClick={openProjectSummary}
               className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-sky-400 hover:text-sky-700"
             >
               <FolderKanban aria-hidden="true" size={16} />
@@ -168,15 +174,34 @@ export function StructuralDashboard() {
         <aside
           className={`fixed inset-y-16 left-0 z-30 w-64 border-r border-slate-200 bg-white p-4 transition-transform md:sticky md:top-16 md:block md:h-[calc(100vh-4rem)] md:translate-x-0 ${
             mobileMenuOpen ? "translate-x-0 shadow-xl" : "-translate-x-full"
-          }`}
+          } no-print`}
         >
           <p className="px-3 pb-3 pt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
             Estructura principal
           </p>
           <nav aria-label="Tipos de elemento" className="space-y-1.5">
+            <button
+              type="button"
+              onClick={openProjectSummary}
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
+                projectSummaryOpen
+                  ? "bg-sky-100 text-sky-900 ring-1 ring-inset ring-sky-200"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"
+              }`}
+            >
+              <FolderKanban aria-hidden="true" size={19} />
+              <span>
+                <span className="block text-sm font-bold">
+                  Resumen & Memoria
+                </span>
+                <span className="block text-[11px] opacity-65">
+                  {project.elements.length} elementos guardados
+                </span>
+              </span>
+            </button>
             {tabs.map((tab) => {
               const Icon = tab.icon;
-              const active = tab.id === activeTab;
+              const active = !projectSummaryOpen && tab.id === activeTab;
               return (
                 <button
                   key={tab.id}
@@ -209,7 +234,7 @@ export function StructuralDashboard() {
               <div className="h-full w-full rounded-full bg-sky-600" />
             </div>
             <p className="mt-2 text-[10px] leading-4 text-slate-500">
-              Cálculo local, sin registro ni almacenamiento de datos.
+              Proyecto guardado localmente, sin cuentas ni base de datos.
             </p>
           </div>
         </aside>
@@ -218,7 +243,7 @@ export function StructuralDashboard() {
           <button
             type="button"
             aria-label="Cerrar navegación"
-            className="fixed inset-0 top-16 z-20 bg-slate-950/30 md:hidden"
+            className="no-print fixed inset-0 top-16 z-20 bg-slate-950/30 md:hidden"
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
@@ -227,28 +252,29 @@ export function StructuralDashboard() {
           <div className="mx-auto max-w-7xl">
             <div className="mb-7">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#E65100]">
-                Proyecto / Estructura principal / {activeDefinition.label}
+                Proyecto / Estructura principal /{" "}
+                {projectSummaryOpen ? "Resumen & Memoria" : activeDefinition.label}
               </p>
               <div className="mt-2 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
                 <div>
                   <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-                    Predimensionamiento de {activeDefinition.label.toLowerCase()}
+                    {projectSummaryOpen
+                      ? "Resumen de proyecto y memoria técnica"
+                      : `Predimensionamiento de ${activeDefinition.label.toLowerCase()}`}
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                    Estimación geométrica rápida con criterios de la Norma
-                    Ecuatoriana de la Construcción.
+                    {projectSummaryOpen
+                      ? "Inventario consolidado, metadatos y exportación del proyecto local."
+                      : "Estimación geométrica rápida con criterios de la Norma Ecuatoriana de la Construcción."}
                   </p>
                 </div>
                 <p className="font-mono text-xs text-slate-400">Unidades SI</p>
               </div>
             </div>
 
-            {projectSummaryOpen && (
-              <div className="mb-7">
-                <ProjectSummary />
-              </div>
-            )}
-
+            {projectSummaryOpen ? (
+              <ProjectSummary />
+            ) : (
             <div className="grid items-start gap-6 xl:grid-cols-[minmax(340px,0.78fr)_minmax(0,1.22fr)]">
               <div>
                 {activeTab === "beam" && (
@@ -270,11 +296,12 @@ export function StructuralDashboard() {
                 onOpenReport={() => setReportOpen(true)}
               />
             </div>
+            )}
           </div>
         </main>
       </div>
 
-      <footer className="border-t border-slate-200 bg-white px-4 py-6 md:ml-64">
+      <footer className="no-print border-t border-slate-200 bg-white px-4 py-6 md:ml-64">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-2 text-xs text-slate-400 sm:flex-row">
           <p>© 2026 PreDim NEC · Herramienta educativa gratuita</p>
           <p>Los resultados no sustituyen una memoria de cálculo firmada.</p>

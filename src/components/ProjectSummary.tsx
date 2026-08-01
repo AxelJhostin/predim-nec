@@ -2,14 +2,21 @@
 
 import { useRef, useState, type ChangeEvent } from "react";
 import {
+  CheckCircle2,
+  Columns3,
   Download,
   FileJson,
+  Layers3,
+  Minus,
   Pencil,
+  Printer,
   RotateCcw,
   Save,
+  Search,
   Trash2,
   Upload,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import {
   parseImportedProject,
@@ -30,23 +37,34 @@ function MetadataField({
   label,
   field,
   type = "text",
+  editing,
 }: {
   label: string;
   field: keyof ProjectMetadata;
   type?: "text" | "date";
+  editing: boolean;
 }) {
   const { project, updateMetadata } = useProject();
 
   return (
-    <label className="block text-xs font-bold uppercase tracking-[0.1em] text-slate-600">
-      {label}
-      <input
-        type={type}
-        className={metadataInputClass}
-        value={project.metadata[field]}
-        onChange={(event) => updateMetadata(field, event.target.value)}
-      />
-    </label>
+    <div>
+      <p className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#5A4138]">
+        {label}
+      </p>
+      {editing ? (
+        <input
+          aria-label={label}
+          type={type}
+          className={metadataInputClass}
+          value={project.metadata[field]}
+          onChange={(event) => updateMetadata(field, event.target.value)}
+        />
+      ) : (
+        <p className="mt-2 min-h-6 text-sm font-semibold text-[#0B1C30]">
+          {project.metadata[field] || "Sin definir"}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -54,6 +72,7 @@ export function ProjectSummary() {
   const {
     project,
     isHydrated,
+    updateMetadata,
     renameElement,
     removeElement,
     replaceProject,
@@ -64,6 +83,8 @@ export function ProjectSummary() {
   const [editingLabel, setEditingLabel] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [metadataEditing, setMetadataEditing] = useState(false);
+  const [filter, setFilter] = useState("");
 
   function exportProject() {
     const content = JSON.stringify(project, null, 2);
@@ -135,6 +156,31 @@ export function ProjectSummary() {
     setEditingLabel("");
   }
 
+  function printProject() {
+    setMetadataEditing(false);
+    window.setTimeout(() => window.print(), 0);
+  }
+
+  const counts = project.elements.reduce(
+    (total, element) => {
+      total[element.kind] += 1;
+      return total;
+    },
+    { beam: 0, column: 0, slab: 0 },
+  );
+  const passingElements = project.elements.filter(
+    (element) => element.status === "PASA",
+  ).length;
+  const compliancePercentage = project.elements.length
+    ? Math.round((passingElements / project.elements.length) * 100)
+    : 0;
+  const normalizedFilter = filter.trim().toLocaleLowerCase("es");
+  const filteredElements = project.elements.filter((element) =>
+    `${element.label} ${kindLabels[element.kind]} ${element.dimension}`
+      .toLocaleLowerCase("es")
+      .includes(normalizedFilter),
+  );
+
   if (!isHydrated) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
@@ -144,89 +190,141 @@ export function ProjectSummary() {
   }
 
   return (
-    <section className="structural-card overflow-hidden">
-      <div className="border-b border-slate-200 p-5 sm:p-7">
-        <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#E65100]">
-              Persistencia local
-            </p>
-            <h2 className="mt-1 text-2xl font-black text-slate-950">
-              Resumen del proyecto
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-slate-500">
-              Los datos se guardan únicamente en este navegador.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={exportProject}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:border-sky-500 hover:text-sky-700"
-            >
-              <Download aria-hidden="true" size={16} />
-              Exportar JSON
-            </button>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:border-sky-500 hover:text-sky-700"
-            >
-              <Upload aria-hidden="true" size={16} />
-              Importar JSON
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="application/json,.json"
-              className="sr-only"
-              onChange={importProject}
-            />
-            <button
-              type="button"
-              onClick={resetProject}
-              className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100"
-            >
-              <RotateCcw aria-hidden="true" size={16} />
-              Nuevo / limpiar
-            </button>
-          </div>
+    <div className="project-print-container space-y-4">
+      <div className="no-print flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+        <div className="flex items-center gap-2 font-mono text-xs text-[#5A4138]">
+          <span>Proyectos</span>
+          <span aria-hidden="true">›</span>
+          <span className="font-bold text-[#E65100]">
+            {project.metadata.name || "Proyecto sin nombre"}
+          </span>
         </div>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <MetadataField label="Nombre del proyecto" field="name" />
-          <MetadataField label="Ingeniero / estudiante" field="responsible" />
-          <MetadataField label="Ubicación / universidad" field="location" />
-          <MetadataField label="Fecha" field="date" type="date" />
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setMetadataEditing(true)}
+            className="inline-flex items-center gap-2 rounded border border-[#8F7066] bg-white px-4 py-2.5 text-xs font-bold text-[#0B1C30] hover:bg-slate-50"
+          >
+            <Pencil aria-hidden="true" size={15} />
+            Editar metadatos
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setMetadataEditing(false);
+              setMessage("Metadatos guardados localmente.");
+            }}
+            className="inline-flex items-center gap-2 rounded bg-[#E65100] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#C84600]"
+          >
+            <Save aria-hidden="true" size={15} />
+            Guardar cambios
+          </button>
+          <button
+            type="button"
+            onClick={resetProject}
+            className="inline-flex items-center gap-2 rounded border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100"
+          >
+            <RotateCcw aria-hidden="true" size={15} />
+            Nuevo proyecto
+          </button>
         </div>
-
-        {message && (
-          <p className="mt-4 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-            {message}
-          </p>
-        )}
-        {error && (
-          <p role="alert" className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-            {error}
-          </p>
-        )}
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px] border-collapse text-left">
+      <section className="rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <MetadataField
+            label="Proyecto"
+            field="name"
+            editing={metadataEditing}
+          />
+          <MetadataField
+            label="Ubicación"
+            field="location"
+            editing={metadataEditing}
+          />
+          <MetadataField
+            label="Ingeniero / estudiante"
+            field="responsible"
+            editing={metadataEditing}
+          />
+          <MetadataField
+            label="Universidad / institución"
+            field="institution"
+            editing={metadataEditing}
+          />
+          <MetadataField
+            label="Fecha"
+            field="date"
+            type="date"
+            editing={metadataEditing}
+          />
+        </div>
+      </section>
+
+      {message && (
+        <p className="no-print rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+          {message}
+        </p>
+      )}
+      {error && (
+        <p
+          role="alert"
+          className="no-print rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
+        >
+          {error}
+        </p>
+      )}
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard label="Total vigas" value={counts.beam} icon={Minus} />
+        <StatCard label="Total columnas" value={counts.column} icon={Columns3} />
+        <StatCard label="Total losas" value={counts.slab} icon={Layers3} />
+        <StatCard
+          label="Estado NEC"
+          value={
+            project.elements.length
+              ? `${compliancePercentage}% PASA`
+              : "SIN DATOS"
+          }
+          icon={CheckCircle2}
+          success={compliancePercentage === 100 && project.elements.length > 0}
+        />
+      </section>
+
+      <section className="overflow-hidden rounded-lg border border-[#E3BFB2] bg-white">
+        <div className="flex flex-col justify-between gap-3 border-b border-[#E3BFB2] px-5 py-4 sm:flex-row sm:items-center">
+          <h3 className="text-lg font-bold text-[#0B1C30]">
+            Inventario de elementos estructurales
+          </h3>
+          <label className="no-print flex items-center gap-2 rounded border border-[#E3BFB2] bg-[#EFF4FF] px-3 py-2">
+            <Search aria-hidden="true" size={16} className="text-[#5A4138]" />
+            <span className="sr-only">Filtrar elementos</span>
+            <input
+              className="w-full border-0 bg-transparent text-sm outline-none placeholder:text-slate-500 sm:w-52"
+              placeholder="Filtrar por ID o tipo…"
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+            />
+          </label>
+        </div>
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[720px] border-collapse text-left">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-[0.13em] text-slate-500">
-              <th className="px-5 py-4">Etiqueta</th>
+            <tr className="border-b border-[#E3BFB2] bg-[#DCE9FF] font-mono text-[10px] uppercase tracking-[0.13em] text-[#5A4138]">
+              <th className="px-5 py-3">ID</th>
               <th className="px-5 py-4">Tipo</th>
               <th className="px-5 py-4">Dimensión</th>
+              <th className="px-5 py-4">Norma NEC</th>
               <th className="px-5 py-4">Estado</th>
-              <th className="px-5 py-4">Guardado</th>
               <th className="px-5 py-4 text-right">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
-            {project.elements.map((element) => (
-              <tr key={element.id} className="hover:bg-slate-50/70">
+          <tbody className="divide-y divide-[#E3BFB2]">
+            {filteredElements.map((element, index) => (
+              <tr
+                key={element.id}
+                className={`hover:bg-slate-100/80 ${index % 2 ? "bg-slate-50" : "bg-white"}`}
+              >
                 <td className="px-5 py-4">
                   {editingId === element.id ? (
                     <input
@@ -240,7 +338,7 @@ export function ProjectSummary() {
                       }}
                     />
                   ) : (
-                    <span className="font-mono text-sm font-bold text-slate-900">
+                    <span className="font-mono text-sm font-bold text-[#0284C7]">
                       {element.label}
                     </span>
                   )}
@@ -250,6 +348,11 @@ export function ProjectSummary() {
                 </td>
                 <td className="px-5 py-4 font-mono text-sm text-slate-700">
                   {element.dimension}
+                </td>
+                <td className="px-5 py-4 text-sm text-slate-600">
+                  {element.kind === "column"
+                    ? "NEC-SE-HM / DS"
+                    : "NEC-SE-HM"}
                 </td>
                 <td className="px-5 py-4">
                   <span
@@ -261,12 +364,6 @@ export function ProjectSummary() {
                   >
                     {element.status}
                   </span>
-                </td>
-                <td className="px-5 py-4 font-mono text-xs text-slate-500">
-                  {new Intl.DateTimeFormat("es-EC", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  }).format(new Date(element.savedAt))}
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-1">
@@ -314,16 +411,119 @@ export function ProjectSummary() {
           </tbody>
         </table>
 
-        {project.elements.length === 0 && (
+        {filteredElements.length === 0 && (
           <div className="flex flex-col items-center justify-center gap-2 px-6 py-12 text-center text-slate-500">
             <FileJson aria-hidden="true" size={30} />
-            <p className="text-sm font-semibold">Aún no hay elementos guardados.</p>
+            <p className="text-sm font-semibold">
+              {project.elements.length
+                ? "No hay elementos que coincidan con el filtro."
+                : "Aún no hay elementos guardados."}
+            </p>
             <p className="text-xs">
-              Calcula una sección y usa “Guardar elemento al proyecto”.
+              {project.elements.length
+                ? "Prueba con otra etiqueta o tipo de elemento."
+                : "Calcula una sección y usa “Guardar elemento al proyecto”."}
             </p>
           </div>
         )}
+        </div>
+      </section>
+
+      <section className="rounded-lg border border-[#E3BFB2] bg-white p-5 sm:p-6">
+        <label
+          className="block text-lg font-bold text-[#0B1C30]"
+          htmlFor="project-notes"
+        >
+          Notas y observaciones del proyecto
+        </label>
+        <textarea
+          id="project-notes"
+          rows={4}
+          className="mt-4 w-full rounded-lg border border-[#E3BFB2] bg-white p-4 text-sm leading-6 text-slate-700 outline-none focus:border-[#E65100] focus:ring-4 focus:ring-orange-100"
+          placeholder="Ingrese comentarios sobre el diseño estructural, consideraciones de carga o detalles de cimentación…"
+          value={project.metadata.notes}
+          onChange={(event) => updateMetadata("notes", event.target.value)}
+        />
+        <p className="mt-2 font-mono text-[10px] italic text-[#5A4138]">
+          Autoguardado local activo.
+        </p>
+      </section>
+
+      <section className="no-print flex flex-col items-start justify-between gap-4 rounded-lg border border-[#E3BFB2] bg-[#DCE9FF] p-5 md:flex-row md:items-center">
+        <div>
+          <h4 className="text-lg font-bold text-[#E65100]">
+            Generar reporte final
+          </h4>
+          <p className="mt-1 text-sm text-[#5A4138]">
+            Memoria consolidada del proyecto bajo criterios NEC.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={printProject}
+            className="inline-flex items-center gap-2 rounded bg-[#0284C7] px-4 py-2.5 text-xs font-bold text-white hover:bg-sky-700"
+          >
+            <Printer aria-hidden="true" size={16} />
+            Imprimir / guardar PDF
+          </button>
+          <button
+            type="button"
+            onClick={exportProject}
+            className="inline-flex items-center gap-2 rounded border border-[#0284C7] bg-white px-4 py-2.5 text-xs font-bold text-[#0284C7] hover:bg-sky-50"
+          >
+            <Download aria-hidden="true" size={16} />
+            Descargar .JSON
+          </button>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center gap-2 rounded border border-[#8F7066] bg-white px-4 py-2.5 text-xs font-bold text-[#5A4138] hover:bg-slate-50"
+          >
+            <Upload aria-hidden="true" size={16} />
+            Importar proyecto
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json,.json"
+            className="sr-only"
+            onChange={importProject}
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  success = false,
+}: {
+  label: string;
+  value: number | string;
+  icon: LucideIcon;
+  success?: boolean;
+}) {
+  return (
+    <div className="group flex items-center justify-between rounded-lg border border-[#E3BFB2] bg-white p-4 transition hover:border-[#E65100]">
+      <div>
+        <p className="font-mono text-xs text-[#5A4138]">{label}</p>
+        <p
+          className={`mt-2 font-mono text-2xl font-bold ${
+            success ? "text-emerald-700" : "text-[#E65100]"
+          }`}
+        >
+          {value}
+        </p>
       </div>
-    </section>
+      <Icon
+        aria-hidden="true"
+        size={23}
+        className={success ? "text-emerald-500" : "text-[#E3BFB2]"}
+      />
+    </div>
   );
 }

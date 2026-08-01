@@ -21,7 +21,9 @@ export interface ProjectMetadata {
   name: string;
   responsible: string;
   location: string;
+  institution: string;
   date: string;
+  notes: string;
 }
 
 export interface SavedProjectElement {
@@ -65,7 +67,9 @@ function createEmptyProject(): LocalProject {
       name: "",
       responsible: "",
       location: "",
+      institution: "",
       date: today(),
+      notes: "",
     },
     elements: [],
   };
@@ -133,7 +137,19 @@ export function parseImportedProject(value: unknown): LocalProject {
     throw new Error("La lista de elementos contiene datos incompatibles.");
   }
 
-  return value as unknown as LocalProject;
+  return {
+    schemaVersion: PROJECT_SCHEMA_VERSION,
+    metadata: {
+      name: metadata.name,
+      responsible: metadata.responsible,
+      location: metadata.location,
+      institution:
+        typeof metadata.institution === "string" ? metadata.institution : "",
+      date: metadata.date,
+      notes: typeof metadata.notes === "string" ? metadata.notes : "",
+    },
+    elements: elements as SavedProjectElement[],
+  };
 }
 
 export function ProjectProvider({ children }: { children: ReactNode }) {

@@ -8,6 +8,42 @@ Funciona completamente en el navegador, sin cuentas ni base de datos.
 
 [Abrir PreDim NEC](https://predim-nec.vercel.app)
 
+## Estado actual
+
+La aplicación incluye tres calculadoras interactivas, trazabilidad normativa,
+reportes imprimibles y gestión de proyectos sin servidor. Los metadatos y
+elementos guardados permanecen en el navegador y pueden trasladarse mediante
+archivos JSON.
+
+### Cambios recientes
+
+#### Posicionamiento orgánico y páginas indexables
+
+- Se configuraron títulos, descripciones, URL canónica, Open Graph y metadatos
+  para compartir la aplicación.
+- Se añadieron datos estructurados JSON-LD para describir la aplicación y la
+  sección de preguntas frecuentes.
+- Se publicaron `robots.txt`, `sitemap.xml` y `manifest.webmanifest`.
+- Se crearon páginas independientes e indexables para las calculadoras de
+  vigas, columnas y losas.
+- Se añadió una guía introductoria de predimensionamiento NEC con preguntas
+  frecuentes, enlaces internos y advertencias sobre el alcance técnico.
+- No se incorporaron cookies, Google Analytics ni otros mecanismos de
+  seguimiento.
+
+#### Resumen de proyecto y memoria técnica
+
+- Se integró la vista de resumen siguiendo el diseño exportado de Stitch.
+- Los datos de proyecto —nombre, responsable, institución, ubicación, fecha y
+  notas— ahora son editables y se guardan automáticamente.
+- Se añadieron indicadores dinámicos para vigas, columnas, losas y cumplimiento
+  global.
+- La tabla consolidada permite buscar, revisar y eliminar elementos guardados.
+- Se conectaron las acciones para exportar e importar JSON, crear un proyecto
+  nuevo e imprimir o guardar la memoria como PDF.
+- La navegación lateral y el encabezado permiten abrir el resumen sin abandonar
+  el flujo de cálculo.
+
 ## Desarrollo local
 
 Requisitos: Node.js 20 o superior y npm.

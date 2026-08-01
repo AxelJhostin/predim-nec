@@ -23,16 +23,20 @@ function parameterRows(result: CalculationResult) {
     return [
       ["Luz de la viga", `${formatNumber(result.inputs.spanM, 2)} m`],
       ["Tipo de apoyo", result.inputs.supportType],
-      ["Carga de diseño", `${formatNumber(result.inputs.designLoadKnM2)} kN/m²`],
-      ["Regla aplicada", "h = L / 12"],
+      ["Carga de diseño", `${formatNumber(result.inputs.designLoadKnM)} kN/m`],
+      ["Regla aplicada", `h = L / ${result.supportDivisor}`],
+      ["Fluencia fy", `${formatNumber(result.inputs.steelYieldMpa)} MPa`],
+      ["Recubrimiento", `${formatNumber(result.inputs.coverCm)} cm`],
     ];
   }
   if (result.kind === "column") {
     return [
       ["Área tributaria", `${formatNumber(result.inputs.tributaryAreaM2)} m²`],
       ["Número de pisos", `${result.inputs.floors} niveles`],
-      ["Carga de servicio", `${formatNumber(result.inputs.serviceLoadKnM2)} kN/m²`],
+      ["Carga de servicio", `${formatNumber(result.appliedServiceLoadKnM2)} kN/m²`],
       ["Tipo de columna", result.inputs.columnType],
+      ["Factor de posición", formatNumber(result.positionFactor, 2)],
+      ["Factor de área", formatNumber(result.areaReductionFactor, 2)],
       ["Longitud libre", `${formatNumber(result.inputs.clearHeightM)} m`],
       ["Factor efectivo k", formatNumber(result.inputs.effectiveLengthFactor, 2)],
       ["Acero longitudinal As", `${formatNumber(result.inputs.longitudinalSteelCm2)} cm²`],
@@ -56,6 +60,8 @@ function resultRows(result: CalculationResult) {
       ["Sección recomendada", `${formatNumber(result.widthCm)} × ${formatNumber(result.depthCm)} cm`],
       ["Inercia Ix", `${formatNumber(result.inertiaCm4, 0)} cm⁴`],
       ["Peso propio estimado", `${formatNumber(result.selfWeightKnM, 2)} kN/m`],
+      ["Momento último Mu", `${formatNumber(result.ultimateMomentKnM, 2)} kN·m`],
+      ["Resistencia φMn", `${formatNumber(result.designResistanceKnM, 2)} kN·m`],
     ];
   }
   if (result.kind === "column") {
@@ -172,13 +178,33 @@ export function TechnicalReport({ result, onClose }: TechnicalReportProps) {
           </div>
         </ReportSection>
 
-        <ReportSection number="03" title="Cumplimiento normativo">
+        <ReportSection number="03" title="Procedimiento y referencias">
+          <ol className="space-y-4 rounded-xl border border-slate-200 p-5">
+            {result.procedure.map((step) => (
+              <li key={step.title}>
+                <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-slate-700">
+                  {step.title}
+                </p>
+                <p className="mt-1 font-mono text-xs leading-5 text-slate-700">
+                  {step.detail}
+                </p>
+                {step.reference && (
+                  <p className="mt-1 text-[11px] leading-5 text-sky-800">
+                    Referencia: {step.reference}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ol>
+        </ReportSection>
+
+        <ReportSection number="04" title="Cumplimiento normativo">
           <div className="rounded-xl border border-slate-200">
             <ComplianceTable criteria={result.compliance} compact />
           </div>
         </ReportSection>
 
-        <ReportSection number="04" title="Notas técnicas">
+        <ReportSection number="05" title="Notas técnicas">
           <div className="flex gap-3 rounded-xl border-l-4 border-[#FACC15] bg-amber-50 p-5 text-sm leading-6 text-amber-950">
             <TriangleAlert aria-hidden="true" className="mt-0.5 shrink-0" size={20} />
             <ul className="list-disc space-y-1 pl-4">

@@ -1,4 +1,4 @@
-import { Download, Info, ShieldCheck } from "lucide-react";
+import { BookOpenText, Download, Info, ShieldCheck } from "lucide-react";
 import { ComplianceTable } from "@/components/ComplianceTable";
 import {
   formatNumber,
@@ -68,6 +68,8 @@ function ResultMetrics({ result }: { result: CalculationResult }) {
       <div className="grid grid-cols-2 gap-3">
         <Metric label="Inercia Ix" value={formatNumber(result.inertiaCm4, 0)} unit="cm⁴" />
         <Metric label="Peso propio" value={formatNumber(result.selfWeightKnM, 2)} unit="kN/m" />
+        <Metric label="Momento Mu" value={formatNumber(result.ultimateMomentKnM, 1)} unit="kN·m" />
+        <Metric label="Resistencia φMn" value={formatNumber(result.designResistanceKnM, 1)} unit="kN·m" />
       </div>
     );
   }
@@ -175,6 +177,35 @@ export function ResultsPanel({
           <span className="font-mono text-[10px] text-slate-400">NEC-SE</span>
         </div>
         <ComplianceTable criteria={result.compliance} compact />
+      </div>
+
+      <div className="border-t border-slate-200 px-5 py-5 sm:px-7">
+        <details className="group rounded-xl border border-sky-200 bg-sky-50/60">
+          <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 text-sm font-bold text-sky-950">
+            <BookOpenText aria-hidden="true" size={18} />
+            Ver procedimiento paso a paso y referencias NEC
+            <span className="ml-auto font-mono text-lg transition group-open:rotate-45">
+              +
+            </span>
+          </summary>
+          <ol className="space-y-4 border-t border-sky-200 px-4 py-5">
+            {result.procedure.map((step) => (
+              <li key={step.title}>
+                <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-slate-700">
+                  {step.title}
+                </p>
+                <p className="mt-1 font-mono text-xs leading-6 text-slate-700">
+                  {step.detail}
+                </p>
+                {step.reference && (
+                  <p className="mt-1.5 text-[11px] leading-5 text-sky-800">
+                    Referencia: {step.reference}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ol>
+        </details>
       </div>
 
       <div className="border-t border-slate-200 bg-slate-50 p-5 sm:px-7">

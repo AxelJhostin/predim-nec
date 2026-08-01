@@ -103,7 +103,9 @@ export function BeamForm({
   const [values, setValues] = useState<BeamInputs>({
     spanM: 6,
     supportType: "Ambos extremos continuos",
-    designLoadKnM2: 8.5,
+    designLoadKnM: 8.5,
+    steelYieldMpa: 420,
+    coverCm: 4,
   });
   const [error, setError] = useState("");
 
@@ -141,7 +143,10 @@ export function BeamForm({
             className={inputClass}
             value={values.supportType}
             onChange={(event) =>
-              setValues({ ...values, supportType: event.target.value })
+              setValues({
+                ...values,
+                supportType: event.target.value as BeamInputs["supportType"],
+              })
             }
           >
             <option>Simplemente apoyada</option>
@@ -152,23 +157,68 @@ export function BeamForm({
         </Field>
         <Field
           label="Carga de diseño"
-          unit="kN/m²"
-          hint="Dato informativo para la memoria; la regla L/12 controla este predimensionamiento."
+          unit="kN/m"
+          hint="Carga lineal mayorada utilizada para estimar Mu ≈ wL²/10."
         >
           <input
             className={inputClass}
             type="number"
             min="0.1"
             step="0.1"
-            value={values.designLoadKnM2}
+            value={values.designLoadKnM}
             onChange={(event) =>
               setValues({
                 ...values,
-                designLoadKnM2: Number(event.target.value),
+                designLoadKnM: Number(event.target.value),
               })
             }
           />
         </Field>
+        <details className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <summary className="cursor-pointer text-xs font-bold uppercase tracking-[0.1em] text-slate-700">
+            Parámetros avanzados
+          </summary>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Fluencia del acero (fy)"
+              unit="MPa"
+              hint="Valor predeterminado para acero Grado 60."
+            >
+              <input
+                className={inputClass}
+                type="number"
+                min="100"
+                step="10"
+                value={values.steelYieldMpa}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    steelYieldMpa: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
+            <Field label="Recubrimiento efectivo" unit="cm">
+              <input
+                className={inputClass}
+                type="number"
+                min="1"
+                step="0.5"
+                value={values.coverCm}
+                onChange={(event) =>
+                  setValues({
+                    ...values,
+                    coverCm: Number(event.target.value),
+                  })
+                }
+              />
+            </Field>
+          </div>
+          <p className="mt-3 text-[11px] leading-5 text-slate-500">
+            La capacidad aproximada usa ρ = 1% y φ = 0,90. Estos valores no
+            reemplazan el diseño del refuerzo.
+          </p>
+        </details>
         <SubmitButton />
       </form>
     </FormCard>
@@ -184,7 +234,7 @@ export function ColumnForm({
     tributaryAreaM2: 25,
     floors: 5,
     columnType: "Central",
-    serviceLoadKnM2: 12,
+    serviceLoadKnM2: 8,
     clearHeightM: 3,
     effectiveLengthFactor: 1,
     longitudinalSteelCm2: 20,
@@ -239,7 +289,10 @@ export function ColumnForm({
             className={inputClass}
             value={values.columnType}
             onChange={(event) =>
-              setValues({ ...values, columnType: event.target.value })
+              setValues({
+                ...values,
+                columnType: event.target.value as ColumnInputs["columnType"],
+              })
             }
           >
             <option>Central</option>
@@ -247,11 +300,15 @@ export function ColumnForm({
             <option>Esquina</option>
           </select>
         </Field>
-        <Field label="Carga de servicio (q)" unit="kN/m²">
+        <Field
+          label="Carga de servicio (q)"
+          unit="kN/m²"
+          hint="Ingrese 0 para aplicar el valor residencial preliminar de 8,0 kN/m²."
+        >
           <input
             className={inputClass}
             type="number"
-            min="0.1"
+            min="0"
             step="0.1"
             value={values.serviceLoadKnM2}
             onChange={(event) =>

@@ -21,11 +21,14 @@ Abra [http://localhost:3000](http://localhost:3000).
 
 ## Módulos
 
-- **Vigas:** peralte `L/12` y ancho mínimo de 25 cm.
-- **Columnas:** carga de servicio, área bruta, dimensión mínima de 30 cm,
+- **Vigas:** peralte según condición de apoyo, ancho mínimo de 25 cm y
+  verificación flexional aproximada con carga lineal.
+- **Columnas:** carga y área ajustadas por posición, dimensión mínima de 30 cm,
   esbeltez y cuantía longitudinal preliminar.
 - **Losas:** relaciones `L/25` para maciza y `L/21` para nervada.
 - **Reportes:** vista técnica imprimible o guardable como PDF para cada módulo.
+- **Trazabilidad:** procedimiento, conversiones, redondeos y referencias
+  normativas visibles junto a cada resultado.
 
 La lógica de cálculo está centralizada en
 `src/utils/necCalculations.ts`. Los componentes de interfaz se encuentran en

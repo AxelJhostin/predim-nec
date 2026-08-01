@@ -60,13 +60,15 @@ const tabs: TabDefinition[] = [
 const initialBeam = calculateBeam({
   spanM: 6,
   supportType: "Ambos extremos continuos",
-  designLoadKnM2: 8.5,
+  designLoadKnM: 8.5,
+  steelYieldMpa: 420,
+  coverCm: 4,
 });
 const initialColumn = calculateColumn({
   tributaryAreaM2: 25,
   floors: 5,
   columnType: "Central",
-  serviceLoadKnM2: 12,
+  serviceLoadKnM2: 8,
   clearHeightM: 3,
   effectiveLengthFactor: 1,
   longitudinalSteelCm2: 20,

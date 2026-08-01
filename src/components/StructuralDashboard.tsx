@@ -5,6 +5,7 @@ import {
   BookOpen,
   Building2,
   Columns3,
+  FolderKanban,
   Layers3,
   Menu,
   Minus,
@@ -18,7 +19,9 @@ import {
   TechnicalDisclaimer,
 } from "@/components/CalculatorForms";
 import { ResultsPanel } from "@/components/ResultsPanel";
+import { ProjectSummary } from "@/components/ProjectSummary";
 import { TechnicalReport } from "@/components/TechnicalReport";
+import { useProject } from "@/context/ProjectContext";
 import {
   calculateBeam,
   calculateColumn,
@@ -83,6 +86,8 @@ export function StructuralDashboard() {
   const [slabResult, setSlabResult] = useState<SlabResult>(initialSlab);
   const [reportOpen, setReportOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [projectSummaryOpen, setProjectSummaryOpen] = useState(false);
+  const { project, addElement } = useProject();
 
   const result =
     activeTab === "beam"
@@ -132,6 +137,17 @@ export function StructuralDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setProjectSummaryOpen((open) => !open)}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-sky-400 hover:text-sky-700"
+            >
+              <FolderKanban aria-hidden="true" size={16} />
+              <span className="hidden sm:inline">Proyecto</span>
+              <span className="rounded-full bg-sky-100 px-1.5 py-0.5 font-mono text-[10px] text-sky-800">
+                {project.elements.length}
+              </span>
+            </button>
             <span className="hidden rounded-full bg-sky-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-sky-700 ring-1 ring-inset ring-sky-200 sm:inline-flex">
               NEC-SE 2015
             </span>
@@ -227,16 +243,25 @@ export function StructuralDashboard() {
               </div>
             </div>
 
+            {projectSummaryOpen && (
+              <div className="mb-7">
+                <ProjectSummary />
+              </div>
+            )}
+
             <div className="grid items-start gap-6 xl:grid-cols-[minmax(340px,0.78fr)_minmax(0,1.22fr)]">
               <div>
                 {activeTab === "beam" && (
-                  <BeamForm onCalculate={setBeamResult} />
+                  <BeamForm onCalculate={setBeamResult} onSave={addElement} />
                 )}
                 {activeTab === "column" && (
-                  <ColumnForm onCalculate={setColumnResult} />
+                  <ColumnForm
+                    onCalculate={setColumnResult}
+                    onSave={addElement}
+                  />
                 )}
                 {activeTab === "slab" && (
-                  <SlabForm onCalculate={setSlabResult} />
+                  <SlabForm onCalculate={setSlabResult} onSave={addElement} />
                 )}
                 <TechnicalDisclaimer />
               </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Calculator, Info, Ruler, ShieldCheck } from "lucide-react";
+import { Calculator, Info, Ruler, Save, ShieldCheck } from "lucide-react";
 import {
   calculateBeam,
   calculateColumn,
@@ -95,10 +95,64 @@ function SubmitButton() {
   );
 }
 
+function SaveElementControl({
+  defaultLabel,
+  onSave,
+}: {
+  defaultLabel: string;
+  onSave: (label: string) => void;
+}) {
+  const [label, setLabel] = useState(defaultLabel);
+  const [feedback, setFeedback] = useState("");
+
+  function save() {
+    try {
+      onSave(label);
+      setFeedback(`Elemento ${label.trim()} guardado.`);
+    } catch (cause) {
+      setFeedback(cause instanceof Error ? cause.message : "No se pudo guardar.");
+    }
+  }
+
+  return (
+    <div className="mt-4 rounded-lg border border-sky-200 bg-sky-50/60 p-4">
+      <label className="block text-[10px] font-bold uppercase tracking-[0.12em] text-sky-900">
+        Etiqueta del elemento
+        <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input
+            className="min-w-0 flex-1 rounded-lg border border-sky-200 bg-white px-3 py-2.5 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100"
+            value={label}
+            onChange={(event) => {
+              setLabel(event.target.value);
+              setFeedback("");
+            }}
+            placeholder="Ej. V-101"
+          />
+          <button
+            type="button"
+            onClick={save}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-sky-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-sky-800"
+          >
+            <Save aria-hidden="true" size={15} />
+            Guardar elemento
+          </button>
+        </div>
+      </label>
+      {feedback && (
+        <p className="mt-2 text-[11px] normal-case tracking-normal text-sky-800">
+          {feedback}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function BeamForm({
   onCalculate,
+  onSave,
 }: {
   onCalculate: (result: BeamResult) => void;
+  onSave: (label: string, result: BeamResult) => void;
 }) {
   const [values, setValues] = useState<BeamInputs>({
     spanM: 6,
@@ -220,6 +274,14 @@ export function BeamForm({
           </p>
         </details>
         <SubmitButton />
+        <SaveElementControl
+          defaultLabel="V-101"
+          onSave={(label) => {
+            const calculatedResult = calculateBeam(values);
+            onCalculate(calculatedResult);
+            onSave(label, calculatedResult);
+          }}
+        />
       </form>
     </FormCard>
   );
@@ -227,8 +289,10 @@ export function BeamForm({
 
 export function ColumnForm({
   onCalculate,
+  onSave,
 }: {
   onCalculate: (result: ColumnResult) => void;
+  onSave: (label: string, result: ColumnResult) => void;
 }) {
   const [values, setValues] = useState<ColumnInputs>({
     tributaryAreaM2: 25,
@@ -361,6 +425,14 @@ export function ColumnForm({
         </div>
         <div className="sm:col-span-2">
           <SubmitButton />
+          <SaveElementControl
+            defaultLabel="C-1"
+            onSave={(label) => {
+              const calculatedResult = calculateColumn(values);
+              onCalculate(calculatedResult);
+              onSave(label, calculatedResult);
+            }}
+          />
         </div>
       </form>
     </FormCard>
@@ -369,8 +441,10 @@ export function ColumnForm({
 
 export function SlabForm({
   onCalculate,
+  onSave,
 }: {
   onCalculate: (result: SlabResult) => void;
+  onSave: (label: string, result: SlabResult) => void;
 }) {
   const [values, setValues] = useState<SlabInputs>({
     spanM: 5,
@@ -432,6 +506,14 @@ export function SlabForm({
           </div>
         </div>
         <SubmitButton />
+        <SaveElementControl
+          defaultLabel="L-1"
+          onSave={(label) => {
+            const calculatedResult = calculateSlab(values);
+            onCalculate(calculatedResult);
+            onSave(label, calculatedResult);
+          }}
+        />
       </form>
     </FormCard>
   );

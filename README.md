@@ -29,10 +29,18 @@ Abra [http://localhost:3000](http://localhost:3000).
 - **Reportes:** vista técnica imprimible o guardable como PDF para cada módulo.
 - **Trazabilidad:** procedimiento, conversiones, redondeos y referencias
   normativas visibles junto a cada resultado.
+- **Proyectos locales:** metadatos, elementos etiquetados y resumen persistente
+  mediante `localStorage`.
+- **Portabilidad:** exportación e importación de proyectos en formato JSON
+  versionado.
 
 La lógica de cálculo está centralizada en
 `src/utils/necCalculations.ts`. Los componentes de interfaz se encuentran en
 `src/components/`.
+
+El proyecto activo se almacena con la clave
+`predim_nec_active_project`. Los datos permanecen únicamente en el navegador
+del usuario, salvo que se exporten manualmente a un archivo JSON.
 
 ## Verificación
 

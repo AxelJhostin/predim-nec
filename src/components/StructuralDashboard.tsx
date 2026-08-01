@@ -78,8 +78,12 @@ const initialColumn = calculateColumn({
 });
 const initialSlab = calculateSlab({ spanM: 5, slabType: "solid" });
 
-export function StructuralDashboard() {
-  const [activeTab, setActiveTab] = useState<ElementType>("beam");
+export function StructuralDashboard({
+  initialTab = "beam",
+}: {
+  initialTab?: ElementType;
+}) {
+  const [activeTab, setActiveTab] = useState<ElementType>(initialTab);
   const [beamResult, setBeamResult] = useState<BeamResult>(initialBeam);
   const [columnResult, setColumnResult] =
     useState<ColumnResult>(initialColumn);

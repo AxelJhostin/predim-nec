@@ -33,6 +33,13 @@ Abra [http://localhost:3000](http://localhost:3000).
   mediante `localStorage`.
 - **Portabilidad:** exportación e importación de proyectos en formato JSON
   versionado.
+- **SEO técnico:** metadatos canónicos, Open Graph, JSON-LD, `robots.txt`,
+  `sitemap.xml` y manifiesto web.
+- **Contenido indexable:** páginas específicas para
+  [vigas](https://predim-nec.vercel.app/calculadora-vigas-nec),
+  [columnas](https://predim-nec.vercel.app/calculadora-columnas-nec),
+  [losas](https://predim-nec.vercel.app/calculadora-losas-nec) y una
+  [guía con preguntas frecuentes](https://predim-nec.vercel.app/guia-predimensionamiento-nec).
 
 La lógica de cálculo está centralizada en
 `src/utils/necCalculations.ts`. Los componentes de interfaz se encuentran en

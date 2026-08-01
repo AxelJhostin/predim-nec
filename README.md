@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PreDim NEC
 
-## Getting Started
+Calculadora web gratuita para predimensionamiento preliminar de vigas, columnas
+y losas según criterios de la Norma Ecuatoriana de la Construcción (NEC).
+Funciona completamente en el navegador, sin cuentas ni base de datos.
 
-First, run the development server:
+## Desarrollo local
+
+Requisitos: Node.js 20 o superior y npm.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Módulos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Vigas:** peralte `L/12` y ancho mínimo de 25 cm.
+- **Columnas:** carga de servicio, área bruta, dimensión mínima de 30 cm,
+  esbeltez y cuantía longitudinal preliminar.
+- **Losas:** relaciones `L/25` para maciza y `L/21` para nervada.
+- **Reportes:** vista técnica imprimible o guardable como PDF para cada módulo.
 
-## Learn More
+La lógica de cálculo está centralizada en
+`src/utils/necCalculations.ts`. Los componentes de interfaz se encuentran en
+`src/components/`.
 
-To learn more about Next.js, take a look at the following resources:
+## Verificación
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Alcance técnico
 
-## Deploy on Vercel
+Los resultados son únicamente de predimensionamiento. No sustituyen el análisis
+estructural, las combinaciones de carga, el detallado del refuerzo ni una
+memoria de cálculo revisada y firmada por un profesional competente.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El proyecto está preparado para despliegue estático en Vercel mediante Next.js
+App Router.

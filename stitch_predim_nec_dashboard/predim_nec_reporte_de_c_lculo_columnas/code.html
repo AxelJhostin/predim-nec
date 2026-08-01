@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reporte de Cálculo - PreDim NEC</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#cd4700",
+                        "on-primary-container": "#fffbff",
+                        "tertiary-fixed": "#ffe083",
+                        "surface-container": "#e5eeff",
+                        "inverse-primary": "#ffb59a",
+                        "surface-container-low": "#eff4ff",
+                        "on-background": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#735c00",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#380d00",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-secondary-fixed": "#001d31",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f7066",
+                        "secondary-container": "#5bb8fe",
+                        "surface": "#f8f9ff",
+                        "surface-tint": "#a83900",
+                        "surface-container-high": "#dce9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#802a00",
+                        "on-surface-variant": "#5a4138",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#00476e",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#006398",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#93ccff",
+                        "inverse-surface": "#213145",
+                        "primary": "#a43700",
+                        "on-surface": "#0b1c30",
+                        "secondary-fixed": "#cce5ff",
+                        "tertiary-fixed-dim": "#eec200",
+                        "surface-dim": "#cbdbf5",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#cea700",
+                        "on-tertiary-container": "#4e3e00",
+                        "outline-variant": "#e3bfb2",
+                        "on-secondary-fixed-variant": "#004b73",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "container-max": "1280px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "data-display": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "data-display": ["14px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-sm": ["18px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["13px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+            .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .page-break { page-break-after: always; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .technical-border {
+            border: 1px solid #e3bfb2;
+        }
+        .blueprint-grid {
+            background-image: radial-gradient(#e3bfb2 0.5px, transparent 0.5px);
+            background-size: 10px 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen">
+<!-- Top Navigation (Shell from JSON) -->
+<header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flex justify-between items-center w-full px-margin-desktop py-4 sticky top-0 z-50 no-print">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim">PreDim NEC</span>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors px-2 py-1" href="#">Normativa NEC</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary">Reporte Activo</span>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity" onclick="window.print()">
+<span class="material-symbols-outlined">print</span>
+                Imprimir Reporte
+            </button>
+</div>
+</header>
+<main class="max-w-[1000px] mx-auto bg-surface-container-lowest my-8 shadow-lg print:shadow-none print:my-0 p-8 md:p-12 print-container">
+<!-- Document Header -->
+<div class="border-b-4 border-primary pb-6 mb-8">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary uppercase tracking-tight">Reporte de Predimensionamiento Estructural</h1>
+<p class="font-headline-sm text-headline-sm text-on-surface-variant mt-1">Elemento: Columna de Hormigón Armado</p>
+</div>
+<div class="text-right hidden md:block">
+<div class="font-bold text-primary text-headline-sm">PreDim NEC</div>
+<div class="text-label-md font-label-md text-on-surface-variant">v2024.1.0</div>
+</div>
+</div>
+<!-- Metadata Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-outline-variant">
+<div>
+<span class="block text-label-md font-label-md text-outline uppercase">Fecha</span>
+<span class="font-body-md text-on-surface">24 de Mayo, 2024</span>
+</div>
+<div>
+<span class="block text-label-md font-label-md text-outline uppercase">Ingeniero Responsable</span>
+<span class="font-body-md text-on-surface">Ing. Estructural Senior</span>
+</div>
+<div>
+<span class="block text-label-md font-label-md text-outline uppercase">Ubicación</span>
+<span class="font-body-md text-on-surface">Quito, Ecuador (Zona V)</span>
+</div>
+<div>
+<span class="block text-label-md font-label-md text-outline uppercase">Normativa</span>
+<span class="font-body-md text-on-surface">NEC-SE-2015</span>
+</div>
+</div>
+</div>
+<!-- Section 1: Project Summary (Bento-ish Layout) -->
+<section class="mb-10">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined">analytics</span>
+                1. Parámetros de Entrada
+            </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-4 rounded-lg technical-border">
+<p class="text-label-md font-label-md text-outline mb-1">Área Tributaria</p>
+<p class="font-data-display text-data-display text-on-surface text-xl">25.00 m²</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg technical-border">
+<p class="text-label-md font-label-md text-outline mb-1">Número de Pisos</p>
+<p class="font-data-display text-data-display text-on-surface text-xl">5 Niveles</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg technical-border">
+<p class="text-label-md font-label-md text-outline mb-1">Tipo de Columna</p>
+<p class="font-data-display text-data-display text-on-surface text-xl">Esquinera (C3)</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg technical-border">
+<p class="text-label-md font-label-md text-outline mb-1">Carga de Servicio</p>
+<p class="font-data-display text-data-display text-on-surface text-xl">125.0 Tnf</p>
+</div>
+</div>
+</section>
+<!-- Section 2: Dimensioning Results -->
+<section class="mb-10">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined">architecture</span>
+                2. Resultados de Dimensionamiento
+            </h2>
+<div class="flex flex-col lg:flex-row gap-8 items-stretch">
+<!-- Visual Schematic -->
+<div class="flex-1 bg-surface-container-low technical-border rounded-xl p-8 flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 blueprint-grid opacity-20"></div>
+<!-- The Column Schematic -->
+<div class="relative z-10 w-48 h-48 border-[6px] border-on-surface-variant bg-surface shadow-inner flex items-center justify-center">
+<!-- Rebar Indicators -->
+<div class="absolute top-2 left-2 w-3 h-3 bg-on-surface-variant rounded-full"></div>
+<div class="absolute top-2 right-2 w-3 h-3 bg-on-surface-variant rounded-full"></div>
+<div class="absolute bottom-2 left-2 w-3 h-3 bg-on-surface-variant rounded-full"></div>
+<div class="absolute bottom-2 right-2 w-3 h-3 bg-on-surface-variant rounded-full"></div>
+<div class="absolute top-1/2 left-2 -translate-y-1/2 w-3 h-3 bg-on-surface-variant rounded-full"></div>
+<div class="absolute top-1/2 right-2 -translate-y-1/2 w-3 h-3 bg-on-surface-variant rounded-full"></div>
+<div class="text-center">
+<p class="font-data-display text-headline-sm text-on-surface">45 x 45</p>
+<p class="text-label-md font-label-md text-outline uppercase">cm</p>
+</div>
+<!-- Dimension Lines -->
+<div class="absolute -bottom-6 left-0 right-0 h-px bg-outline-variant flex justify-between px-1">
+<div class="w-px h-2 bg-outline-variant"></div>
+<span class="text-[10px] font-label-md text-outline -translate-y-1">45.00</span>
+<div class="w-px h-2 bg-outline-variant"></div>
+</div>
+<div class="absolute -left-6 top-0 bottom-0 w-px bg-outline-variant flex flex-col justify-between py-1">
+<div class="h-px w-2 bg-outline-variant"></div>
+<span class="text-[10px] font-label-md text-outline rotate-90 -translate-x-2">45.00</span>
+<div class="h-px w-2 bg-outline-variant"></div>
+</div>
+</div>
+<p class="mt-8 font-label-md text-label-md text-on-surface-variant bg-surface-container-high px-3 py-1 rounded">
+                        Esquema técnico preliminar
+                    </p>
+</div>
+<!-- Technical Data Cards -->
+<div class="lg:w-1/3 flex flex-col gap-4">
+<div class="p-4 border-l-4 border-primary bg-surface-container-high">
+<span class="block text-label-md font-label-md text-outline uppercase mb-1">Sección Sugerida</span>
+<span class="font-headline-md text-headline-md text-primary">45 x 45 cm</span>
+</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex justify-between items-center p-3 border-b border-outline-variant">
+<span class="text-body-md text-on-surface-variant">Área Bruta (Ag)</span>
+<span class="font-data-display text-on-surface">2,025 cm²</span>
+</div>
+<div class="flex justify-between items-center p-3 border-b border-outline-variant">
+<span class="text-body-md text-on-surface-variant">Cuantía Estimada (ρ)</span>
+<span class="font-data-display text-on-surface">1.25%</span>
+</div>
+<div class="flex justify-between items-center p-3 border-b border-outline-variant">
+<span class="text-body-md text-on-surface-variant">Carga Crítica (Pu)</span>
+<span class="font-data-display text-on-surface">175.4 kN</span>
+</div>
+<div class="flex justify-between items-center p-3">
+<span class="text-body-md text-on-surface-variant">Resistencia (f'c)</span>
+<span class="font-data-display text-on-surface">21.0 MPa</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Compliance Table -->
+<section class="mb-10">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined">fact_check</span>
+                3. Resumen de Cumplimiento Normativo
+            </h2>
+<div class="overflow-hidden border border-outline-variant rounded-lg">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface">
+<tr>
+<th class="p-4 font-label-md text-label-md uppercase">Criterio de Evaluación</th>
+<th class="p-4 font-label-md text-label-md uppercase">Valor Calculado</th>
+<th class="p-4 font-label-md text-label-md uppercase">Límite Normativo</th>
+<th class="p-4 font-label-md text-label-md uppercase text-center">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-4 font-body-md">Relación de Esbeltez (λ)</td>
+<td class="p-4 font-data-display text-data-display">24.5</td>
+<td class="p-4 font-data-display text-data-display">< 40.0</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">
+<span class="material-symbols-outlined text-sm">check_circle</span> PASA
+                                </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
+<td class="p-4 font-body-md">Dimensión Mínima</td>
+<td class="p-4 font-data-display text-data-display">45 cm</td>
+<td class="p-4 font-data-display text-data-display">≥ 30 cm</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">
+<span class="material-symbols-outlined text-sm">check_circle</span> PASA
+                                </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-4 font-body-md">Cuantía de Acero (ρ)</td>
+<td class="p-4 font-data-display text-data-display">1.25%</td>
+<td class="p-4 font-data-display text-data-display">1% - 3% (Sugerido)</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">
+<span class="material-symbols-outlined text-sm">check_circle</span> PASA
+                                </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
+<td class="p-4 font-body-md">Relación de Aspecto</td>
+<td class="p-4 font-data-display text-data-display">1.00</td>
+<td class="p-4 font-data-display text-data-display">≤ 2.50</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">
+<span class="material-symbols-outlined text-sm">check_circle</span> PASA
+                                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 4: Technical Notes -->
+<section class="mb-16">
+<div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-tertiary">
+<h3 class="font-headline-sm text-headline-sm text-tertiary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined">warning</span>
+                    Notas Técnicas y Advertencias
+                </h3>
+<ul class="list-disc list-inside space-y-2 text-on-surface-variant font-body-md">
+<li>Este reporte constituye un <strong>predimensionamiento preliminar</strong> basado en las simplificaciones permitidas por la norma NEC-SE-2015.</li>
+<li>No reemplaza el análisis estructural detallado mediante software de elementos finitos.</li>
+<li>Se debe verificar la deriva de piso y el diseño por capacidad en etapas posteriores del proyecto.</li>
+<li>Los valores de carga viva (L) y carga muerta (D) deben ser validados según el uso específico de la edificación.</li>
+</ul>
+</div>
+</section>
+<!-- Signature Section -->
+<section class="mt-24">
+<div class="flex flex-col md:flex-row justify-between items-end gap-12">
+<div class="w-full md:w-64 border-t-2 border-on-surface pt-4 text-center">
+<p class="font-headline-sm text-headline-sm text-on-surface uppercase mb-1">Firma del Ingeniero</p>
+<p class="text-label-md font-label-md text-on-surface-variant">Responsable de Cálculo</p>
+<p class="text-[10px] text-outline mt-4 font-data-display">Reg. SENESCYT: XXXXXX-XX-XXXX</p>
+</div>
+<div class="flex-1 flex justify-center md:justify-end">
+<div class="p-4 border-2 border-outline-variant border-dashed rounded-lg flex items-center gap-4 bg-surface">
+<div class="w-16 h-16 bg-surface-container-high rounded flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-3xl text-outline">qr_code_2</span>
+</div>
+<div class="text-[10px] leading-tight text-outline uppercase tracking-wider font-label-md">
+                            VERIFICACIÓN DIGITAL<br/>PREDIM-NEC-2024-0524<br/>AUTENTICIDAD GARANTIZADA
+                        </div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shell from JSON) -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline w-full py-gutter px-margin-desktop flex flex-col md:flex-row justify-between items-center text-center md:text-left no-print">
+<div class="mb-4 md:mb-0">
+<span class="font-label-md text-label-md font-bold text-primary">PreDim NEC</span>
+<p class="text-on-surface-variant dark:text-surface-variant font-body-md mt-1">© 2024 Herramienta exclusivamente para predimensionamiento estructural preliminar bajo normativa NEC-SE.</p>
+</div>
+<div class="flex gap-6">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors text-body-md" href="#">Descargo Legal</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors text-body-md" href="#">Guía de Usuario</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors text-body-md" href="#">Soporte Técnico</a>
+</div>
+</footer>
+<script>
+        // Simple interactivity for print preview if needed
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'p') {
+                console.log('Document ready for professional printing.');
+            }
+        });
+    </script>
+</body></html>

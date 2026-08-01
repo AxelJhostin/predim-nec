@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PreDim NEC - Dimensionamiento de Vigas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-dim": "#cbdbf5",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#213145",
+                    "on-error": "#ffffff",
+                    "primary-container": "#cd4700",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "primary": "#a43700",
+                    "on-primary-fixed-variant": "#802a00",
+                    "primary-fixed-dim": "#ffb59a",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#8f7066",
+                    "on-surface-variant": "#5a4138",
+                    "surface-variant": "#d3e4fe",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-container": "#e5eeff",
+                    "on-primary-container": "#fffbff",
+                    "on-surface": "#0b1c30",
+                    "primary-fixed": "#ffdbcf",
+                    "tertiary-fixed-dim": "#eec200",
+                    "on-primary-fixed": "#380d00",
+                    "surface-container-high": "#dce9ff",
+                    "error": "#ba1a1a",
+                    "surface": "#f8f9ff",
+                    "secondary-container": "#5bb8fe",
+                    "on-tertiary-fixed": "#231b00",
+                    "on-tertiary-container": "#4e3e00",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#a83900",
+                    "inverse-primary": "#ffb59a",
+                    "tertiary-container": "#cea700",
+                    "secondary-fixed-dim": "#93ccff",
+                    "tertiary": "#735c00",
+                    "on-secondary-container": "#00476e",
+                    "secondary": "#006398",
+                    "surface-container-low": "#eff4ff",
+                    "on-background": "#0b1c30",
+                    "background": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary-fixed": "#001d31",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffe083",
+                    "outline-variant": "#e3bfb2",
+                    "on-tertiary-fixed-variant": "#574500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "container-max": "1280px",
+                    "unit": "4px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "data-display": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["13px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "data-display": ["14px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["18px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .structural-card {
+            border: 1px solid #e2e8f0; /* Slate 200 equivalent */
+            background: #ffffff;
+            transition: border-color 0.2s ease;
+        }
+        .structural-card:hover {
+            border-color: #cbd5e1; /* Slate 300 equivalent */
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-margin-desktop py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">PreDim NEC</h1>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label-md text-label-md border border-outline-variant">
+                Ecuador Normative (NEC-SE)
+            </span>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-primary font-bold border-b-2 border-primary py-1 font-headline-sm text-headline-sm transition-colors" href="#">Normativa NEC</a>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant px-4 py-2 rounded-lg font-body-md text-body-md transition-colors border border-outline-variant">
+                NEC-SE 2015
+            </button>
+</nav>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar / Tabs -->
+<aside class="w-64 bg-surface-container-low border-r border-outline-variant hidden md:flex flex-col p-6 gap-6">
+<div class="mb-4">
+<p class="font-headline-sm text-headline-sm font-bold text-primary">Proyectos</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Estructura Principal</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="bg-secondary-container text-on-secondary-container flex items-center gap-3 px-4 py-3 rounded-xl scale-95 duration-150 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="Architecture">qr_code_2</span>
+<span class="font-label-md text-label-md">Vigas</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-highest flex items-center gap-3 px-4 py-3 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="view_column">view_column</span>
+<span class="font-label-md text-label-md">Columnas</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-highest flex items-center gap-3 px-4 py-3 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-label-md text-label-md">Losas</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<div class="structural-card rounded-xl p-4 bg-surface-container-lowest">
+<p class="font-label-md text-label-md text-primary mb-1">Estado de Memoria</p>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/3"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-surface px-6 md:px-margin-desktop py-gutter">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Inputs -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<div class="structural-card rounded-xl p-6 shadow-sm">
+<h2 class="font-headline-md text-headline-md mb-6 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="straighten">straighten</span>
+                                Dimensionamiento de Vigas
+                            </h2>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Luz de la viga (L) en metros</label>
+<div class="relative">
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 font-data-display text-on-surface focus:ring-2 focus:ring-secondary-container focus:border-secondary transition-all outline-none" placeholder="Ej: 5.50" step="0.01" type="number" value="6.00"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-50 font-label-md">m</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Tipo de apoyo</label>
+<select class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-secondary-container focus:border-secondary outline-none transition-all">
+<option value="simple">Simplemente apoyada</option>
+<option value="one_end">Un extremo continuo</option>
+<option selected="" value="both_ends">Ambos extremos continuos</option>
+<option value="cantilever">Voladizo</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Carga de diseño</label>
+<div class="relative">
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 font-data-display text-on-surface focus:ring-2 focus:ring-secondary-container focus:border-secondary transition-all outline-none" placeholder="Ej: 10.0" step="0.1" type="number" value="8.5"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-50 font-label-md">kN/m²</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary py-4 rounded-lg font-headline-sm text-headline-sm font-bold shadow-md transition-all active:scale-[0.98] flex justify-center items-center gap-2" type="button">
+<span class="material-symbols-outlined" data-icon="calculate">calculate</span>
+                                    Calcular Predimensionamiento
+                                </button>
+</form>
+</div>
+<div class="structural-card rounded-xl p-4 bg-surface-container-lowest border-dashed">
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+                                * Los cálculos automáticos aplican coeficientes según NEC-SE-HM Cap. 4 para secciones rectangulares de hormigón armado.
+                            </p>
+</div>
+</div>
+<!-- Right Column: Results & Visualization -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+<!-- Visualization Placeholder -->
+<div class="structural-card rounded-xl h-64 overflow-hidden relative group">
+<div class="absolute inset-0 bg-[linear-gradient(45deg,#f1f5f9_25%,transparent_25%,transparent_50%,#f1f5f9_50%,#f1f5f9_75%,transparent_75%,transparent)] bg-[length:24px_24px] opacity-20"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-64 h-32 border-4 border-primary/20 bg-white shadow-inner flex items-center justify-center relative">
+<div class="absolute -top-6 left-0 right-0 text-center font-label-md text-primary">b = 30 cm</div>
+<div class="absolute top-0 bottom-0 -left-12 flex items-center font-label-md text-primary rotate-[-90deg]">h = 45 cm</div>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-primary/40"></div>
+<div class="w-3 h-3 rounded-full bg-primary/40"></div>
+<div class="w-3 h-3 rounded-full bg-primary/40"></div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 right-4">
+<span class="bg-surface/80 backdrop-blur-sm border border-outline-variant px-3 py-1 rounded text-label-md font-label-md text-on-surface-variant">Esquema referencial</span>
+</div>
+</div>
+<!-- Main Results Card -->
+<div class="structural-card rounded-xl p-8 border-l-4 border-l-primary shadow-lg bg-surface-container-lowest">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Dimensiones Sugeridas</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Elemento V1 - Entrepiso Tipo</p>
+</div>
+<span class="bg-[#e8f5e9] text-[#2e7d32] px-3 py-1 rounded-full font-label-md text-label-md font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    Mínimo NEC Aplicado
+                                </span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-8 mb-8 border border-outline-variant flex flex-col items-center justify-center text-center">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-2">Sección de la viga</span>
+<div class="font-headline-lg text-[48px] font-extrabold text-on-surface flex items-baseline gap-2">
+<span>30</span>
+<span class="text-primary text-[32px] font-light">x</span>
+<span>45</span>
+<span class="text-[20px] font-normal text-on-surface-variant ml-2">cm</span>
+</div>
+<div class="mt-4 flex gap-8">
+<div class="text-center">
+<p class="font-label-md text-label-md text-on-surface-variant">Inercia (Ix)</p>
+<p class="font-data-display text-on-surface">227,812 cm⁴</p>
+</div>
+<div class="text-center border-l border-outline-variant pl-8">
+<p class="font-label-md text-label-md text-on-surface-variant">Peso Propio</p>
+<p class="font-data-display text-on-surface">3.24 kN/m</p>
+</div>
+</div>
+</div>
+<div class="bg-tertiary-container/20 border border-tertiary-container rounded-lg p-4 flex gap-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="info">info</span>
+<p class="font-body-md text-body-md text-on-tertiary-container leading-snug">
+<span class="font-bold">Recomendación estructural:</span> Se recomienda verificar deflexiones según NEC-SE-HM, considerando la carga viva y los efectos a largo plazo de la fisuración.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant w-full py-6 px-margin-desktop flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
+<div class="flex flex-col md:flex-row items-center gap-4">
+<span class="font-label-md text-label-md font-bold text-primary">PreDim NEC</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Herramienta gratuita para estudiantes e ingenieros. Basado en la normativa NEC-SE-HM.
+            </p>
+</div>
+<div class="flex gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Descargo Legal</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Guía de Usuario</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Soporte Técnico</a>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant opacity-60">
+            © 2024 PreDim NEC.
+        </div>
+</footer>
+<script>
+        // Micro-interaction for input fields
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.closest('.structural-card').style.borderColor = 'var(--tw-secondary)';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.closest('.structural-card').style.borderColor = '#e2e8f0';
+            });
+        });
+
+        // Simple mock calculation logic
+        document.querySelector('button').addEventListener('click', function() {
+            this.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="sync">sync</span> Procesando...';
+            setTimeout(() => {
+                this.innerHTML = '<span class="material-symbols-outlined" data-icon="calculate">calculate</span> Calcular Predimensionamiento';
+                // Trigger a subtle success pulse
+                const resultCard = document.querySelector('.col-span-12.lg\\:col-span-7 .structural-card:last-child');
+                resultCard.classList.add('ring-4', 'ring-primary/20');
+                setTimeout(() => resultCard.classList.remove('ring-4', 'ring-primary/20'), 1000);
+            }, 800);
+        });
+    </script>
+</body></html>

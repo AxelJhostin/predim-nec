@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import {
   serializeJsonLd,
+  SITE_AUTHOR,
+  SITE_CREDIT,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
@@ -35,8 +37,8 @@ export const metadata: Metadata = {
     "Norma Ecuatoriana de la Construcción",
     "ingeniería civil Ecuador",
   ],
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
-  creator: SITE_NAME,
+  authors: [{ name: SITE_CREDIT, url: SITE_URL }],
+  creator: SITE_AUTHOR,
   category: "engineering",
   alternates: {
     canonical: "/",
@@ -88,6 +90,11 @@ const webApplicationJsonLd = {
     "Memoria técnica imprimible",
     "Proyectos locales exportables en JSON",
   ],
+  author: {
+    "@type": "Person",
+    name: SITE_AUTHOR,
+    affiliation: "PUCE sede Portoviejo",
+  },
 };
 
 export default function RootLayout({

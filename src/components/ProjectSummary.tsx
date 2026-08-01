@@ -475,6 +475,9 @@ export function ProjectSummary() {
           <p>Revisión estructural</p>
           <span>Nombre, registro profesional y firma</span>
         </div>
+        <p className="col-span-full text-[10px] text-slate-500">
+          Generado con PreDim NEC · Hernández Axel · PUCE sede Portoviejo
+        </p>
       </footer>
 
       <section className="no-print flex flex-col items-start justify-between gap-4 rounded-lg border border-[#E3BFB2] bg-[#DCE9FF] p-5 md:flex-row md:items-center">

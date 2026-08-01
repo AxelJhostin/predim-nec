@@ -256,6 +256,9 @@ export function TechnicalReport({ result, onClose }: TechnicalReportProps) {
             </span>
             <FileCheck2 aria-hidden="true" size={24} />
           </div>
+          <p className="sm:col-span-2 text-[10px] text-slate-400">
+            Generado con PreDim NEC · Hernández Axel · PUCE sede Portoviejo
+          </p>
         </footer>
       </main>
     </div>

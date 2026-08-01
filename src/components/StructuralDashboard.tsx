@@ -306,8 +306,14 @@ export function StructuralDashboard({
       </div>
 
       <footer className="no-print border-t border-slate-200 bg-white px-4 py-6 md:ml-64">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-2 text-xs text-slate-400 sm:flex-row">
-          <p>© 2026 PreDim NEC · Herramienta educativa gratuita</p>
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-2 text-xs text-slate-400 sm:flex-row sm:items-center">
+          <p>
+            © 2026 PreDim NEC · Herramienta educativa gratuita
+            <span className="mx-1.5 text-slate-300" aria-hidden="true">
+              ·
+            </span>
+            Hernández Axel · PUCE sede Portoviejo
+          </p>
           <p>Los resultados no sustituyen una memoria de cálculo firmada.</p>
         </div>
       </footer>

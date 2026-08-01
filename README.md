@@ -4,6 +4,8 @@ Calculadora web gratuita para predimensionamiento preliminar de vigas, columnas
 y losas según criterios de la Norma Ecuatoriana de la Construcción (NEC).
 Funciona completamente en el navegador, sin cuentas ni base de datos.
 
+Desarrollada por **Hernández Axel · PUCE sede Portoviejo**.
+
 ## Aplicación desplegada
 
 [Abrir PreDim NEC](https://predim-nec.vercel.app)

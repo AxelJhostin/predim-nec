@@ -217,8 +217,13 @@ export default function GuidePage() {
       </main>
 
       <footer className="bg-slate-950 px-4 py-8 text-center text-sm text-slate-400">
-        PreDim NEC · Herramienta educativa de predimensionamiento estructural
-        para Ecuador.
+        <p>
+          PreDim NEC · Herramienta educativa de predimensionamiento estructural
+          para Ecuador.
+        </p>
+        <p className="mt-2 text-xs text-slate-500">
+          Hernández Axel · PUCE sede Portoviejo
+        </p>
       </footer>
     </div>
   );

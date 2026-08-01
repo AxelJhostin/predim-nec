@@ -4,6 +4,9 @@ export const SITE_URL = "https://predim-nec.vercel.app";
 export const SITE_NAME = "PreDim NEC";
 export const SITE_DESCRIPTION =
   "Calculadora gratuita para predimensionamiento de vigas, columnas y losas según la Norma Ecuatoriana de la Construcción (NEC).";
+export const SITE_AUTHOR = "Hernández Axel";
+export const SITE_AFFILIATION = "PUCE sede Portoviejo";
+export const SITE_CREDIT = `${SITE_AUTHOR} · ${SITE_AFFILIATION}`;
 
 export const calculatorPages = [
   {

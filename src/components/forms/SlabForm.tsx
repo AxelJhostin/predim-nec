@@ -15,9 +15,11 @@ import {
 export function SlabForm({
   onCalculate,
   onSave,
+  onOpenProjectSummary,
 }: {
   onCalculate: (result: SlabResult) => void;
   onSave: (label: string, result: SlabResult) => void;
+  onOpenProjectSummary?: () => void;
 }) {
   const [values, setValues] = useState<SlabInputs>({
     spanM: 5,
@@ -188,6 +190,7 @@ export function SlabForm({
         <SubmitButton />
         <SaveElementControl
           defaultLabel="L-1"
+          onOpenProjectSummary={onOpenProjectSummary}
           onSave={(label) => {
             const calculatedResult = calculateSlab(values);
             onCalculate(calculatedResult);

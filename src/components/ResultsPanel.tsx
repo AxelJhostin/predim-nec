@@ -1,15 +1,33 @@
-import { BookOpenText, Download, Info, ShieldCheck } from "lucide-react";
+import { BookOpenText, Download, Info, ShieldAlert, ShieldCheck } from "lucide-react";
 import { ComplianceTable } from "@/components/ComplianceTable";
 import {
   formatNumber,
   type CalculationResult,
 } from "@/calculations";
 
-function StatusBadge({ applied }: { applied: boolean }) {
+function OverallStatus({ result }: { result: CalculationResult }) {
+  const failed = result.compliance.filter(
+    (criterion) => criterion.status === "fail",
+  ).length;
+
+  if (failed > 0) {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-red-700 ring-1 ring-inset ring-red-200">
+        <ShieldAlert aria-hidden="true" size={13} />
+        {failed} criterio{failed === 1 ? "" : "s"} por revisar
+      </span>
+    );
+  }
+
+  const minimumApplied =
+    result.kind === "beam" || result.kind === "column"
+      ? result.minimumApplied
+      : false;
+
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700 ring-1 ring-inset ring-emerald-200">
       <ShieldCheck aria-hidden="true" size={13} />
-      {applied ? "Mínimo NEC aplicado" : "Cumple mínimo NEC"}
+      {minimumApplied ? "Mínimo NEC aplicado" : "Cumple criterios previos"}
     </span>
   );
 }
@@ -19,7 +37,7 @@ function SectionSchematic({ result }: { result: CalculationResult }) {
     return (
       <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-blueprint-grid">
         <div className="relative h-10 w-4/5 border-2 border-sky-700 bg-sky-100 shadow-[inset_0_-8px_0_rgba(2,132,199,0.12)]">
-          <span className="absolute -right-12 top-1/2 -translate-y-1/2 font-mono text-xs font-bold text-sky-900">
+          <span className="absolute -right-2 top-1/2 -translate-y-1/2 translate-x-full pl-2 font-mono text-[11px] font-bold text-sky-900 sm:-right-4 sm:text-xs">
             h = {formatNumber(result.thicknessCm)} cm
           </span>
         </div>
@@ -51,10 +69,10 @@ function SectionSchematic({ result }: { result: CalculationResult }) {
               className={`absolute h-3 w-3 rounded-full bg-orange-700 ${position}`}
             />
           ))}
-        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-xs font-bold text-slate-700">
+        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] font-bold text-slate-700 sm:text-xs">
           b = {formatNumber(width)} cm
         </span>
-        <span className="absolute -right-16 top-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-xs font-bold text-slate-700">
+        <span className="absolute -right-2 top-1/2 -translate-y-1/2 translate-x-full pl-2 font-mono text-[11px] font-bold text-slate-700 sm:-right-3 sm:text-xs">
           h = {formatNumber(height)} cm
         </span>
       </div>
@@ -139,9 +157,15 @@ function Metric({
 export function ResultsPanel({
   result,
   onOpenReport,
+  isDemo = false,
+  justUpdated = false,
+  liveMessage = "",
 }: {
   result: CalculationResult;
   onOpenReport: () => void;
+  isDemo?: boolean;
+  justUpdated?: boolean;
+  liveMessage?: string;
 }) {
   const section =
     result.kind === "beam"
@@ -150,15 +174,9 @@ export function ResultsPanel({
         ? `${formatNumber(result.sideCm)} × ${formatNumber(result.sideCm)} cm`
         : `${formatNumber(result.thicknessCm)} cm`;
   const title =
-    result.kind === "beam"
-      ? "Sección y refuerzo sugeridos"
-      : result.kind === "column"
-        ? "Sección y refuerzo sugeridos"
-        : "Espesor y refuerzo sugeridos";
-  const minimumApplied =
     result.kind === "beam" || result.kind === "column"
-      ? result.minimumApplied
-      : false;
+      ? "Sección y refuerzo sugeridos"
+      : "Espesor y refuerzo sugeridos";
   const reinforcementLine =
     result.kind === "beam"
       ? `${result.flexuralBarProposal} · ${result.stirrupProposal}`
@@ -167,7 +185,16 @@ export function ResultsPanel({
         : `${result.flexuralBarProposal}`;
 
   return (
-    <section className="structural-card overflow-hidden">
+    <section
+      id="calculation-results"
+      tabIndex={-1}
+      className={`structural-card overflow-hidden outline-none transition ring-offset-2 ${
+        justUpdated ? "result-panel-updated ring-2 ring-sky-400" : ""
+      }`}
+    >
+      <p className="sr-only" role="status" aria-live="polite">
+        {liveMessage}
+      </p>
       <div className="border-b border-slate-200 p-5 sm:p-7">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -176,8 +203,27 @@ export function ResultsPanel({
             </p>
             <h2 className="mt-1 text-xl font-bold text-slate-950">{title}</h2>
           </div>
-          {result.kind !== "slab" && <StatusBadge applied={minimumApplied} />}
+          <div className="flex flex-wrap items-center gap-2">
+            {isDemo ? (
+              <span className="inline-flex rounded-full bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-amber-800 ring-1 ring-inset ring-amber-200">
+                Ejemplo inicial
+              </span>
+            ) : (
+              <span className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-sky-800 ring-1 ring-inset ring-sky-200">
+                Tu cálculo
+              </span>
+            )}
+            <OverallStatus result={result} />
+          </div>
         </div>
+
+        {isDemo && (
+          <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50/80 px-3 py-2 text-xs leading-5 text-amber-950">
+            Estos valores son un ejemplo de arranque. Pulsa{" "}
+            <strong>Calcular predimensionamiento</strong> o elige un ejemplo
+            listo para actualizar el resultado con tus datos.
+          </p>
+        )}
 
         <p className="mt-5 font-mono text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
           {section}

@@ -19,6 +19,14 @@ permanecen en el navegador y pueden trasladarse mediante archivos JSON.
 
 ### Cambios recientes
 
+#### Experiencia de uso
+
+- Tras calcular: scroll a resultados, resaltado breve y aviso accesible.
+- Distinción entre **ejemplo inicial** y **tu cálculo**.
+- Tras guardar: CTA a Resumen & Memoria y sugerencia de siguiente etiqueta.
+- Ayuda de campos usable con toque; menú móvil con Escape/`aria-expanded`.
+- Cumplimiento visible (pasa / criterios por revisar); confirmar al eliminar.
+
 #### Calidad de software
 
 - Tests unitarios del dominio (`vitest`) para vigas, columnas, losas, casos

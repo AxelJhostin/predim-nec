@@ -19,9 +19,11 @@ import {
 export function ColumnForm({
   onCalculate,
   onSave,
+  onOpenProjectSummary,
 }: {
   onCalculate: (result: ColumnResult) => void;
   onSave: (label: string, result: ColumnResult) => void;
+  onOpenProjectSummary?: () => void;
 }) {
   const [values, setValues] = useState<ColumnInputs>({
     tributaryAreaM2: 25,
@@ -211,6 +213,7 @@ export function ColumnForm({
           <SubmitButton />
           <SaveElementControl
             defaultLabel="C-1"
+            onOpenProjectSummary={onOpenProjectSummary}
             onSave={(label) => {
               const calculatedResult = calculateColumn(values);
               onCalculate(calculatedResult);

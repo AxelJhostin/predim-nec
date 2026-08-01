@@ -45,8 +45,15 @@ describe("BeamForm", () => {
     const user = userEvent.setup();
     const onCalculate = vi.fn<(result: BeamResult) => void>();
     const onSave = vi.fn();
+    const onOpenProjectSummary = vi.fn();
 
-    render(<BeamForm onCalculate={onCalculate} onSave={onSave} />);
+    render(
+      <BeamForm
+        onCalculate={onCalculate}
+        onSave={onSave}
+        onOpenProjectSummary={onOpenProjectSummary}
+      />,
+    );
 
     const labelInput = screen.getByPlaceholderText("Ej. V-101");
     await user.clear(labelInput);
@@ -57,5 +64,12 @@ describe("BeamForm", () => {
     expect(onSave.mock.calls[0]?.[0]).toBe("V-DEMO");
     expect(onSave.mock.calls[0]?.[1]?.kind).toBe("beam");
     expect(onCalculate).toHaveBeenCalled();
+    expect(
+      screen.getByRole("button", { name: /ver en resumen/i }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /ver en resumen/i }));
+    expect(onOpenProjectSummary).toHaveBeenCalledTimes(1);
+    expect(labelInput).toHaveValue("V-DEMO");
   });
 });

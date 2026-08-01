@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BookOpen,
   Columns3,
@@ -27,6 +27,7 @@ import {
   calculateColumn,
   calculateSlab,
   type BeamResult,
+  type CalculationResult,
   type ColumnResult,
   type ElementType,
   type SlabResult,
@@ -100,10 +101,20 @@ export function StructuralDashboard({
   const [columnResult, setColumnResult] =
     useState<ColumnResult>(initialColumn);
   const [slabResult, setSlabResult] = useState<SlabResult>(initialSlab);
+  const [userCalculated, setUserCalculated] = useState<
+    Record<ElementType, boolean>
+  >({
+    beam: false,
+    column: false,
+    slab: false,
+  });
+  const [justUpdated, setJustUpdated] = useState(false);
+  const [liveMessage, setLiveMessage] = useState("");
   const [reportOpen, setReportOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [projectSummaryOpen, setProjectSummaryOpen] = useState(false);
-  const { project, addElement } = useProject();
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const { project, addElement, isHydrated } = useProject();
 
   const result =
     activeTab === "beam"
@@ -112,6 +123,22 @@ export function StructuralDashboard({
         ? columnResult
         : slabResult;
   const activeDefinition = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
+  const elementCount = isHydrated ? project.elements.length : "…";
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen]);
 
   function selectTab(tab: ElementType) {
     setActiveTab(tab);
@@ -122,6 +149,32 @@ export function StructuralDashboard({
   function openProjectSummary() {
     setProjectSummaryOpen(true);
     setMobileMenuOpen(false);
+  }
+
+  function focusResults() {
+    const panel = resultsRef.current;
+    if (!panel) {
+      return;
+    }
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    panel.focus({ preventScroll: true });
+  }
+
+  function handleCalculated<T extends CalculationResult>(
+    kind: ElementType,
+    next: T,
+    apply: (value: T) => void,
+  ) {
+    apply(next);
+    setUserCalculated((current) => ({ ...current, [kind]: true }));
+    setJustUpdated(true);
+    setLiveMessage(
+      "Resultado actualizado. Revisa la sección de diseño simplificado.",
+    );
+    window.setTimeout(() => {
+      focusResults();
+    }, 50);
+    window.setTimeout(() => setJustUpdated(false), 2200);
   }
 
   if (reportOpen) {
@@ -141,6 +194,8 @@ export function StructuralDashboard({
             <button
               type="button"
               aria-label={mobileMenuOpen ? "Cerrar navegación" : "Abrir navegación"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="primary-navigation"
               onClick={() => setMobileMenuOpen((open) => !open)}
               className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 md:hidden"
             >
@@ -160,12 +215,17 @@ export function StructuralDashboard({
             <button
               type="button"
               onClick={openProjectSummary}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-sky-400 hover:text-sky-700"
+              aria-current={projectSummaryOpen ? "page" : undefined}
+              className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition ${
+                projectSummaryOpen
+                  ? "border-sky-400 bg-sky-50 text-sky-800"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-sky-400 hover:text-sky-700"
+              }`}
             >
               <FolderKanban aria-hidden="true" size={16} />
               <span className="hidden sm:inline">Proyecto</span>
               <span className="rounded-full bg-sky-100 px-1.5 py-0.5 font-mono text-[10px] text-sky-800">
-                {project.elements.length}
+                {elementCount}
               </span>
             </button>
             <span className="hidden rounded-full bg-sky-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-sky-700 ring-1 ring-inset ring-sky-200 sm:inline-flex">
@@ -186,6 +246,7 @@ export function StructuralDashboard({
 
       <div className="flex">
         <aside
+          id="primary-navigation"
           className={`fixed inset-y-16 left-0 z-30 w-64 border-r border-slate-200 bg-white p-4 transition-transform md:sticky md:top-16 md:block md:h-[calc(100vh-4rem)] md:translate-x-0 ${
             mobileMenuOpen ? "translate-x-0 shadow-xl" : "-translate-x-full"
           } no-print`}
@@ -197,6 +258,7 @@ export function StructuralDashboard({
             <button
               type="button"
               onClick={openProjectSummary}
+              aria-current={projectSummaryOpen ? "page" : undefined}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
                 projectSummaryOpen
                   ? "bg-sky-100 text-sky-900 ring-1 ring-inset ring-sky-200"
@@ -209,7 +271,9 @@ export function StructuralDashboard({
                   Resumen & Memoria
                 </span>
                 <span className="block text-[11px] opacity-65">
-                  {project.elements.length} elementos guardados
+                  {isHydrated
+                    ? `${project.elements.length} elementos guardados`
+                    : "Cargando proyecto…"}
                 </span>
               </span>
             </button>
@@ -221,6 +285,7 @@ export function StructuralDashboard({
                   key={tab.id}
                   type="button"
                   onClick={() => selectTab(tab.id)}
+                  aria-current={active ? "page" : undefined}
                   className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
                     active
                       ? "bg-sky-100 text-sky-900 ring-1 ring-inset ring-sky-200"
@@ -286,34 +351,65 @@ export function StructuralDashboard({
                           : "Espesor, flexión por metro y acero de temperatura. El diseño final requiere análisis estructural, combinaciones de carga, detallado y revisión de un profesional."}
                   </p>
                 </div>
-                <p className="font-mono text-xs text-slate-400">Unidades SI</p>
+                {!projectSummaryOpen && (
+                  <a
+                    href="#calculation-results"
+                    className="no-print inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-sky-700 hover:border-sky-400 xl:hidden"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      focusResults();
+                    }}
+                  >
+                    Ver resultados
+                  </a>
+                )}
               </div>
             </div>
 
             {projectSummaryOpen ? (
               <ProjectSummary />
             ) : (
-            <div className="grid items-start gap-6 xl:grid-cols-[minmax(340px,0.78fr)_minmax(0,1.22fr)]">
-              <div>
-                {activeTab === "beam" && (
-                  <BeamForm onCalculate={setBeamResult} onSave={addElement} />
-                )}
-                {activeTab === "column" && (
-                  <ColumnForm
-                    onCalculate={setColumnResult}
-                    onSave={addElement}
+              <div className="grid items-start gap-6 xl:grid-cols-[minmax(340px,0.78fr)_minmax(0,1.22fr)]">
+                <div>
+                  {activeTab === "beam" && (
+                    <BeamForm
+                      onOpenProjectSummary={openProjectSummary}
+                      onCalculate={(next) =>
+                        handleCalculated("beam", next, setBeamResult)
+                      }
+                      onSave={addElement}
+                    />
+                  )}
+                  {activeTab === "column" && (
+                    <ColumnForm
+                      onOpenProjectSummary={openProjectSummary}
+                      onCalculate={(next) =>
+                        handleCalculated("column", next, setColumnResult)
+                      }
+                      onSave={addElement}
+                    />
+                  )}
+                  {activeTab === "slab" && (
+                    <SlabForm
+                      onOpenProjectSummary={openProjectSummary}
+                      onCalculate={(next) =>
+                        handleCalculated("slab", next, setSlabResult)
+                      }
+                      onSave={addElement}
+                    />
+                  )}
+                  <TechnicalDisclaimer />
+                </div>
+                <div ref={resultsRef}>
+                  <ResultsPanel
+                    result={result}
+                    isDemo={!userCalculated[activeTab]}
+                    justUpdated={justUpdated}
+                    liveMessage={liveMessage}
+                    onOpenReport={() => setReportOpen(true)}
                   />
-                )}
-                {activeTab === "slab" && (
-                  <SlabForm onCalculate={setSlabResult} onSave={addElement} />
-                )}
-                <TechnicalDisclaimer />
+                </div>
               </div>
-              <ResultsPanel
-                result={result}
-                onOpenReport={() => setReportOpen(true)}
-              />
-            </div>
             )}
           </div>
         </main>

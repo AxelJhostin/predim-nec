@@ -1,10 +1,27 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { Calculator, CircleHelp, Ruler, Save } from "lucide-react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { ArrowRight, Calculator, CircleHelp, Ruler, Save } from "lucide-react";
 
 export const inputClass =
   "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none transition focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
+
+export function suggestNextLabel(label: string) {
+  const trimmed = label.trim();
+  const match = trimmed.match(/^(.*?)(\d+)$/);
+  if (!match) {
+    return trimmed;
+  }
+  const [, prefix, digits] = match;
+  const next = String(Number(digits) + 1).padStart(digits.length, "0");
+  return `${prefix}${next}`;
+}
 
 export function Field({
   label,
@@ -19,24 +36,70 @@ export function Field({
   help?: string;
   children: ReactNode;
 }) {
+  const [helpOpen, setHelpOpen] = useState(false);
+  const helpId = useId();
+  const helpRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!helpOpen) {
+      return;
+    }
+
+    function onPointerDown(event: PointerEvent) {
+      if (
+        helpRef.current &&
+        !helpRef.current.contains(event.target as Node)
+      ) {
+        setHelpOpen(false);
+      }
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setHelpOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [helpOpen]);
+
   return (
     <label className="block text-xs font-bold uppercase tracking-[0.11em] text-slate-600">
       <span className="flex items-center justify-between gap-3">
         <span className="inline-flex items-center gap-1.5">
           {label}
           {help && (
-            <button
-              type="button"
-              className="group relative inline-flex rounded-full text-slate-400 transition hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200"
-              aria-label={`Ayuda: ${label}`}
-              title={help}
-              onClick={(event) => event.preventDefault()}
-            >
-              <CircleHelp aria-hidden="true" size={14} />
-              <span className="pointer-events-none absolute left-0 top-6 z-20 hidden w-56 rounded-lg border border-slate-200 bg-white p-3 text-left text-[11px] font-normal normal-case leading-5 tracking-normal text-slate-600 shadow-lg group-hover:block group-focus:block sm:left-auto sm:right-0">
-                {help}
-              </span>
-            </button>
+            <span ref={helpRef} className="relative inline-flex">
+              <button
+                type="button"
+                className="inline-flex rounded-full text-slate-400 transition hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                aria-label={`Ayuda: ${label}`}
+                aria-expanded={helpOpen}
+                aria-controls={helpId}
+                title={help}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  setHelpOpen((open) => !open);
+                }}
+              >
+                <CircleHelp aria-hidden="true" size={14} />
+              </button>
+              {helpOpen && (
+                <span
+                  id={helpId}
+                  role="tooltip"
+                  className="absolute left-0 top-6 z-20 w-56 rounded-lg border border-slate-200 bg-white p-3 text-left text-[11px] font-normal normal-case leading-5 tracking-normal text-slate-600 shadow-lg sm:left-auto sm:right-0"
+                >
+                  {help}
+                </span>
+              )}
+            </span>
           )}
         </span>
         {unit && (
@@ -105,18 +168,25 @@ export function SubmitButton() {
 export function SaveElementControl({
   defaultLabel,
   onSave,
+  onOpenProjectSummary,
 }: {
   defaultLabel: string;
   onSave: (label: string) => void;
+  onOpenProjectSummary?: () => void;
 }) {
   const [label, setLabel] = useState(defaultLabel);
   const [feedback, setFeedback] = useState("");
+  const [savedLabel, setSavedLabel] = useState("");
 
   function save() {
     try {
+      const trimmed = label.trim();
       onSave(label);
-      setFeedback(`Elemento ${label.trim()} guardado.`);
+      setSavedLabel(trimmed);
+      setFeedback(`Elemento ${trimmed} guardado en el proyecto local.`);
+      setLabel(suggestNextLabel(trimmed || defaultLabel));
     } catch (cause) {
+      setSavedLabel("");
       setFeedback(cause instanceof Error ? cause.message : "No se pudo guardar.");
     }
   }
@@ -132,6 +202,7 @@ export function SaveElementControl({
             onChange={(event) => {
               setLabel(event.target.value);
               setFeedback("");
+              setSavedLabel("");
             }}
             placeholder="Ej. V-101"
           />
@@ -146,9 +217,23 @@ export function SaveElementControl({
         </div>
       </label>
       {feedback && (
-        <p className="mt-2 text-[11px] normal-case tracking-normal text-sky-800">
-          {feedback}
-        </p>
+        <div
+          role="status"
+          aria-live="polite"
+          className="mt-3 space-y-2 text-[11px] normal-case tracking-normal text-sky-900"
+        >
+          <p>{feedback}</p>
+          {savedLabel && onOpenProjectSummary && (
+            <button
+              type="button"
+              onClick={onOpenProjectSummary}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-sky-300 bg-white px-3 py-2 text-xs font-bold text-sky-800 transition hover:border-sky-500 hover:bg-sky-50"
+            >
+              Ver en Resumen & Memoria
+              <ArrowRight aria-hidden="true" size={14} />
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

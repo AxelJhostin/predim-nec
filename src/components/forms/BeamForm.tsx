@@ -15,9 +15,11 @@ import {
 export function BeamForm({
   onCalculate,
   onSave,
+  onOpenProjectSummary,
 }: {
   onCalculate: (result: BeamResult) => void;
   onSave: (label: string, result: BeamResult) => void;
+  onOpenProjectSummary?: () => void;
 }) {
   const [values, setValues] = useState<BeamInputs>({
     spanM: 6,
@@ -209,6 +211,7 @@ export function BeamForm({
         <SubmitButton />
         <SaveElementControl
           defaultLabel="V-101"
+          onOpenProjectSummary={onOpenProjectSummary}
           onSave={(label) => {
             const calculatedResult = calculateBeam(values);
             onCalculate(calculatedResult);

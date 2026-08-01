@@ -19,6 +19,7 @@ export function PwaInstallPrompt() {
   const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
+    // Retrasa el aviso para no tapar el primer cálculo en móvil.
     const hydrationTask = window.setTimeout(() => {
       const standalone =
         window.matchMedia("(display-mode: standalone)").matches ||
@@ -38,7 +39,7 @@ export function PwaInstallPrompt() {
           updateViaCache: "none",
         });
       }
-    }, 0);
+    }, 8000);
 
     function onBeforeInstall(event: Event) {
       event.preventDefault();
@@ -75,7 +76,7 @@ export function PwaInstallPrompt() {
   }
 
   return (
-    <div className="no-print fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:left-auto">
+    <div className="no-print fixed bottom-20 left-4 right-4 z-50 mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:bottom-4 sm:left-auto">
       <div className="flex items-start gap-3">
         <BrandLogo size={40} />
         <div className="min-w-0 flex-1">

@@ -224,26 +224,32 @@ export function ProjectSummary() {
             {project.metadata.name || "Proyecto sin nombre"}
           </span>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setMetadataEditing(true)}
-            className="inline-flex items-center gap-2 rounded border border-[#8F7066] bg-white px-4 py-2.5 text-xs font-bold text-[#0B1C30] hover:bg-slate-50"
-          >
-            <Pencil aria-hidden="true" size={15} />
-            Editar metadatos
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMetadataEditing(false);
-              setMessage("Metadatos guardados localmente.");
-            }}
-            className="inline-flex items-center gap-2 rounded bg-[#E65100] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#C84600]"
-          >
-            <Save aria-hidden="true" size={15} />
-            Guardar cambios
-          </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {metadataEditing ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMetadataEditing(false);
+                setMessage("Metadatos listos. Se guardan solos en este navegador.");
+              }}
+              className="inline-flex items-center gap-2 rounded bg-[#E65100] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#C84600]"
+            >
+              <Save aria-hidden="true" size={15} />
+              Listo
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setMetadataEditing(true);
+                setMessage("");
+              }}
+              className="inline-flex items-center gap-2 rounded border border-[#8F7066] bg-white px-4 py-2.5 text-xs font-bold text-[#0B1C30] hover:bg-slate-50"
+            >
+              <Pencil aria-hidden="true" size={15} />
+              Editar metadatos
+            </button>
+          )}
           <button
             type="button"
             onClick={resetProject}
@@ -252,6 +258,9 @@ export function ProjectSummary() {
             <RotateCcw aria-hidden="true" size={15} />
             Nuevo proyecto
           </button>
+          <p className="w-full text-[11px] text-slate-500 sm:w-auto">
+            Autoguardado local al escribir. No hace falta un botón extra.
+          </p>
         </div>
       </div>
 
@@ -474,7 +483,14 @@ export function ProjectSummary() {
                     <button
                       type="button"
                       aria-label={`Eliminar ${element.label}`}
-                      onClick={() => removeElement(element.id)}
+                      onClick={() => {
+                        const confirmed = window.confirm(
+                          `¿Eliminar el elemento ${element.label} del proyecto local?`,
+                        );
+                        if (confirmed) {
+                          removeElement(element.id);
+                        }
+                      }}
                       className="rounded-md p-2 text-red-700 hover:bg-red-50"
                     >
                       <Trash2 aria-hidden="true" size={16} />

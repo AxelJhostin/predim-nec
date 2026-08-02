@@ -35,9 +35,16 @@ Entrada directa: [/predim](https://predim-nec.vercel.app/predim)
 - **GeoSecciones** — área, inercia y módulo de sección ([/geosecciones](https://predim-nec.vercel.app/geosecciones)).
 - **Unidades EC** — conversiones SI para civil ([/unidades-ec](https://predim-nec.vercel.app/unidades-ec)).
 
+### Flujo de tarea (activas)
+
+- **Combinaciones NEC** — 1.4D y 1.2D+1.6L → q_u / w ([/combinaciones-nec](https://predim-nec.vercel.app/combinaciones-nec)).
+- **Tributarias** — At de columna y w de viga ([/tributarias](https://predim-nec.vercel.app/tributarias)).
+
+Flujo sugerido: Combinaciones → Tributarias → PreDim (pegar valores).
+
 ### Próximos módulos (roadmap)
 
-Tributarias · Combinaciones NEC · Zapatas PreDim · Deflexión aprox. (detalle en el plan).
+Zapatas PreDim · Deflexión aprox. · ampliar Guía NEC (detalle en el plan).
 
 ## Desarrollo local
 

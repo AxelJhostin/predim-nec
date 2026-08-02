@@ -29,6 +29,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.85,
     },
+    {
+      url: `${SITE_URL}/tributarias`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.88,
+    },
+    {
+      url: `${SITE_URL}/combinaciones-nec`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.88,
+    },
     ...calculatorPages.map((page) => ({
       url: `${SITE_URL}${page.slug}`,
       lastModified,

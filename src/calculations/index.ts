@@ -39,3 +39,16 @@ export {
   type UnitConversionInputs,
   type UnitConversionResult,
 } from "./units";
+export {
+  calculateTributary,
+  type TributaryTarget,
+  type ColumnBayPosition,
+  type TributaryInputs,
+  type TributaryResult,
+} from "./tributary";
+export {
+  calculateCombinations,
+  type CombinationId,
+  type CombinationInputs,
+  type CombinationResult,
+} from "./combinations";

@@ -54,18 +54,22 @@ export const toolkitModules: ToolkitModule[] = [
     name: "Tributarias",
     shortName: "Tributarias",
     level: "Intermedio",
-    status: "soon",
+    status: "live",
     description:
       "Áreas tributarias y cargas de piso hacia columnas o vigas (kN / kN/m).",
+    href: "/tributarias",
+    cta: "Abrir Tributarias",
   },
   {
     id: "combinations",
     name: "Combinaciones NEC",
     shortName: "Combinaciones",
     level: "Intermedio",
-    status: "soon",
+    status: "live",
     description:
       "Combinaciones simplificadas NEC-SE-CG para obtener cargas de anteproyecto.",
+    href: "/combinaciones-nec",
+    cta: "Abrir Combinaciones",
   },
   {
     id: "footing",

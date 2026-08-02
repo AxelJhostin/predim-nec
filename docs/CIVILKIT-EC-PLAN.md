@@ -54,8 +54,8 @@ Orden pensado para utilidad de pregrado + SEO + reutilizar lo ya construido.
 | 1 | **CivilKit Shell** | — | Home de suite, navegación, marca, SEO hub | **Hecho** (`/`) |
 | 2 | **GeoSecciones** | Básico | Área, inercia, módulo de sección (rectángulo, T, circular) | **Hecho** (`/geosecciones`) |
 | 3 | **Unidades EC** | Básico | Conversiones SI útiles en civil (kN, MPa, kgf, etc.) | **Hecho** (`/unidades-ec`) |
-| 4 | **Tributarias** | Intermedio | Áreas tributarias, cargas de piso → kN o kN/m | Pendiente |
-| 5 | **Combinaciones NEC** | Intermedio | Combinaciones simplificadas NEC-SE-CG (1.2D+1.6L, etc.) | Pendiente |
+| 4 | **Tributarias** | Intermedio | Áreas tributarias, cargas de piso → kN o kN/m | **Hecho** (`/tributarias`) |
+| 5 | **Combinaciones NEC** | Intermedio | Combinaciones simplificadas NEC-SE-CG (1.2D+1.6L, etc.) | **Hecho** (`/combinaciones-nec`) |
 | 6 | **Zapatas PreDim** | Intermedio | Zapata aislada preliminar (área, espesor, chequeos básicos) | Pendiente |
 | 7 | **Deflexión aprox.** | Intermedio | Deflexión elástica aproximada de vigas (anteproyecto) | Pendiente |
 | 8 | **Guía NEC Estudiante** | Contenido | FAQ, glosario, flujo de tarea, enlaces a módulos | Parcial (guía actual) |
@@ -129,10 +129,11 @@ src/
 ### Fase C — Flujo de tarea (2 módulos)
 **Objetivo:** conectar con PreDim.
 
-1. **Tributarias** → exportar carga a PreDim (manual al inicio; deep-link después).  
-2. **Combinaciones NEC** → obtener w o q de diseño simplificado.
+- [x] **Tributarias** — `/tributarias` (At columna, bt/w viga; CTA a PreDim).
+- [x] **Combinaciones NEC** — `/combinaciones-nec` (1.4D, 1.2D+1.6L → q_u / w).
+- [x] Enlaces cruzados Tributarias ↔ Combinaciones ↔ PreDim (pegado manual).
 
-**Éxito:** plantilla de tarea “vivienda 2 plantas” usa Tributarias → Combinaciones → PreDim.
+**Éxito:** flujo Combinaciones → Tributarias → PreDim documentado y usable. ✅
 
 ### Fase D — Anteproyecto ampliado
 1. **Zapatas PreDim**  
@@ -193,9 +194,10 @@ Estado rápido al inicio de cada sesión:
 
 ## 9. Próximo paso inmediato
 
-**Fase C — Flujo de tarea**
-1. **Tributarias** (áreas tributarias → kN o kN/m).  
-2. **Combinaciones NEC** (1.2D+1.6L y similares simplificadas).
+**Fase D — Anteproyecto ampliado**
+1. **Zapatas PreDim**  
+2. **Deflexión aprox.**  
+3. Ampliar **Guía NEC Estudiante** (glosario + mapa de módulos).
 
 ---
 
@@ -207,6 +209,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Plan CivilKit EC aprobado (nombre, Ecuador, pregrado, módulos elegidos) |
 | 2026-08-02 | Fase A: shell CivilKit EC en `/`, PreDim en `/predim`, SEO/README |
 | 2026-08-02 | Fase B: GeoSecciones + Unidades EC (páginas SEO, catálogo, tests) |
+| 2026-08-02 | Fase C: Tributarias + Combinaciones NEC (flujo hacia PreDim) |
 
 ---
 

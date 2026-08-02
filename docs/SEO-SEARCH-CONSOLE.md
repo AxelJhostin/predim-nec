@@ -26,6 +26,7 @@ Pide indexación manual de:
 - `/`
 - `/predim`
 - `/aprender`
+- `/norma-nec`
 - `/guia-predimensionamiento-nec`
 - `/calculadora-vigas-nec`
 - `/combinaciones-nec`

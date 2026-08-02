@@ -110,6 +110,12 @@ export default function GuidePage() {
           </Link>
           <div className="flex items-center gap-2">
             <Link
+              href="/norma-nec"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-sky-300 hover:text-sky-800"
+            >
+              Norma NEC
+            </Link>
+            <Link
               href="/aprender"
               className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-sky-300 hover:text-sky-800"
             >

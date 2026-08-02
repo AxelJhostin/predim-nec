@@ -111,9 +111,20 @@ export const toolkitModules: ToolkitModule[] = [
     level: "Contenido",
     status: "live",
     description:
-      "Guías cortas indexables: tributarias, combinaciones, zapatas, deflexión y unidades.",
+      "Guías cortas: tributarias, combinaciones, vigas/columnas/losas, sismo y más.",
     href: "/aprender",
     cta: "Ver artículos",
+  },
+  {
+    id: "norma",
+    name: "Norma NEC oficial",
+    shortName: "Norma NEC",
+    level: "Contenido",
+    status: "live",
+    description:
+      "Enlaces a capítulos oficiales MIT/MIDUVI (NEC-SE-CG, HM, DS, GC…) para descargar la norma.",
+    href: "/norma-nec",
+    cta: "Ver norma oficial",
   },
 ];
 

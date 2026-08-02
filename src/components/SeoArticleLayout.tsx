@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import type { ContentArticle } from "@/lib/contentArticles";
 import { SITE_CREDIT, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
@@ -25,13 +25,21 @@ export function SeoArticleLayout({
               </p>
             </div>
           </Link>
-          <Link
-            href="/aprender"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-sky-700"
-          >
-            <ArrowLeft aria-hidden="true" size={14} />
-            Aprender
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/norma-nec"
+              className="text-xs font-semibold text-slate-600 hover:text-sky-700"
+            >
+              Norma NEC
+            </Link>
+            <Link
+              href="/aprender"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-sky-700"
+            >
+              <ArrowLeft aria-hidden="true" size={14} />
+              Aprender
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -59,18 +67,42 @@ export function SeoArticleLayout({
           ))}
         </div>
 
-        <div className="mt-10 rounded-xl border border-slate-200 bg-white p-5">
-          <p className="text-sm text-slate-600">
-            Practica el cálculo en la herramienta enlazada. Recuerda el alcance
-            educativo de {SITE_NAME}.
-          </p>
-          <Link
-            href={article.toolHref}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
-          >
-            {article.toolLabel}
-            <ArrowRight aria-hidden="true" size={15} />
-          </Link>
+        <div className="mt-10 space-y-3">
+          {article.toolHref && article.toolLabel && (
+            <div className="rounded-xl border border-slate-200 bg-white p-5">
+              <p className="text-sm text-slate-600">
+                Practica en CivilKit. Alcance educativo: no sustituye el diseño
+                profesional.
+              </p>
+              <Link
+                href={article.toolHref}
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
+              >
+                {article.toolLabel}
+                <ArrowRight aria-hidden="true" size={15} />
+              </Link>
+            </div>
+          )}
+
+          {article.officialHref && (
+            <div className="rounded-xl border border-sky-200 bg-sky-50 p-5">
+              <p className="text-sm font-semibold text-sky-950">
+                Fuente oficial (recomendado)
+              </p>
+              <p className="mt-1 text-sm text-sky-900/80">
+                Contrasta siempre con el PDF vigente en el portal del Estado.
+              </p>
+              <a
+                href={article.officialHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-sky-300 bg-white px-4 py-2.5 text-sm font-semibold text-sky-900 hover:border-sky-500"
+              >
+                {article.officialLabel ?? "Abrir norma oficial"}
+                <ExternalLink aria-hidden="true" size={15} />
+              </a>
+            </div>
+          )}
         </div>
       </article>
 

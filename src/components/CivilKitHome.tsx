@@ -77,6 +77,13 @@ export function CivilKitHome() {
                 <BookOpen aria-hidden="true" size={17} />
                 Aprender NEC
               </Link>
+              <Link
+                href="/norma-nec"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-sky-400 hover:text-sky-700"
+              >
+                <ShieldCheck aria-hidden="true" size={17} />
+                Norma oficial
+              </Link>
             </div>
             <p className="mt-6 max-w-2xl text-sm leading-6 text-slate-500">
               <ShieldCheck

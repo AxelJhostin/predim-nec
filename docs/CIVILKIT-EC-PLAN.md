@@ -216,6 +216,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Fase E (parcial): deep-link PreDim + flujo en home |
 | 2026-08-02 | Fix deep-link: handoff vía searchParams servidor (evita Suspense/Turbopack) |
 | 2026-08-02 | SEO pack: OG, FAQ módulos, /aprender ×5, docs Search Console |
+| 2026-08-02 | Hub /norma-nec (enlaces oficiales MIT/MIDUVI) + más artículos Aprender |
 
 ---
 

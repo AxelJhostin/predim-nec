@@ -47,9 +47,17 @@ export default function AprenderHubPage() {
           Aprender NEC · guías cortas
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-          Textos prácticos para búsquedas de pregrado. Cada guía enlaza a la
-          calculadora CivilKit correspondiente.
+          Textos prácticos para pregrado. Cada guía enlaza a una calculadora
+          CivilKit y, cuando aplica, al portal oficial de la NEC (MIT/MIDUVI).
         </p>
+
+        <Link
+          href="/norma-nec"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-semibold text-sky-950 hover:border-sky-400"
+        >
+          Descargar capítulos NEC oficiales
+          <ArrowRight aria-hidden="true" size={15} />
+        </Link>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {contentArticles.map((article) => (

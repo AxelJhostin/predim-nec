@@ -88,4 +88,16 @@ export const moduleFaqs = {
         "Sí. Combinaciones, Tributarias y Deflexión tienen botones «Usar en PreDim» que abren /predim con q_u, w o At en la URL.",
     },
   ],
+  calculus: [
+    {
+      question: "¿Qué cubre Cálculo para civil?",
+      answer:
+        "Derivadas e integrales de polinomios, potencias, seno, coseno y exponenciales, más centroide/inercia de triángulo y rectángulo con pasos. No es un CAS completo.",
+    },
+    {
+      question: "¿Sirve para el examen de cálculo?",
+      answer:
+        "Es apoyo para practicar reglas básicas y conectar con secciones. No sustituye el curso ni cubre integración por partes, series o multivariable.",
+    },
+  ],
 } as const satisfies Record<string, FaqItem[]>;

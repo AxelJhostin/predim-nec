@@ -460,6 +460,39 @@ export const contentArticles: ContentArticle[] = [
     officialHref: OFFICIAL_NEC_HUBS.mitNec,
     officialLabel: "Marco NEC-SE-HM (oficial)",
   },
+  {
+    slug: "derivadas-integrales-civil",
+    title: "Derivadas e integrales para ingeniería civil (paso a paso)",
+    description:
+      "Reglas básicas de cálculo aplicadas a civil: potencias, seno/coseno y centroides e inercia por integración. Herramienta CivilKit EC.",
+    keywords: [
+      "derivadas ingeniería civil",
+      "integrales centroide",
+      "inercia por integración",
+      "cálculo para civil Ecuador",
+    ],
+    eyebrow: "Básico",
+    lead: "En pregrado conviene dominar derivadas e integrales simples antes de saltar a secciones o PreDim. Esta guía conecta las reglas del cálculo I con centroides e inercia.",
+    sections: [
+      {
+        heading: "Qué practicar primero",
+        body: [
+          "Regla de potencias: d/dx[xⁿ] = n·xⁿ⁻¹ y su integral inversa.",
+          "Cadena en sen(bx), cos(bx) y e^(bx).",
+          "Integral definida con el teorema fundamental: F(b) − F(a).",
+        ],
+      },
+      {
+        heading: "Puente a secciones",
+        body: [
+          "El centroide de un triángulo rectángulo (ȳ = h/3) y la inercia de un rectángulo respecto a la base (bh³/3) salen de integrar dA.",
+          "Después puedes contrastar el número en GeoSecciones.",
+        ],
+      },
+    ],
+    toolHref: "/calculo-civil",
+    toolLabel: "Abrir Cálculo para civil",
+  },
 ];
 
 export function getContentArticle(slug: string) {

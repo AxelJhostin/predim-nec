@@ -54,6 +54,7 @@ Orden pensado para utilidad de pregrado + SEO + reutilizar lo ya construido.
 | 1 | **CivilKit Shell** | — | Home de suite, navegación, marca, SEO hub | **Hecho** (`/`) |
 | 2 | **GeoSecciones** | Básico | Área, inercia, módulo de sección (rectángulo, T, circular) | **Hecho** (`/geosecciones`) |
 | 3 | **Unidades EC** | Básico | Conversiones SI útiles en civil (kN, MPa, kgf, etc.) | **Hecho** (`/unidades-ec`) |
+| 3b | **Cálculo para civil** | Básico | Derivadas/integrales + centroide/inercia paso a paso | **Hecho** (`/calculo-civil`) |
 | 4 | **Tributarias** | Intermedio | Áreas tributarias, cargas de piso → kN o kN/m | **Hecho** (`/tributarias`) |
 | 5 | **Combinaciones NEC** | Intermedio | Combinaciones simplificadas NEC-SE-CG (1.2D+1.6L, etc.) | **Hecho** (`/combinaciones-nec`) |
 | 6 | **Zapatas PreDim** | Intermedio | Zapata aislada preliminar (área, espesor, chequeos básicos) | **Hecho** (`/zapatas-predim`) |
@@ -122,6 +123,7 @@ src/
 
 - [x] **GeoSecciones** — `/geosecciones` (rectángulo, círculo, T; A, I, S, r).
 - [x] **Unidades EC** — `/unidades-ec` (longitud, fuerza, esfuerzo, cargas).
+- [x] **Cálculo para civil** — `/calculo-civil` (derivadas/integrales + casos civil).
 - [x] Catálogo home, sitemap, SW shell, tests de dominio.
 
 **Éxito:** cada uno con página SEO + calcular + explicación corta + tests. ✅
@@ -217,6 +219,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Fix deep-link: handoff vía searchParams servidor (evita Suspense/Turbopack) |
 | 2026-08-02 | SEO pack: OG, FAQ módulos, /aprender ×5, docs Search Console |
 | 2026-08-02 | Hub /norma-nec (enlaces oficiales MIT/MIDUVI) + más artículos Aprender |
+| 2026-08-02 | Módulo Cálculo para civil (`/calculo-civil`) + artículo Aprender |
 
 ---
 

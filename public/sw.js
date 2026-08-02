@@ -1,4 +1,4 @@
-const CACHE_VERSION = "civilkit-ec-v7";
+const CACHE_VERSION = "civilkit-ec-v8";
 const APP_SHELL = [
   "/",
   "/predim",
@@ -7,6 +7,7 @@ const APP_SHELL = [
   "/tarea-vivienda-2-plantas",
   "/geosecciones",
   "/unidades-ec",
+  "/calculo-civil",
   "/tributarias",
   "/combinaciones-nec",
   "/zapatas-predim",

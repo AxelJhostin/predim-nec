@@ -55,6 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${SITE_URL}/calculo-civil`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.86,
+    },
+    {
       url: `${SITE_URL}/tributarias`,
       lastModified,
       changeFrequency: "monthly",

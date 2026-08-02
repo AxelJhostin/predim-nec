@@ -50,6 +50,17 @@ export const toolkitModules: ToolkitModule[] = [
     cta: "Abrir Unidades EC",
   },
   {
+    id: "calculus",
+    name: "Cálculo para civil",
+    shortName: "Cálculo",
+    level: "Básico",
+    status: "live",
+    description:
+      "Derivadas e integrales con paso a paso, más centroides e inercia por integración.",
+    href: "/calculo-civil",
+    cta: "Abrir Cálculo",
+  },
+  {
     id: "tributary",
     name: "Tributarias",
     shortName: "Tributarias",

@@ -17,6 +17,7 @@ Desarrollada por **Hernández Axel · PUCE sede Portoviejo**.
 | **PreDim NEC** | `/predim` | Vigas, columnas y losas (diseño simplificado) |
 | **GeoSecciones** | `/geosecciones` | Área, inercia, módulo de sección |
 | **Unidades EC** | `/unidades-ec` | Conversiones SI (MPa, kgf/cm², kN…) |
+| **Cálculo para civil** | `/calculo-civil` | Derivadas/integrales + centroide/inercia paso a paso |
 | **Combinaciones NEC** | `/combinaciones-nec` | 1.4D y 1.2D+1.6L → q_u / w |
 | **Tributarias** | `/tributarias` | At de columna y w de viga |
 | **Zapatas PreDim** | `/zapatas-predim` | Zapata aislada preliminar |

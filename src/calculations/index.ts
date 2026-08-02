@@ -63,3 +63,14 @@ export {
   type DeflectionInputs,
   type DeflectionResult,
 } from "./deflection";
+export {
+  calculateCalculus,
+  listFunctionPresets,
+  listCivilCases,
+  type CalculusMode,
+  type FunctionPresetId,
+  type CivilCaseId,
+  type CalculusInputs,
+  type CalculusResult,
+  type CalculusCivilInputs,
+} from "./calculusCivil";

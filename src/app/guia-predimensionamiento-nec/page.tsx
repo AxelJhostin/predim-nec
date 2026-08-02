@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
+import { liveModules } from "@/lib/modules";
 import {
   createPageMetadata,
   PREDIM_NAME,
@@ -11,7 +12,7 @@ import {
 } from "@/lib/seo";
 
 const description =
-  "Guía práctica para entender el predimensionamiento de vigas, columnas y losas según la NEC en Ecuador, con preguntas frecuentes y calculadoras gratuitas.";
+  "Guía CivilKit EC: flujo de tarea NEC para pregrado en Ecuador, mapa de módulos (PreDim, tributarias, zapatas, deflexión) y preguntas frecuentes.";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Guía de predimensionamiento estructural según NEC",
@@ -49,6 +50,11 @@ const faqs = [
     question: "¿Qué carga debo ingresar?",
     answer:
       "Debe usarse la carga correspondiente al proyecto y a su etapa de cálculo. Los valores sugeridos por la interfaz son únicamente ejemplos; no deben adoptarse sin verificar uso, materiales, geometría y combinaciones exigidas por la NEC.",
+  },
+  {
+    question: "¿Cómo encadenar las herramientas de CivilKit EC?",
+    answer:
+      "Flujo típico de entrepiso: Combinaciones NEC (obtener q_u) → Tributarias (At o w) → PreDim (vigas/columnas/losas) → Deflexión aprox. (servicio) y Zapatas PreDim (cimentación preliminar). Se pegan los valores entre módulos.",
   },
 ];
 
@@ -118,36 +124,41 @@ export default function GuidePage() {
               Guía técnica introductoria
             </p>
             <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
-              Predimensionamiento estructural según la NEC en Ecuador
+              Guía NEC estudiante · CivilKit EC
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-              Aprende qué datos intervienen en una primera estimación de vigas,
-              columnas y losas, cómo interpretar los resultados y qué
-              verificaciones quedan pendientes para el diseño definitivo.
+              Mapa de herramientas gratuitas para pregrado en Ecuador: desde
+              cargas y tributarias hasta PreDim, deflexión y zapata preliminar.
+              Resultados de anteproyecto; el diseño final es profesional.
             </p>
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:py-20">
-          <div className="grid gap-6 md:grid-cols-3">
-            <CalculatorCard
-              href="/calculadora-vigas-nec"
-              number="01"
-              title="Vigas"
-              description="La luz, el apoyo y la carga lineal controlan el peralte y la demanda flexional preliminar."
-            />
-            <CalculatorCard
-              href="/calculadora-columnas-nec"
-              number="02"
-              title="Columnas"
-              description="El área tributaria, los pisos y la posición permiten estimar la carga axial y el área requerida."
-            />
-            <CalculatorCard
-              href="/calculadora-losas-nec"
-              number="03"
-              title="Losas"
-              description="La luz y el sistema constructivo orientan el espesor inicial para coordinar el anteproyecto."
-            />
+          <div className="mb-10 max-w-2xl">
+            <p className="font-mono text-sm font-bold uppercase tracking-[0.16em] text-[#0284C7]">
+              Mapa CivilKit
+            </p>
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+              Módulos disponibles
+            </h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              Cada herramienta tiene URL propia, procedimiento visible y
+              alcance educativo NEC.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {liveModules
+              .filter((module) => module.href)
+              .map((module, index) => (
+                <CalculatorCard
+                  key={module.id}
+                  href={module.href!}
+                  number={String(index + 1).padStart(2, "0")}
+                  title={module.name}
+                  description={module.description}
+                />
+              ))}
           </div>
 
           <div className="mt-16 grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
@@ -156,20 +167,20 @@ export default function GuidePage() {
                 Flujo recomendado
               </p>
               <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
-                Del anteproyecto al diseño
+                Tarea de entrepiso + zapata
               </h2>
               <p className="mt-4 leading-7 text-slate-600">
-                Una sección preliminar coherente reduce iteraciones, pero debe
-                validarse dentro del sistema estructural completo.
+                Encadena los módulos de CivilKit y luego valida el sistema
+                completo en un modelo estructural.
               </p>
             </div>
             <ol className="space-y-4">
               {[
-                "Definir uso, geometría, materiales y sistema resistente.",
-                "Estimar cargas y obtener dimensiones preliminares.",
-                "Modelar la estructura y aplicar combinaciones de carga.",
-                "Verificar resistencia, servicio, estabilidad y desempeño sísmico.",
-                "Detallar los elementos y documentar la memoria de cálculo.",
+                "Definir uso, geometría, materiales y retícula (vanos, pisos).",
+                "Combinaciones NEC → q_u; Tributarias → At o w.",
+                "PreDim: losa, viga y columna; pegar cargas obtenidas.",
+                "Deflexión aprox. (L/240) y Zapatas PreDim con P de columna.",
+                "Modelar, verificar sismo/servicio y detallar con un profesional.",
               ].map((step, index) => (
                 <li
                   key={step}

@@ -42,9 +42,14 @@ Entrada directa: [/predim](https://predim-nec.vercel.app/predim)
 
 Flujo sugerido: Combinaciones → Tributarias → PreDim (pegar valores).
 
-### Próximos módulos (roadmap)
+### Anteproyecto ampliado (activas)
 
-Zapatas PreDim · Deflexión aprox. · ampliar Guía NEC (detalle en el plan).
+- **Zapatas PreDim** — zapata aislada preliminar ([/zapatas-predim](https://predim-nec.vercel.app/zapatas-predim)).
+- **Deflexión aprox.** — chequeo elástico L/240 ([/deflexion-aprox](https://predim-nec.vercel.app/deflexion-aprox)).
+
+### Roadmap
+
+Pulido SEO/UX continuo (Fase E del plan).
 
 ## Desarrollo local
 

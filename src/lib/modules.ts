@@ -76,18 +76,22 @@ export const toolkitModules: ToolkitModule[] = [
     name: "Zapatas PreDim",
     shortName: "Zapatas",
     level: "Intermedio",
-    status: "soon",
+    status: "live",
     description:
       "Zapata aislada preliminar: área, espesor y chequeos básicos de anteproyecto.",
+    href: "/zapatas-predim",
+    cta: "Abrir Zapatas",
   },
   {
     id: "deflection",
     name: "Deflexión aprox.",
     shortName: "Deflexión",
     level: "Intermedio",
-    status: "soon",
+    status: "live",
     description:
       "Deflexión elástica aproximada de vigas para chequeos L/240 y similares.",
+    href: "/deflexion-aprox",
+    cta: "Abrir Deflexión",
   },
   {
     id: "guide",

@@ -41,6 +41,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.88,
     },
+    {
+      url: `${SITE_URL}/zapatas-predim`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.88,
+    },
+    {
+      url: `${SITE_URL}/deflexion-aprox`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
     ...calculatorPages.map((page) => ({
       url: `${SITE_URL}${page.slug}`,
       lastModified,

@@ -56,9 +56,9 @@ Orden pensado para utilidad de pregrado + SEO + reutilizar lo ya construido.
 | 3 | **Unidades EC** | Básico | Conversiones SI útiles en civil (kN, MPa, kgf, etc.) | **Hecho** (`/unidades-ec`) |
 | 4 | **Tributarias** | Intermedio | Áreas tributarias, cargas de piso → kN o kN/m | **Hecho** (`/tributarias`) |
 | 5 | **Combinaciones NEC** | Intermedio | Combinaciones simplificadas NEC-SE-CG (1.2D+1.6L, etc.) | **Hecho** (`/combinaciones-nec`) |
-| 6 | **Zapatas PreDim** | Intermedio | Zapata aislada preliminar (área, espesor, chequeos básicos) | Pendiente |
-| 7 | **Deflexión aprox.** | Intermedio | Deflexión elástica aproximada de vigas (anteproyecto) | Pendiente |
-| 8 | **Guía NEC Estudiante** | Contenido | FAQ, glosario, flujo de tarea, enlaces a módulos | Parcial (guía actual) |
+| 6 | **Zapatas PreDim** | Intermedio | Zapata aislada preliminar (área, espesor, chequeos básicos) | **Hecho** (`/zapatas-predim`) |
+| 7 | **Deflexión aprox.** | Intermedio | Deflexión elástica aproximada de vigas (anteproyecto) | **Hecho** (`/deflexion-aprox`) |
+| 8 | **Guía NEC Estudiante** | Contenido | FAQ, glosario, flujo de tarea, enlaces a módulos | **Hecho** (mapa CivilKit) |
 
 ### Por qué este orden
 1. **Shell** da identidad CivilKit sin romper PreDim.  
@@ -136,11 +136,11 @@ src/
 **Éxito:** flujo Combinaciones → Tributarias → PreDim documentado y usable. ✅
 
 ### Fase D — Anteproyecto ampliado
-1. **Zapatas PreDim**  
-2. **Deflexión aprox.**  
-3. Ampliar **Guía NEC Estudiante** (glosario + mapa de módulos).
+- [x] **Zapatas PreDim** — `/zapatas-predim` (área, espesor, corte/punzonamiento, malla).
+- [x] **Deflexión aprox.** — `/deflexion-aprox` (δ elástica, L/n).
+- [x] Ampliar **Guía NEC Estudiante** (flujo CivilKit + mapa de módulos).
 
-**Éxito:** 6+ herramientas indexables; estudiante resuelve una tarea de entrepiso + zapata sin Excel.
+**Éxito:** 6+ herramientas indexables; estudiante resuelve una tarea de entrepiso + zapata sin Excel. ✅
 
 ### Fase E — Pulido continuo
 - SEO (FAQ, internos, Open Graph por módulo).  
@@ -194,10 +194,10 @@ Estado rápido al inicio de cada sesión:
 
 ## 9. Próximo paso inmediato
 
-**Fase D — Anteproyecto ampliado**
-1. **Zapatas PreDim**  
-2. **Deflexión aprox.**  
-3. Ampliar **Guía NEC Estudiante** (glosario + mapa de módulos).
+**Fase E — Pulido continuo**
+- SEO (FAQ por módulo, Open Graph, enlaces internos).  
+- UX (deep-link PreDim, ejemplos listos, memoria unificada).  
+- Calidad (tests de borde, migraciones si cambia schema).
 
 ---
 
@@ -210,6 +210,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Fase A: shell CivilKit EC en `/`, PreDim en `/predim`, SEO/README |
 | 2026-08-02 | Fase B: GeoSecciones + Unidades EC (páginas SEO, catálogo, tests) |
 | 2026-08-02 | Fase C: Tributarias + Combinaciones NEC (flujo hacia PreDim) |
+| 2026-08-02 | Fase D: Zapatas + Deflexión + guía con mapa CivilKit |
 
 ---
 

@@ -52,3 +52,14 @@ export {
   type CombinationInputs,
   type CombinationResult,
 } from "./combinations";
+export {
+  calculateFooting,
+  type FootingInputs,
+  type FootingResult,
+} from "./footing";
+export {
+  calculateDeflection,
+  type DeflectionSupport,
+  type DeflectionInputs,
+  type DeflectionResult,
+} from "./deflection";

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "civilkit-ec-v3";
+const CACHE_VERSION = "civilkit-ec-v4";
 const APP_SHELL = [
   "/",
   "/predim",
@@ -6,6 +6,8 @@ const APP_SHELL = [
   "/unidades-ec",
   "/tributarias",
   "/combinaciones-nec",
+  "/zapatas-predim",
+  "/deflexion-aprox",
   "/manifest.webmanifest",
   "/icons/predim-nec-logo.svg",
   "/icons/icon.svg",

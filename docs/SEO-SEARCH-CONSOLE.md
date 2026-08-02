@@ -6,17 +6,13 @@ Robots: https://predim-nec.vercel.app/robots.txt
 
 ## 1. Verificar la propiedad (una sola vez)
 
-1. Entra a [Google Search Console](https://search.google.com/search-console).
-2. Añade la propiedad **URL prefijo**: `https://predim-nec.vercel.app`.
-3. Elige verificación por **etiqueta HTML** (meta tag).
-4. Copia el código de verificación (solo el valor `content="…"`).
-5. En Vercel → Project → Settings → Environment Variables:
-   - Nombre: `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
-   - Valor: el token de Google
-6. Redeploy. La app ya lee esa variable en `src/app/layout.tsx`.
-7. Pulsa **Verificar** en Search Console.
+**Método activo: archivo HTML** (ya en el repo):
 
-Alternativa: verificación por archivo HTML en `public/` si prefieres no usar env.
+- Archivo: `public/googleb1c9503ecf985b49.html`
+- URL: https://predim-nec.vercel.app/googleb1c9503ecf985b49.html
+- Tras el deploy, en Search Console pulsa **Verificar**.
+
+Alternativa (meta tag): variable `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` en Vercel; la lee `src/app/layout.tsx`.
 
 ## 2. Enviar el sitemap
 

@@ -30,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.92,
     },
+    {
+      url: `${SITE_URL}/tarea-vivienda-2-plantas`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     ...contentArticles.map((article) => ({
       url: `${SITE_URL}/aprender/${article.slug}`,
       lastModified,

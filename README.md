@@ -24,6 +24,7 @@ Desarrollada por **Hernández Axel · PUCE sede Portoviejo**.
 | **Guía NEC** | `/guia-predimensionamiento-nec` | FAQ, mapa de módulos, flujo |
 | **Aprender NEC** | `/aprender` | Guías cortas (flujo, hormigón, sismo, unidades…) |
 | **Norma NEC oficial** | `/norma-nec` | Enlaces MIT/MIDUVI a capítulos oficiales |
+| **Tarea vivienda 2P** | `/tarea-vivienda-2-plantas` | Flujo guiado con cálculos coherentes |
 
 SEO legado de PreDim (vigas/columnas/losas): `/calculadora-*-nec`.
 

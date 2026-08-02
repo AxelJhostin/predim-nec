@@ -1,9 +1,10 @@
-const CACHE_VERSION = "civilkit-ec-v6";
+const CACHE_VERSION = "civilkit-ec-v7";
 const APP_SHELL = [
   "/",
   "/predim",
   "/aprender",
   "/norma-nec",
+  "/tarea-vivienda-2-plantas",
   "/geosecciones",
   "/unidades-ec",
   "/tributarias",

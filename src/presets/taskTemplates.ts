@@ -8,6 +8,7 @@ import {
   createSavedElement,
   type LocalProject,
 } from "@/project";
+import { runVivienda2PlantasFlow } from "@/lib/vivienda2Plantas";
 import { beamExamples } from "./beamExamples";
 import { columnExamples } from "./columnExamples";
 import { slabExamples } from "./slabExamples";
@@ -28,17 +29,9 @@ export const taskTemplates: TaskTemplate[] = [
     id: "housing-assignment",
     title: "Tarea: vivienda de 2 plantas",
     summary:
-      "Proyecto demo con vigas, columnas y losas etiquetadas para entregar una memoria rápida.",
+      "Flujo coherente D=5, L=2, vano 4×4, bt=2 m, 2 pisos. Misma base que /tarea-vivienda-2-plantas.",
     build() {
-      const beamMain = calculateBeam(beamExamples[0].values);
-      const beamCantilever = calculateBeam(beamExamples[2].values);
-      const columnCentral = calculateColumn(columnExamples[0].values);
-      const columnCorner = calculateColumn(columnExamples[2].values);
-      const slabSolid = calculateSlab(slabExamples[0].values);
-      const slabRibbed = calculateSlab({
-        ...slabExamples[1].values,
-        spanM: 5,
-      });
+      const flow = runVivienda2PlantasFlow();
 
       return {
         schemaVersion: PROJECT_SCHEMA_VERSION,
@@ -49,15 +42,12 @@ export const taskTemplates: TaskTemplate[] = [
           institution: "PUCE sede Portoviejo",
           date: today(),
           notes:
-            "Plantilla educativa PreDim NEC. Compara alternativas, revisa el procedimiento y completa tus metadatos antes de imprimir la memoria.",
+            "Plantilla coherente CivilKit EC: q_u=9.2 kN/m², w=18.4 kN/m, At=16 m², 2 pisos. Recorrido guiado en /tarea-vivienda-2-plantas. Contrasta con NEC-SE-VIVIENDA oficial.",
         },
         elements: [
-          createSavedElement("V-101", beamMain),
-          createSavedElement("V-201-VOL", beamCantilever),
-          createSavedElement("C-1", columnCentral),
-          createSavedElement("C-4", columnCorner),
-          createSavedElement("L-1", slabSolid),
-          createSavedElement("L-2", slabRibbed),
+          createSavedElement("L-1", flow.slab),
+          createSavedElement("V-101", flow.beam),
+          createSavedElement("C-1", flow.column),
         ],
       };
     },

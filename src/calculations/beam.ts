@@ -12,7 +12,6 @@ import {
   flexuralCapacityKnM,
   formatNumber,
   roundUpToFive,
-  roundUpToHalf,
 } from "./shared";
 
 export type { BeamInputs, BeamResult, BeamSupportType } from "./types";
@@ -207,10 +206,11 @@ export function calculateBeam(inputs: BeamInputs): BeamResult {
       stirrupProposal = `Estribos Ø${stirrupDiameterMm} mm a dos ramas @ ${formatNumber(spacingMm / 10)} cm`;
     }
 
-    stirrupSpacingCm = roundUpToHalf(Math.max(5, spacingMm / 10));
-    // Reexpresar propuesta con espaciamiento redondeado constructivo (al 0.5 cm inferior seguro).
-    const spaced = Math.floor(stirrupSpacingCm * 2) / 2;
-    stirrupSpacingCm = spaced;
+    // Redondeo al 0.5 cm inferior (más seguro: menor espaciamiento).
+    stirrupSpacingCm = Math.max(
+      5,
+      Math.floor((spacingMm / 10) * 2) / 2,
+    );
     stirrupProposal =
       vu <= phiVc / 2
         ? `Estribos Ø${stirrupDiameterMm} mm @ ${formatNumber(stirrupSpacingCm)} cm (mínimos / constructivos)`

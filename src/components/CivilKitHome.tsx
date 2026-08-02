@@ -139,9 +139,9 @@ export function CivilKitHome() {
               },
               {
                 step: "04",
-                title: "Zapata / δ",
-                href: "/zapatas-predim",
-                detail: "Cimentación y servicio",
+                title: "Tarea 2P",
+                href: "/tarea-vivienda-2-plantas",
+                detail: "Flujo guiado",
               },
             ].map((item) => (
               <li key={item.step}>

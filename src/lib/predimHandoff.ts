@@ -198,6 +198,8 @@ export function describeHandoffSource(source: string | null): string {
       return "Deflexión aprox.";
     case "zapatas":
       return "Zapatas PreDim";
+    case "vivienda2p":
+      return "Tarea vivienda 2 plantas";
     default:
       return "CivilKit EC";
   }

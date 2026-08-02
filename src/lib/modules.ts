@@ -126,6 +126,17 @@ export const toolkitModules: ToolkitModule[] = [
     href: "/norma-nec",
     cta: "Ver norma oficial",
   },
+  {
+    id: "vivienda2p",
+    name: "Tarea vivienda 2 plantas",
+    shortName: "Tarea 2P",
+    level: "Contenido",
+    status: "live",
+    description:
+      "Recorrido guiado Combinaciones → Tributarias → PreDim → Deflexión → Zapata con datos coherentes.",
+    href: "/tarea-vivienda-2-plantas",
+    cta: "Empezar tarea",
+  },
 ];
 
 export const liveModules = toolkitModules.filter(

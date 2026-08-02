@@ -51,18 +51,20 @@ npm run dev
 
 Abra [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
-### Si el dev server falla o muestra errores raros de Turbopack
+### Si aparece Internal Server Error o errores de Turbopack
 
-Errores del tipo `chunk.reason.enqueueModel is not a function` suelen ser
-caché/HMR de Next 16 + Turbopack. Limpia y reinicia:
+Casi siempre es caché corrupta de `.next` (p. ej. borrar `.next` con el
+servidor aún corriendo). **Para el servidor primero**, luego limpia:
 
 ```bash
 pkill -f "next dev" || true
-rm -rf .next
-npm run dev
+npm run dev:clean
 ```
 
-Si persiste, prueba build de producción local:
+También sirve ante `enqueueModel is not a function` o panics de Turbopack
+(`Failed to open SST file`).
+
+Si persiste:
 
 ```bash
 npm run build && npm start

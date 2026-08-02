@@ -52,8 +52,8 @@ Orden pensado para utilidad de pregrado + SEO + reutilizar lo ya construido.
 | --- | --- | --- | --- | --- |
 | 0 | **PreDim NEC** | Intermedio | Vigas, columnas, losas (diseño simplificado) | **Hecho** (`/predim`) |
 | 1 | **CivilKit Shell** | — | Home de suite, navegación, marca, SEO hub | **Hecho** (`/`) |
-| 2 | **GeoSecciones** | Básico | Área, inercia, módulo de sección (rectángulo, T, circular) | Pendiente |
-| 3 | **Unidades EC** | Básico | Conversiones SI útiles en civil (kN, MPa, kgf, etc.) | Pendiente |
+| 2 | **GeoSecciones** | Básico | Área, inercia, módulo de sección (rectángulo, T, circular) | **Hecho** (`/geosecciones`) |
+| 3 | **Unidades EC** | Básico | Conversiones SI útiles en civil (kN, MPa, kgf, etc.) | **Hecho** (`/unidades-ec`) |
 | 4 | **Tributarias** | Intermedio | Áreas tributarias, cargas de piso → kN o kN/m | Pendiente |
 | 5 | **Combinaciones NEC** | Intermedio | Combinaciones simplificadas NEC-SE-CG (1.2D+1.6L, etc.) | Pendiente |
 | 6 | **Zapatas PreDim** | Intermedio | Zapata aislada preliminar (área, espesor, chequeos básicos) | Pendiente |
@@ -120,10 +120,11 @@ src/
 ### Fase B — Básicos (2 módulos)
 **Objetivo:** atraer búsquedas básicas y utilidad diaria.
 
-1. **GeoSecciones**  
-2. **Unidades EC**
+- [x] **GeoSecciones** — `/geosecciones` (rectángulo, círculo, T; A, I, S, r).
+- [x] **Unidades EC** — `/unidades-ec` (longitud, fuerza, esfuerzo, cargas).
+- [x] Catálogo home, sitemap, SW shell, tests de dominio.
 
-**Éxito:** cada uno con página SEO + calcular + explicación corta + tests.
+**Éxito:** cada uno con página SEO + calcular + explicación corta + tests. ✅
 
 ### Fase C — Flujo de tarea (2 módulos)
 **Objetivo:** conectar con PreDim.
@@ -192,9 +193,9 @@ Estado rápido al inicio de cada sesión:
 
 ## 9. Próximo paso inmediato
 
-**Fase B — Básicos**
-1. **GeoSecciones** (área, inercia, módulo de sección).  
-2. **Unidades EC** (conversiones SI útiles).
+**Fase C — Flujo de tarea**
+1. **Tributarias** (áreas tributarias → kN o kN/m).  
+2. **Combinaciones NEC** (1.2D+1.6L y similares simplificadas).
 
 ---
 
@@ -205,6 +206,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-01 | PreDim NEC: diseño simplificado vigas/columnas/losas, modularización, tests, CI, UX |
 | 2026-08-02 | Plan CivilKit EC aprobado (nombre, Ecuador, pregrado, módulos elegidos) |
 | 2026-08-02 | Fase A: shell CivilKit EC en `/`, PreDim en `/predim`, SEO/README |
+| 2026-08-02 | Fase B: GeoSecciones + Unidades EC (páginas SEO, catálogo, tests) |
 
 ---
 

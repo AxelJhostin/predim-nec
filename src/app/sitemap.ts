@@ -17,6 +17,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.95,
     },
+    {
+      url: `${SITE_URL}/geosecciones`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${SITE_URL}/unidades-ec`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
     ...calculatorPages.map((page) => ({
       url: `${SITE_URL}${page.slug}`,
       lastModified,

@@ -32,18 +32,22 @@ export const toolkitModules: ToolkitModule[] = [
     name: "GeoSecciones",
     shortName: "Geo",
     level: "Básico",
-    status: "soon",
+    status: "live",
     description:
       "Área, inercia y módulo de sección para formas usuales en hormigón y acero.",
+    href: "/geosecciones",
+    cta: "Abrir GeoSecciones",
   },
   {
     id: "units",
     name: "Unidades EC",
     shortName: "Unidades",
     level: "Básico",
-    status: "soon",
+    status: "live",
     description:
       "Conversiones SI útiles en civil: kN, MPa, kgf/cm², m↔cm y más.",
+    href: "/unidades-ec",
+    cta: "Abrir Unidades EC",
   },
   {
     id: "tributary",

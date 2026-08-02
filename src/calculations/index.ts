@@ -25,3 +25,17 @@ export { calculateColumn } from "./column";
 export { calculateSlab } from "./slab";
 
 export { calculators, ELEMENT_LABELS } from "./registry";
+export {
+  calculateSection,
+  type SectionShape,
+  type SectionInputs,
+  type SectionResult,
+} from "./sections";
+export {
+  convertUnits,
+  listUnitCategories,
+  listUnits,
+  type UnitCategory,
+  type UnitConversionInputs,
+  type UnitConversionResult,
+} from "./units";

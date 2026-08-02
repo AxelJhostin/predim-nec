@@ -30,10 +30,14 @@ comparador, PWA y páginas SEO por calculadora.
 
 Entrada directa: [/predim](https://predim-nec.vercel.app/predim)
 
+### Herramientas básicas (activas)
+
+- **GeoSecciones** — área, inercia y módulo de sección ([/geosecciones](https://predim-nec.vercel.app/geosecciones)).
+- **Unidades EC** — conversiones SI para civil ([/unidades-ec](https://predim-nec.vercel.app/unidades-ec)).
+
 ### Próximos módulos (roadmap)
 
-GeoSecciones · Unidades EC · Tributarias · Combinaciones NEC · Zapatas PreDim ·
-Deflexión aprox. (detalle en el plan).
+Tributarias · Combinaciones NEC · Zapatas PreDim · Deflexión aprox. (detalle en el plan).
 
 ## Desarrollo local
 

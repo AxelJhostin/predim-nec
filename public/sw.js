@@ -1,7 +1,9 @@
-const CACHE_VERSION = "civilkit-ec-v1";
+const CACHE_VERSION = "civilkit-ec-v2";
 const APP_SHELL = [
   "/",
   "/predim",
+  "/geosecciones",
+  "/unidades-ec",
   "/manifest.webmanifest",
   "/icons/predim-nec-logo.svg",
   "/icons/icon.svg",

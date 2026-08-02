@@ -1,6 +1,7 @@
-const CACHE_VERSION = "predim-nec-v1";
+const CACHE_VERSION = "civilkit-ec-v1";
 const APP_SHELL = [
   "/",
+  "/predim",
   "/manifest.webmanifest",
   "/icons/predim-nec-logo.svg",
   "/icons/icon.svg",

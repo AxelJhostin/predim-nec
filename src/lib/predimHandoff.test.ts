@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildPredimHref,
   parsePredimHandoff,
+  searchParamsToURLSearchParams,
 } from "./predimHandoff";
 
 describe("predimHandoff", () => {
@@ -41,5 +42,17 @@ describe("predimHandoff", () => {
     const handoff = parsePredimHandoff(new URLSearchParams("tab=viga"));
     expect(handoff.tab).toBe("beam");
     expect(handoff.applied).toBe(false);
+  });
+
+  it("convierte searchParams de App Router", () => {
+    const handoff = parsePredimHandoff(
+      searchParamsToURLSearchParams({
+        tab: "beam",
+        w: "12.5",
+        L: ["6"],
+      }),
+    );
+    expect(handoff.beam.designLoadKnM).toBe(12.5);
+    expect(handoff.beam.spanM).toBe(6);
   });
 });

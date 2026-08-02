@@ -101,6 +101,26 @@ function roundQuery(value: number) {
   return Math.round(value * 1000) / 1000;
 }
 
+/** Convierte `searchParams` de App Router a `URLSearchParams`. */
+export function searchParamsToURLSearchParams(
+  record: Record<string, string | string[] | undefined>,
+): URLSearchParams {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(record)) {
+    if (value === undefined) {
+      continue;
+    }
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        params.append(key, item);
+      }
+      continue;
+    }
+    params.set(key, value);
+  }
+  return params;
+}
+
 /** Interpreta query params de `/predim` (alias cortos y nombres largos). */
 export function parsePredimHandoff(
   params: URLSearchParams,

@@ -214,6 +214,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Fase C: Tributarias + Combinaciones NEC (flujo hacia PreDim) |
 | 2026-08-02 | Fase D: Zapatas + Deflexión + guía con mapa CivilKit |
 | 2026-08-02 | Fase E (parcial): deep-link PreDim + flujo en home |
+| 2026-08-02 | Fix deep-link: handoff vía searchParams servidor (evita Suspense/Turbopack) |
 
 ---
 

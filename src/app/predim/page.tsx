@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { StructuralDashboard } from "@/components/StructuralDashboard";
 import { ProjectProvider } from "@/context/ProjectContext";
 import {
+  parsePredimHandoff,
+  searchParamsToURLSearchParams,
+} from "@/lib/predimHandoff";
+import {
   createPageMetadata,
   PREDIM_DESCRIPTION,
   PREDIM_NAME,
@@ -13,10 +17,19 @@ export const metadata: Metadata = createPageMetadata({
   path: "/predim",
 });
 
-export default function PredimPage() {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export default async function PredimPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const resolved = await searchParams;
+  const handoff = parsePredimHandoff(searchParamsToURLSearchParams(resolved));
+
   return (
     <ProjectProvider>
-      <StructuralDashboard />
+      <StructuralDashboard initialTab={handoff.tab} handoff={handoff} />
     </ProjectProvider>
   );
 }

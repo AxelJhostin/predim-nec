@@ -1,8 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import {
   BookOpen,
   Columns3,
@@ -36,7 +35,6 @@ import {
 } from "@/calculations";
 import {
   describeHandoffSource,
-  parsePredimHandoff,
   type PredimHandoff,
 } from "@/lib/predimHandoff";
 import { PREDIM_NAME, SITE_NAME } from "@/lib/seo";
@@ -99,11 +97,12 @@ const initialSlab = calculateSlab({
   coverCm: 2,
 });
 
-function StructuralDashboardView({
+export function StructuralDashboard({
   initialTab = "beam",
   handoff,
 }: {
   initialTab?: ElementType;
+  /** Preferir pasar desde la página servidor (evita useSearchParams + Suspense). */
   handoff?: PredimHandoff;
 }) {
   const beamPatch = handoff?.beam ?? {};
@@ -477,33 +476,5 @@ function StructuralDashboardView({
         </div>
       </footer>
     </div>
-  );
-}
-
-function StructuralDashboardWithSearch({
-  initialTab = "beam",
-}: {
-  initialTab?: ElementType;
-}) {
-  const searchParams = useSearchParams();
-  const handoff = useMemo(
-    () => parsePredimHandoff(searchParams, initialTab),
-    [searchParams, initialTab],
-  );
-
-  return (
-    <StructuralDashboardView initialTab={initialTab} handoff={handoff} />
-  );
-}
-
-export function StructuralDashboard({
-  initialTab = "beam",
-}: {
-  initialTab?: ElementType;
-}) {
-  return (
-    <Suspense fallback={<StructuralDashboardView initialTab={initialTab} />}>
-      <StructuralDashboardWithSearch initialTab={initialTab} />
-    </Suspense>
   );
 }

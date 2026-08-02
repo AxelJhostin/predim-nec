@@ -9,6 +9,7 @@ import {
 } from "@/calculations/tributary";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { moduleFaqs } from "@/lib/moduleFaqs";
 import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
@@ -86,6 +87,7 @@ export function TributaryTool() {
       eyebrow="Intermedio · CivilKit EC"
       title="Tributarias"
       description="Estima el área tributaria de columnas y el ancho tributario de vigas a partir de la retícula. Con q o q_u obtienes Pservicio o w listos para PreDim."
+      faqs={moduleFaqs.tributary}
       aside={
         result ? (
           <section className="structural-card space-y-4 p-5 sm:p-6">

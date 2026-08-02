@@ -5,6 +5,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { calculateFooting } from "@/calculations/footing";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { moduleFaqs } from "@/lib/moduleFaqs";
 import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
@@ -67,6 +68,7 @@ export function FootingTool() {
       eyebrow="Intermedio · CivilKit EC"
       title="Zapatas PreDim"
       description="Predimensionamiento de zapata aislada cuadrada: área por qa, espesor por corte/punzonamiento y malla inferior tentativa. Orientado a anteproyecto académico."
+      faqs={moduleFaqs.footing}
       aside={
         result ? (
           <section className="structural-card space-y-4 p-5 sm:p-6">

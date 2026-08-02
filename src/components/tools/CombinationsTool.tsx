@@ -5,6 +5,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { calculateCombinations } from "@/calculations/combinations";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { moduleFaqs } from "@/lib/moduleFaqs";
 import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
@@ -48,6 +49,7 @@ export function CombinationsTool() {
       eyebrow="Intermedio · CivilKit EC"
       title="Combinaciones NEC"
       description="Combinaciones gravitacionales simplificadas (1.4D y 1.2D+1.6L) para anteproyecto académico. Obtén q_u y, si indicas el ancho tributario, la w de viga."
+      faqs={moduleFaqs.combinations}
       aside={
         result ? (
           <section className="structural-card space-y-4 p-5 sm:p-6">

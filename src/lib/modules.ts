@@ -104,6 +104,17 @@ export const toolkitModules: ToolkitModule[] = [
     href: "/guia-predimensionamiento-nec",
     cta: "Leer guía",
   },
+  {
+    id: "learn",
+    name: "Aprender NEC",
+    shortName: "Aprender",
+    level: "Contenido",
+    status: "live",
+    description:
+      "Guías cortas indexables: tributarias, combinaciones, zapatas, deflexión y unidades.",
+    href: "/aprender",
+    cta: "Ver artículos",
+  },
 ];
 
 export const liveModules = toolkitModules.filter(

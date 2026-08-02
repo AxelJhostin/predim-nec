@@ -108,12 +108,20 @@ export default function GuidePage() {
             <BrandLogo size={36} priority />
             {SITE_NAME}
           </Link>
-          <Link
-            href="/predim"
-            className="rounded-xl bg-[#E65100] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#C2410C]"
-          >
-            Abrir {PREDIM_NAME}
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/aprender"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-sky-300 hover:text-sky-800"
+            >
+              Aprender
+            </Link>
+            <Link
+              href="/predim"
+              className="rounded-xl bg-[#E65100] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#C2410C]"
+            >
+              Abrir {PREDIM_NAME}
+            </Link>
+          </div>
         </div>
       </header>
 

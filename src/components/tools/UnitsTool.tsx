@@ -9,6 +9,7 @@ import {
 } from "@/calculations/units";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { moduleFaqs } from "@/lib/moduleFaqs";
 
 const inputClass =
   "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
@@ -58,6 +59,7 @@ export function UnitsTool() {
       eyebrow="Básico · CivilKit EC"
       title="Unidades EC"
       description="Conversiones rápidas para ingeniería civil en Ecuador: longitud, fuerza, esfuerzo y cargas. Ideal para pasar de MPa a kgf/cm² o de kN a kgf."
+      faqs={moduleFaqs.units}
       aside={
         result ? (
           <section className="structural-card p-5 sm:p-6">

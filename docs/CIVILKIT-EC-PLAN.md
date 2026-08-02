@@ -146,7 +146,7 @@ src/
 - [x] Deep-link PreDim (`/predim?tab=&w=&q=&At=`) desde Combinaciones / Tributarias / Deflexión.
 - [x] Flujo de tarea visible en home + copy de catálogo actualizado.
 - [x] Tests de handoff (`predimHandoff.test.ts`).
-- [ ] SEO FAQ/OG por módulo (incremental).  
+- [x] SEO: FAQ/JSON-LD por módulo, OG image, hub `/aprender` + 5 guías, checklist GSC.
 - [ ] Memoria unificada CivilKit (más adelante).
 
 ---
@@ -215,6 +215,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Fase D: Zapatas + Deflexión + guía con mapa CivilKit |
 | 2026-08-02 | Fase E (parcial): deep-link PreDim + flujo en home |
 | 2026-08-02 | Fix deep-link: handoff vía searchParams servidor (evita Suspense/Turbopack) |
+| 2026-08-02 | SEO pack: OG, FAQ módulos, /aprender ×5, docs Search Console |
 
 ---
 

@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
+import { ModuleFaq } from "@/components/ModuleFaq";
+import type { FaqItem } from "@/lib/moduleFaqs";
 import { SITE_CREDIT, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 import { SCOPE_SHORT } from "@/lib/scope";
 
@@ -11,12 +13,14 @@ export function ToolkitShell({
   description,
   children,
   aside,
+  faqs,
 }: {
   title: string;
   eyebrow: string;
   description: string;
   children: ReactNode;
   aside?: ReactNode;
+  faqs?: readonly FaqItem[];
 }) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
@@ -60,6 +64,8 @@ export function ToolkitShell({
           <div>{children}</div>
           <div className="space-y-4">{aside}</div>
         </div>
+
+        {faqs && faqs.length > 0 ? <ModuleFaq faqs={faqs} /> : null}
       </main>
 
       <footer className="border-t border-slate-200 bg-white">

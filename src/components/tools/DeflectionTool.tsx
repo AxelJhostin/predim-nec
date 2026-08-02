@@ -8,6 +8,7 @@ import {
 } from "@/calculations/deflection";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { moduleFaqs } from "@/lib/moduleFaqs";
 import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
@@ -71,6 +72,7 @@ export function DeflectionTool() {
       eyebrow="Intermedio · CivilKit EC"
       title="Deflexión aprox."
       description="Estimación elástica de deflexión inmediata en vigas rectangulares (sección bruta). Útil para chequear L/240 o L/360 en anteproyecto."
+      faqs={moduleFaqs.deflection}
       aside={
         result ? (
           <section className="structural-card space-y-4 p-5 sm:p-6">

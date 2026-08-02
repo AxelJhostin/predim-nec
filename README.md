@@ -22,8 +22,11 @@ Desarrollada por **Hernández Axel · PUCE sede Portoviejo**.
 | **Zapatas PreDim** | `/zapatas-predim` | Zapata aislada preliminar |
 | **Deflexión aprox.** | `/deflexion-aprox` | Chequeo elástico L/n |
 | **Guía NEC** | `/guia-predimensionamiento-nec` | FAQ, mapa de módulos, flujo |
+| **Aprender NEC** | `/aprender` | Guías cortas SEO (tributarias, combinaciones, etc.) |
 
 SEO legado de PreDim (vigas/columnas/losas): `/calculadora-*-nec`.
+
+Checklist Search Console: [`docs/SEO-SEARCH-CONSOLE.md`](docs/SEO-SEARCH-CONSOLE.md).
 
 ### Flujo recomendado
 

@@ -71,11 +71,11 @@ export function CivilKitHome() {
                 Empezar con {PREDIM_NAME}
               </Link>
               <Link
-                href="/guia-predimensionamiento-nec"
+                href="/aprender"
                 className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-sky-400 hover:text-sky-700"
               >
                 <BookOpen aria-hidden="true" size={17} />
-                Ver guía NEC
+                Aprender NEC
               </Link>
             </div>
             <p className="mt-6 max-w-2xl text-sm leading-6 text-slate-500">

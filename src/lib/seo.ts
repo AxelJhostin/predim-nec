@@ -35,33 +35,58 @@ export const calculatorPages = [
   },
 ] as const;
 
+/** Imagen social por defecto (1200×630 recomendado vía opengraph-image). */
+export const DEFAULT_OG_IMAGE = "/icons/icon-512.png";
+
 export function createPageMetadata({
   title,
   description,
   path,
+  keywords = [],
 }: {
   title: string;
   description: string;
   path: string;
+  keywords?: string[];
 }): Metadata {
+  const absoluteUrl = path === "/" ? SITE_URL : `${SITE_URL}${path}`;
+  const mergedKeywords = [
+    SITE_NAME,
+    PREDIM_NAME,
+    "NEC Ecuador",
+    "ingeniería civil",
+    "pregrado",
+    ...keywords,
+  ];
+
   return {
     title,
     description,
+    keywords: mergedKeywords,
     alternates: {
       canonical: path,
     },
     openGraph: {
       type: "website",
       locale: "es_EC",
-      url: path,
+      url: absoluteUrl,
       siteName: SITE_NAME,
       title,
       description,
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE,
+          width: 512,
+          height: 512,
+          alt: `${SITE_NAME} - ${title}`,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
+      images: [DEFAULT_OG_IMAGE],
     },
   };
 }

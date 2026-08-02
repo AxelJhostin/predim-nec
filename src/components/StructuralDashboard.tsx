@@ -33,6 +33,8 @@ import {
   type ElementType,
   type SlabResult,
 } from "@/calculations";
+import { ModuleFaq } from "@/components/ModuleFaq";
+import { moduleFaqs } from "@/lib/moduleFaqs";
 import {
   describeHandoffSource,
   type PredimHandoff,
@@ -458,6 +460,12 @@ export function StructuralDashboard({
             )}
           </div>
         </main>
+      </div>
+
+      <div className="no-print border-t border-slate-200 bg-white px-4 md:ml-64">
+        <div className="mx-auto max-w-7xl py-2">
+          <ModuleFaq faqs={moduleFaqs.predim} />
+        </div>
       </div>
 
       <footer className="no-print border-t border-slate-200 bg-white px-4 py-6 md:ml-64">

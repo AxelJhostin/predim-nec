@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { contentArticles } from "@/lib/contentArticles";
 import { calculatorPages, SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -17,6 +18,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.95,
     },
+    {
+      url: `${SITE_URL}/aprender`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    ...contentArticles.map((article) => ({
+      url: `${SITE_URL}/aprender/${article.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
     {
       url: `${SITE_URL}/geosecciones`,
       lastModified,

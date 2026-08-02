@@ -2,11 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
 import {
+  PREDIM_NAME,
   serializeJsonLd,
   SITE_AUTHOR,
   SITE_CREDIT,
   SITE_DESCRIPTION,
   SITE_NAME,
+  SITE_TAGLINE,
   SITE_URL,
 } from "@/lib/seo";
 import "./globals.css";
@@ -25,18 +27,21 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   title: {
-    default: "PreDim NEC - Predimensionamiento Estructural Ecuador",
-    template: "%s | PreDim NEC",
+    default: `${SITE_NAME} - Herramientas de ingeniería civil Ecuador`,
+    template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "predimensionamiento estructural",
+    "CivilKit EC",
+    "ingeniería civil Ecuador",
     "calculadora NEC",
+    "predimensionamiento estructural",
+    "PreDim NEC",
     "vigas de hormigón",
     "columnas de hormigón",
     "losas de hormigón",
     "Norma Ecuatoriana de la Construcción",
-    "ingeniería civil Ecuador",
+    "estudiantes ingeniería civil",
   ],
   authors: [{ name: SITE_CREDIT, url: SITE_URL }],
   creator: SITE_AUTHOR,
@@ -49,12 +54,12 @@ export const metadata: Metadata = {
     locale: "es_EC",
     url: "/",
     siteName: SITE_NAME,
-    title: "PreDim NEC - Predimensionamiento Estructural Ecuador",
+    title: `${SITE_NAME} - Herramientas de ingeniería civil Ecuador`,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary",
-    title: "PreDim NEC - Predimensionamiento Estructural Ecuador",
+    title: `${SITE_NAME} - Herramientas de ingeniería civil Ecuador`,
     description: SITE_DESCRIPTION,
   },
   robots: {
@@ -80,6 +85,7 @@ const webApplicationJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: SITE_NAME,
+  alternateName: PREDIM_NAME,
   url: SITE_URL,
   description: SITE_DESCRIPTION,
   applicationCategory: "EngineeringApplication",
@@ -87,15 +93,19 @@ const webApplicationJsonLd = {
   browserRequirements: "Requiere un navegador web moderno con JavaScript.",
   inLanguage: "es-EC",
   isAccessibleForFree: true,
+  educationalUse: "Pregrado",
+  audience: {
+    "@type": "EducationalAudience",
+    educationalRole: "student",
+  },
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
   },
   featureList: [
-    "Predimensionamiento de vigas de hormigón armado",
-    "Predimensionamiento de columnas de hormigón armado",
-    "Predimensionamiento de losas macizas y nervadas",
+    SITE_TAGLINE,
+    `${PREDIM_NAME}: vigas, columnas y losas`,
     "Memoria técnica imprimible",
     "Proyectos locales exportables en JSON",
     "Aplicación instalable (PWA) con soporte offline básico",

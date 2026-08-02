@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import {
   createPageMetadata,
+  PREDIM_NAME,
   serializeJsonLd,
   SITE_NAME,
   SITE_URL,
@@ -99,13 +100,13 @@ export default function GuidePage() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3 font-black">
             <BrandLogo size={36} priority />
-            PreDim NEC
+            {SITE_NAME}
           </Link>
           <Link
-            href="/"
+            href="/predim"
             className="rounded-xl bg-[#E65100] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#C2410C]"
           >
-            Abrir calculadora
+            Abrir {PREDIM_NAME}
           </Link>
         </div>
       </header>
@@ -217,8 +218,8 @@ export default function GuidePage() {
 
       <footer className="bg-slate-950 px-4 py-8 text-center text-sm text-slate-400">
         <p>
-          PreDim NEC · Herramienta educativa de predimensionamiento estructural
-          para Ecuador.
+          {SITE_NAME} · Suite educativa de ingeniería civil para Ecuador ·{" "}
+          {PREDIM_NAME}
         </p>
         <p className="mt-2 text-xs text-slate-500">
           Hernández Axel · PUCE sede Portoviejo

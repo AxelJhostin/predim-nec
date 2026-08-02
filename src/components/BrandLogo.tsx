@@ -12,7 +12,7 @@ export function BrandLogo({
   return (
     <Image
       src="/icons/predim-nec-logo.svg"
-      alt="PreDim NEC"
+      alt="CivilKit EC"
       width={size}
       height={size}
       priority={priority}

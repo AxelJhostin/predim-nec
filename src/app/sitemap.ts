@@ -11,6 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: `${SITE_URL}/predim`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
     ...calculatorPages.map((page) => ({
       url: `${SITE_URL}${page.slug}`,
       lastModified,

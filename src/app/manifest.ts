@@ -4,7 +4,7 @@ import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: `${SITE_NAME} - Predimensionamiento Estructural`,
+    name: `${SITE_NAME} - Ingeniería civil Ecuador`,
     short_name: SITE_NAME,
     description: SITE_DESCRIPTION,
     start_url: "/",

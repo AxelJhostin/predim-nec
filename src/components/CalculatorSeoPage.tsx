@@ -151,9 +151,11 @@ export function CalculatorSeoPage({
           </div>
 
           <nav
-            aria-label="Más recursos de predimensionamiento"
+            aria-label="Más recursos de CivilKit EC"
             className="mt-10 flex flex-wrap gap-3"
           >
+            <ResourceLink href="/">CivilKit EC</ResourceLink>
+            <ResourceLink href="/predim">PreDim completo</ResourceLink>
             <ResourceLink href="/calculadora-vigas-nec">Vigas</ResourceLink>
             <ResourceLink href="/calculadora-columnas-nec">
               Columnas

@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 
 export const SITE_URL = "https://predim-nec.vercel.app";
-export const SITE_NAME = "PreDim NEC";
+/** Marca de la suite. */
+export const SITE_NAME = "CivilKit EC";
+/** Módulo estrella de predimensionamiento. */
+export const PREDIM_NAME = "PreDim NEC";
 export const SITE_DESCRIPTION =
+  "Suite gratuita de herramientas de ingeniería civil para pregrado en Ecuador (NEC): predimensionamiento, conceptos básicos y apoyo de anteproyecto.";
+export const PREDIM_DESCRIPTION =
   "Calculadora gratuita de predimensionamiento y diseño simplificado de vigas, columnas y losas según la NEC. Herramienta académica: el diseño final requiere revisión profesional.";
 export const SITE_AUTHOR = "Hernández Axel";
 export const SITE_AFFILIATION = "PUCE sede Portoviejo";
 export const SITE_CREDIT = `${SITE_AUTHOR} · ${SITE_AFFILIATION}`;
+export const SITE_TAGLINE = "Gratis · Ecuador · Pregrado · NEC";
 
 export const calculatorPages = [
   {

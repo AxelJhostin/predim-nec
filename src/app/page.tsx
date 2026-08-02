@@ -1,14 +1,18 @@
-import { HomeSeoContent } from "@/components/HomeSeoContent";
-import { StructuralDashboard } from "@/components/StructuralDashboard";
-import { ProjectProvider } from "@/context/ProjectContext";
+import type { Metadata } from "next";
+import { CivilKitHome } from "@/components/CivilKitHome";
+import { createPageMetadata, SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  ...createPageMetadata({
+    title: `${SITE_NAME} - Herramientas de ingeniería civil Ecuador`,
+    description: SITE_DESCRIPTION,
+    path: "/",
+  }),
+  title: {
+    absolute: `${SITE_NAME} - Herramientas de ingeniería civil Ecuador`,
+  },
+};
 
 export default function Home() {
-  return (
-    <>
-      <ProjectProvider>
-        <StructuralDashboard />
-      </ProjectProvider>
-      <HomeSeoContent />
-    </>
-  );
+  return <CivilKitHome />;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   BookOpen,
   Columns3,
@@ -32,6 +33,7 @@ import {
   type ElementType,
   type SlabResult,
 } from "@/calculations";
+import { PREDIM_NAME, SITE_NAME } from "@/lib/seo";
 
 interface TabDefinition {
   id: ElementType;
@@ -201,15 +203,17 @@ export function StructuralDashboard({
             >
               {mobileMenuOpen ? <X size={21} /> : <Menu size={21} />}
             </button>
-            <BrandLogo size={36} priority />
-            <div>
-              <p className="text-base font-black tracking-tight text-slate-950">
-                PreDim NEC
-              </p>
-              <p className="hidden text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 sm:block">
-                Predimensionamiento Ecuador
-              </p>
-            </div>
+            <Link href="/" className="flex items-center gap-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-200">
+              <BrandLogo size={36} priority />
+              <div>
+                <p className="text-base font-black tracking-tight text-slate-950">
+                  {PREDIM_NAME}
+                </p>
+                <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:block">
+                  Módulo de {SITE_NAME}
+                </p>
+              </div>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -418,7 +422,7 @@ export function StructuralDashboard({
       <footer className="no-print border-t border-slate-200 bg-white px-4 py-6 md:ml-64">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-2 text-xs text-slate-400 sm:flex-row sm:items-center">
           <p>
-            © 2026 PreDim NEC · Herramienta educativa gratuita
+            © {new Date().getFullYear()} {SITE_NAME} · {PREDIM_NAME}
             <span className="mx-1.5 text-slate-300" aria-hidden="true">
               ·
             </span>

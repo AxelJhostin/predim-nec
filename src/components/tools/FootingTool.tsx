@@ -5,6 +5,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { calculateFooting } from "@/calculations/footing";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
   "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
@@ -119,7 +120,10 @@ export function FootingTool() {
             </ul>
             <div className="flex flex-wrap gap-2">
               <Link
-                href="/predim"
+                href={buildPredimHref({
+                  tab: "column",
+                  source: "zapatas",
+                })}
                 className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-sky-300 hover:text-sky-800"
               >
                 PreDim columnas

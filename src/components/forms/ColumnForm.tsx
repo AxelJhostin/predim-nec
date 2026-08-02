@@ -16,25 +16,32 @@ import {
   inputClass,
 } from "./primitives";
 
+const defaultColumnInputs: ColumnInputs = {
+  tributaryAreaM2: 25,
+  floors: 5,
+  columnType: "Central",
+  serviceLoadKnM2: 8,
+  clearHeightM: 3,
+  effectiveLengthFactor: 1,
+  concreteStrengthMpa: 21,
+  steelYieldMpa: 420,
+  tieDiameterMm: 10,
+};
+
 export function ColumnForm({
   onCalculate,
   onSave,
   onOpenProjectSummary,
+  initialValues,
 }: {
   onCalculate: (result: ColumnResult) => void;
   onSave: (label: string, result: ColumnResult) => void;
   onOpenProjectSummary?: () => void;
+  initialValues?: Partial<ColumnInputs>;
 }) {
   const [values, setValues] = useState<ColumnInputs>({
-    tributaryAreaM2: 25,
-    floors: 5,
-    columnType: "Central",
-    serviceLoadKnM2: 8,
-    clearHeightM: 3,
-    effectiveLengthFactor: 1,
-    concreteStrengthMpa: 21,
-    steelYieldMpa: 420,
-    tieDiameterMm: 10,
+    ...defaultColumnInputs,
+    ...initialValues,
   });
   const [error, setError] = useState("");
 

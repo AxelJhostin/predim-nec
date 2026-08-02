@@ -143,9 +143,11 @@ src/
 **Éxito:** 6+ herramientas indexables; estudiante resuelve una tarea de entrepiso + zapata sin Excel. ✅
 
 ### Fase E — Pulido continuo
-- SEO (FAQ, internos, Open Graph por módulo).  
-- UX (mismo patrón: ejemplo listo → calcular → guardar → memoria).  
-- Calidad (tests de borde, migraciones si cambia schema).
+- [x] Deep-link PreDim (`/predim?tab=&w=&q=&At=`) desde Combinaciones / Tributarias / Deflexión.
+- [x] Flujo de tarea visible en home + copy de catálogo actualizado.
+- [x] Tests de handoff (`predimHandoff.test.ts`).
+- [ ] SEO FAQ/OG por módulo (incremental).  
+- [ ] Memoria unificada CivilKit (más adelante).
 
 ---
 
@@ -194,10 +196,10 @@ Estado rápido al inicio de cada sesión:
 
 ## 9. Próximo paso inmediato
 
-**Fase E — Pulido continuo**
-- SEO (FAQ por módulo, Open Graph, enlaces internos).  
-- UX (deep-link PreDim, ejemplos listos, memoria unificada).  
-- Calidad (tests de borde, migraciones si cambia schema).
+**Fase E (continuar)**
+- FAQ/OG por módulo.  
+- Memoria unificada CivilKit si hace falta.  
+- Pulido UX según feedback de uso real.
 
 ---
 
@@ -211,6 +213,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | Fase B: GeoSecciones + Unidades EC (páginas SEO, catálogo, tests) |
 | 2026-08-02 | Fase C: Tributarias + Combinaciones NEC (flujo hacia PreDim) |
 | 2026-08-02 | Fase D: Zapatas + Deflexión + guía con mapa CivilKit |
+| 2026-08-02 | Fase E (parcial): deep-link PreDim + flujo en home |
 
 ---
 

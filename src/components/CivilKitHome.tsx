@@ -104,10 +104,59 @@ export function CivilKitHome() {
               Módulos de {SITE_NAME}
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              PreDim ya está disponible. El resto se irá sumando según el plan
-              de la suite, siempre gratis y orientado a estudiantes en Ecuador.
+              Suite completa para anteproyecto académico: básicos, flujo de
+              cargas, PreDim, deflexión y zapatas. Siempre gratis y orientado a
+              pregrado en Ecuador.
             </p>
           </div>
+
+          <ol className="mt-8 grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-4">
+            {[
+              {
+                step: "01",
+                title: "Combinaciones",
+                href: "/combinaciones-nec",
+                detail: "Obtén q_u",
+              },
+              {
+                step: "02",
+                title: "Tributarias",
+                href: "/tributarias",
+                detail: "At o w",
+              },
+              {
+                step: "03",
+                title: "PreDim",
+                href: "/predim",
+                detail: "Sección y acero",
+              },
+              {
+                step: "04",
+                title: "Zapata / δ",
+                href: "/zapatas-predim",
+                detail: "Cimentación y servicio",
+              },
+            ].map((item) => (
+              <li key={item.step}>
+                <Link
+                  href={item.href}
+                  className="block rounded-lg border border-transparent px-2 py-2 hover:border-sky-200 hover:bg-sky-50/60"
+                >
+                  <p className="font-mono text-[10px] font-bold text-[#E65100]">
+                    {item.step}
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-slate-950">
+                    {item.title}
+                  </p>
+                  <p className="text-xs text-slate-500">{item.detail}</p>
+                </Link>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 text-xs text-slate-500">
+            Los botones “Usar en PreDim” de Combinaciones y Tributarias pasan la
+            carga por URL (deep-link).
+          </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {toolkitModules.map((module) => {

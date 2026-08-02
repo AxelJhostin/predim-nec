@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   BookOpen,
   Columns3,
@@ -33,6 +34,11 @@ import {
   type ElementType,
   type SlabResult,
 } from "@/calculations";
+import {
+  describeHandoffSource,
+  parsePredimHandoff,
+  type PredimHandoff,
+} from "@/lib/predimHandoff";
 import { PREDIM_NAME, SITE_NAME } from "@/lib/seo";
 
 interface TabDefinition {
@@ -93,25 +99,51 @@ const initialSlab = calculateSlab({
   coverCm: 2,
 });
 
-export function StructuralDashboard({
+function StructuralDashboardView({
   initialTab = "beam",
+  handoff,
 }: {
   initialTab?: ElementType;
+  handoff?: PredimHandoff;
 }) {
-  const [activeTab, setActiveTab] = useState<ElementType>(initialTab);
-  const [beamResult, setBeamResult] = useState<BeamResult>(initialBeam);
-  const [columnResult, setColumnResult] =
-    useState<ColumnResult>(initialColumn);
-  const [slabResult, setSlabResult] = useState<SlabResult>(initialSlab);
+  const beamPatch = handoff?.beam ?? {};
+  const columnPatch = handoff?.column ?? {};
+  const slabPatch = handoff?.slab ?? {};
+  const hasBeamPatch = Object.keys(beamPatch).length > 0;
+  const hasColumnPatch = Object.keys(columnPatch).length > 0;
+  const hasSlabPatch = Object.keys(slabPatch).length > 0;
+
+  const [activeTab, setActiveTab] = useState<ElementType>(
+    handoff?.tab ?? initialTab,
+  );
+  const [beamResult, setBeamResult] = useState<BeamResult>(() =>
+    hasBeamPatch
+      ? calculateBeam({ ...initialBeam.inputs, ...beamPatch })
+      : initialBeam,
+  );
+  const [columnResult, setColumnResult] = useState<ColumnResult>(() =>
+    hasColumnPatch
+      ? calculateColumn({ ...initialColumn.inputs, ...columnPatch })
+      : initialColumn,
+  );
+  const [slabResult, setSlabResult] = useState<SlabResult>(() =>
+    hasSlabPatch
+      ? calculateSlab({ ...initialSlab.inputs, ...slabPatch })
+      : initialSlab,
+  );
   const [userCalculated, setUserCalculated] = useState<
     Record<ElementType, boolean>
   >({
-    beam: false,
-    column: false,
-    slab: false,
+    beam: hasBeamPatch,
+    column: hasColumnPatch,
+    slab: hasSlabPatch,
   });
-  const [justUpdated, setJustUpdated] = useState(false);
-  const [liveMessage, setLiveMessage] = useState("");
+  const [justUpdated, setJustUpdated] = useState(Boolean(handoff?.applied));
+  const [liveMessage, setLiveMessage] = useState(
+    handoff?.applied
+      ? `Valores cargados desde ${describeHandoffSource(handoff.source)}.`
+      : "",
+  );
   const [reportOpen, setReportOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [projectSummaryOpen, setProjectSummaryOpen] = useState(false);
@@ -375,8 +407,16 @@ export function StructuralDashboard({
             ) : (
               <div className="grid items-start gap-6 xl:grid-cols-[minmax(340px,0.78fr)_minmax(0,1.22fr)]">
                 <div>
+                  {handoff?.applied && (
+                    <div className="mb-4 rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-950">
+                      Valores recibidos desde{" "}
+                      <strong>{describeHandoffSource(handoff.source)}</strong>.
+                      Revisa los campos y ajusta si tu enunciado lo pide.
+                    </div>
+                  )}
                   {activeTab === "beam" && (
                     <BeamForm
+                      initialValues={beamPatch}
                       onOpenProjectSummary={openProjectSummary}
                       onCalculate={(next) =>
                         handleCalculated("beam", next, setBeamResult)
@@ -386,6 +426,7 @@ export function StructuralDashboard({
                   )}
                   {activeTab === "column" && (
                     <ColumnForm
+                      initialValues={columnPatch}
                       onOpenProjectSummary={openProjectSummary}
                       onCalculate={(next) =>
                         handleCalculated("column", next, setColumnResult)
@@ -395,6 +436,7 @@ export function StructuralDashboard({
                   )}
                   {activeTab === "slab" && (
                     <SlabForm
+                      initialValues={slabPatch}
                       onOpenProjectSummary={openProjectSummary}
                       onCalculate={(next) =>
                         handleCalculated("slab", next, setSlabResult)
@@ -435,5 +477,33 @@ export function StructuralDashboard({
         </div>
       </footer>
     </div>
+  );
+}
+
+function StructuralDashboardWithSearch({
+  initialTab = "beam",
+}: {
+  initialTab?: ElementType;
+}) {
+  const searchParams = useSearchParams();
+  const handoff = useMemo(
+    () => parsePredimHandoff(searchParams, initialTab),
+    [searchParams, initialTab],
+  );
+
+  return (
+    <StructuralDashboardView initialTab={initialTab} handoff={handoff} />
+  );
+}
+
+export function StructuralDashboard({
+  initialTab = "beam",
+}: {
+  initialTab?: ElementType;
+}) {
+  return (
+    <Suspense fallback={<StructuralDashboardView initialTab={initialTab} />}>
+      <StructuralDashboardWithSearch initialTab={initialTab} />
+    </Suspense>
   );
 }

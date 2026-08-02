@@ -12,23 +12,30 @@ import {
   inputClass,
 } from "./primitives";
 
+const defaultBeamInputs: BeamInputs = {
+  spanM: 6,
+  supportType: "Ambos extremos continuos",
+  designLoadKnM: 8.5,
+  steelYieldMpa: 420,
+  coverCm: 4,
+  concreteStrengthMpa: 21,
+  stirrupDiameterMm: 10,
+};
+
 export function BeamForm({
   onCalculate,
   onSave,
   onOpenProjectSummary,
+  initialValues,
 }: {
   onCalculate: (result: BeamResult) => void;
   onSave: (label: string, result: BeamResult) => void;
   onOpenProjectSummary?: () => void;
+  initialValues?: Partial<BeamInputs>;
 }) {
   const [values, setValues] = useState<BeamInputs>({
-    spanM: 6,
-    supportType: "Ambos extremos continuos",
-    designLoadKnM: 8.5,
-    steelYieldMpa: 420,
-    coverCm: 4,
-    concreteStrengthMpa: 21,
-    stirrupDiameterMm: 10,
+    ...defaultBeamInputs,
+    ...initialValues,
   });
   const [error, setError] = useState("");
 

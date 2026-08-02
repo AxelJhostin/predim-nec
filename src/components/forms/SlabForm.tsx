@@ -12,23 +12,30 @@ import {
   inputClass,
 } from "./primitives";
 
+const defaultSlabInputs: SlabInputs = {
+  spanM: 5,
+  slabType: "solid",
+  supportType: "Continua",
+  designLoadKnM2: 8,
+  steelYieldMpa: 420,
+  concreteStrengthMpa: 21,
+  coverCm: 2,
+};
+
 export function SlabForm({
   onCalculate,
   onSave,
   onOpenProjectSummary,
+  initialValues,
 }: {
   onCalculate: (result: SlabResult) => void;
   onSave: (label: string, result: SlabResult) => void;
   onOpenProjectSummary?: () => void;
+  initialValues?: Partial<SlabInputs>;
 }) {
   const [values, setValues] = useState<SlabInputs>({
-    spanM: 5,
-    slabType: "solid",
-    supportType: "Continua",
-    designLoadKnM2: 8,
-    steelYieldMpa: 420,
-    concreteStrengthMpa: 21,
-    coverCm: 2,
+    ...defaultSlabInputs,
+    ...initialValues,
   });
   const [error, setError] = useState("");
 

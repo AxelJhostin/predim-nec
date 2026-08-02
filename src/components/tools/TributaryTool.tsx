@@ -9,6 +9,7 @@ import {
 } from "@/calculations/tributary";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
   "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
@@ -124,12 +125,41 @@ export function TributaryTool() {
               {result.predimHint}
             </p>
             <div className="flex flex-wrap gap-2">
-              <Link
-                href="/predim"
-                className="inline-flex items-center justify-center rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
-              >
-                Abrir PreDim
-              </Link>
+              {target === "column" ? (
+                <Link
+                  href={buildPredimHref({
+                    tab: "column",
+                    tributaryAreaM2: result.tributaryAreaM2,
+                    serviceLoadKnM2: result.serviceLoadKnM2 ?? undefined,
+                    source: "tributarias",
+                  })}
+                  className="inline-flex items-center justify-center rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
+                >
+                  Usar At en columna
+                </Link>
+              ) : result.designLoadKnM !== null ? (
+                <Link
+                  href={buildPredimHref({
+                    tab: "beam",
+                    designLoadKnM: result.designLoadKnM,
+                    spanM:
+                      result.inputs.target === "beam"
+                        ? result.inputs.spanM
+                        : undefined,
+                    source: "tributarias",
+                  })}
+                  className="inline-flex items-center justify-center rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
+                >
+                  Usar w en viga
+                </Link>
+              ) : (
+                <Link
+                  href="/combinaciones-nec"
+                  className="inline-flex items-center justify-center rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
+                >
+                  Primero obtener q_u
+                </Link>
+              )}
               <Link
                 href="/combinaciones-nec"
                 className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-sky-300 hover:text-sky-800"

@@ -5,6 +5,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { calculateCombinations } from "@/calculations/combinations";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
   "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
@@ -99,11 +100,27 @@ export function CombinationsTool() {
             </p>
             <div className="flex flex-wrap gap-2">
               <Link
-                href="/predim"
+                href={buildPredimHref({
+                  tab: "slab",
+                  designLoadKnM2: result.governing.valueKnM2,
+                  source: "combinaciones",
+                })}
                 className="inline-flex items-center justify-center rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
               >
-                Abrir PreDim
+                Usar q_u en losa
               </Link>
+              {result.designLoadKnM !== null && (
+                <Link
+                  href={buildPredimHref({
+                    tab: "beam",
+                    designLoadKnM: result.designLoadKnM,
+                    source: "combinaciones",
+                  })}
+                  className="inline-flex items-center justify-center rounded-lg border border-orange-200 bg-orange-50 px-4 py-2.5 text-sm font-semibold text-orange-900 hover:border-orange-300"
+                >
+                  Usar w en viga
+                </Link>
+              )}
               <Link
                 href="/tributarias"
                 className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-sky-300 hover:text-sky-800"

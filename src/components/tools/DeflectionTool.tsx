@@ -8,6 +8,7 @@ import {
 } from "@/calculations/deflection";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { buildPredimHref } from "@/lib/predimHandoff";
 
 const inputClass =
   "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
@@ -112,7 +113,12 @@ export function DeflectionTool() {
             </p>
             <div className="flex flex-wrap gap-2">
               <Link
-                href="/predim"
+                href={buildPredimHref({
+                  tab: "beam",
+                  designLoadKnM,
+                  spanM,
+                  source: "deflexion",
+                })}
                 className="inline-flex items-center justify-center rounded-lg bg-[#E65100] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#C84600]"
               >
                 Ajustar en PreDim

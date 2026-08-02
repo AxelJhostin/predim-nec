@@ -54,7 +54,7 @@ const faqs = [
   {
     question: "¿Cómo encadenar las herramientas de CivilKit EC?",
     answer:
-      "Flujo típico de entrepiso: Combinaciones NEC (obtener q_u) → Tributarias (At o w) → PreDim (vigas/columnas/losas) → Deflexión aprox. (servicio) y Zapatas PreDim (cimentación preliminar). Se pegan los valores entre módulos.",
+      "Flujo típico de entrepiso: Combinaciones NEC (obtener q_u) → Tributarias (At o w) → PreDim (vigas/columnas/losas) → Deflexión aprox. (servicio) y Zapatas PreDim (cimentación preliminar). Los botones «Usar en PreDim» pasan la carga por URL.",
   },
 ];
 

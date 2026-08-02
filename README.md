@@ -40,7 +40,8 @@ Entrada directa: [/predim](https://predim-nec.vercel.app/predim)
 - **Combinaciones NEC** — 1.4D y 1.2D+1.6L → q_u / w ([/combinaciones-nec](https://predim-nec.vercel.app/combinaciones-nec)).
 - **Tributarias** — At de columna y w de viga ([/tributarias](https://predim-nec.vercel.app/tributarias)).
 
-Flujo sugerido: Combinaciones → Tributarias → PreDim (pegar valores).
+Flujo sugerido: Combinaciones → Tributarias → PreDim. Los botones **Usar en
+PreDim** pasan `q_u`, `w` o `At` por URL (`/predim?tab=…`).
 
 ### Anteproyecto ampliado (activas)
 

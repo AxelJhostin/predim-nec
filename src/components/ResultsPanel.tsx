@@ -1,5 +1,6 @@
 import { BookOpenText, Download, Info, ShieldAlert, ShieldCheck } from "lucide-react";
 import { ComplianceTable } from "@/components/ComplianceTable";
+import { ElementLoadDiagram } from "@/components/diagrams/ElementLoadDiagram";
 import {
   formatNumber,
   type CalculationResult,
@@ -29,56 +30,6 @@ function OverallStatus({ result }: { result: CalculationResult }) {
       <ShieldCheck aria-hidden="true" size={14} />
       {minimumApplied ? "Mínimo NEC aplicado" : "Criterios previos OK"}
     </span>
-  );
-}
-
-function SectionSchematic({ result }: { result: CalculationResult }) {
-  if (result.kind === "slab") {
-    return (
-      <div className="relative flex h-44 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-blueprint-grid sm:h-48">
-        <div className="relative h-10 w-4/5 border-2 border-sky-700 bg-sky-100/90">
-          <span className="absolute -right-2 top-1/2 -translate-y-1/2 translate-x-full pl-2 font-mono text-[11px] font-semibold text-sky-900 sm:text-xs">
-            h = {formatNumber(result.thicknessCm)} cm
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  const width = result.kind === "beam" ? result.widthCm : result.sideCm;
-  const height = result.kind === "beam" ? result.depthCm : result.sideCm;
-
-  return (
-    <div className="relative flex h-56 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-blueprint-grid sm:h-64">
-      <div
-        className={`relative border-[3px] border-slate-700 bg-slate-100 ${
-          result.kind === "column"
-            ? "h-36 w-36 sm:h-40 sm:w-40"
-            : "h-40 w-24 sm:h-44 sm:w-28"
-        }`}
-      >
-        {result.kind === "column" &&
-          [
-            "left-3 top-3",
-            "right-3 top-3",
-            "left-3 bottom-3",
-            "right-3 bottom-3",
-            "left-3 top-1/2 -translate-y-1/2",
-            "right-3 top-1/2 -translate-y-1/2",
-          ].map((position) => (
-            <span
-              key={position}
-              className={`absolute h-2.5 w-2.5 rounded-full bg-orange-700 ${position}`}
-            />
-          ))}
-        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] font-semibold text-slate-700 sm:text-xs">
-          b = {formatNumber(width)} cm
-        </span>
-        <span className="absolute -right-2 top-1/2 -translate-y-1/2 translate-x-full pl-2 font-mono text-[11px] font-semibold text-slate-700 sm:text-xs">
-          h = {formatNumber(height)} cm
-        </span>
-      </div>
-    </div>
   );
 }
 
@@ -233,7 +184,7 @@ export function ResultsPanel({
         </p>
 
         <div className="mt-6 grid gap-5 md:grid-cols-[1.1fr_1fr] md:items-start">
-          <SectionSchematic result={result} />
+          <ElementLoadDiagram result={result} />
           <div className="space-y-3">
             <ResultMetrics result={result} />
             <p className="flex gap-2 text-[12px] leading-5 text-slate-500">

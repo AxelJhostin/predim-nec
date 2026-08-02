@@ -9,11 +9,9 @@ import {
 } from "@/calculations/tributary";
 import { formatNumber } from "@/calculations";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { Metric, NumberField, inputClass } from "@/components/tools/primitives";
 import { moduleFaqs } from "@/lib/moduleFaqs";
 import { buildPredimHref } from "@/lib/predimHandoff";
-
-const inputClass =
-  "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
 
 export function TributaryTool() {
   const [target, setTarget] = useState<TributaryTarget>("column");
@@ -282,48 +280,3 @@ export function TributaryTool() {
   );
 }
 
-function NumberField({
-  label,
-  unit,
-  value,
-  onChange,
-  step = "0.1",
-}: {
-  label: string;
-  unit: string;
-  value: number;
-  onChange: (value: number) => void;
-  step?: string;
-}) {
-  return (
-    <label className="block text-xs font-semibold uppercase tracking-[0.11em] text-slate-600">
-      <span className="flex items-center justify-between gap-2">
-        {label}
-        <span className="font-mono text-[10px] font-medium normal-case text-slate-400">
-          {unit}
-        </span>
-      </span>
-      <input
-        className={inputClass}
-        type="number"
-        min="0"
-        step={step}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
-    </label>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-slate-100 bg-slate-50/80 px-3 py-2.5">
-      <dt className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">
-        {label}
-      </dt>
-      <dd className="mt-0.5 font-mono text-sm font-semibold text-slate-950">
-        {value}
-      </dd>
-    </div>
-  );
-}

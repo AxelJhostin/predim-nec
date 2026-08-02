@@ -1,4 +1,4 @@
-const CACHE_VERSION = "civilkit-ec-v8";
+const CACHE_VERSION = "civilkit-ec-v9";
 const APP_SHELL = [
   "/",
   "/predim",
@@ -19,7 +19,6 @@ const APP_SHELL = [
   "/icons/icon-192.png",
   "/icons/icon-512.png",
   "/icons/apple-touch-icon.png",
-  "/guia-predimensionamiento-nec",
   "/calculadora-vigas-nec",
   "/calculadora-columnas-nec",
   "/calculadora-losas-nec",

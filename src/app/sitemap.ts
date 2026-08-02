@@ -1,9 +1,30 @@
 import type { MetadataRoute } from "next";
 import { contentArticles } from "@/lib/contentArticles";
+import { liveModules } from "@/lib/modules";
 import { calculatorPages, SITE_URL } from "@/lib/seo";
+
+function modulePriority(id: string, level: string): number {
+  if (id === "predim") return 0.95;
+  if (id === "norma") return 0.92;
+  if (level === "Contenido") return 0.9;
+  if (level === "Intermedio") return 0.88;
+  return 0.85;
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
+
+  const fromCatalog: MetadataRoute.Sitemap = liveModules
+    .filter((module): module is typeof module & { href: string } =>
+      Boolean(module.href),
+    )
+    .map((module) => ({
+      url: `${SITE_URL}${module.href}`,
+      lastModified,
+      changeFrequency:
+        module.id === "predim" || module.id === "learn" ? "weekly" : "monthly",
+      priority: modulePriority(module.id, module.level),
+    }));
 
   return [
     {
@@ -12,89 +33,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    {
-      url: `${SITE_URL}/predim`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.95,
-    },
-    {
-      url: `${SITE_URL}/aprender`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/norma-nec`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.92,
-    },
-    {
-      url: `${SITE_URL}/tarea-vivienda-2-plantas`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
+    ...fromCatalog,
     ...contentArticles.map((article) => ({
       url: `${SITE_URL}/aprender/${article.slug}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
-    {
-      url: `${SITE_URL}/geosecciones`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
-      url: `${SITE_URL}/unidades-ec`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
-      url: `${SITE_URL}/calculo-civil`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.86,
-    },
-    {
-      url: `${SITE_URL}/tributarias`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.88,
-    },
-    {
-      url: `${SITE_URL}/combinaciones-nec`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.88,
-    },
-    {
-      url: `${SITE_URL}/zapatas-predim`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.88,
-    },
-    {
-      url: `${SITE_URL}/deflexion-aprox`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
     ...calculatorPages.map((page) => ({
       url: `${SITE_URL}${page.slug}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.9,
     })),
-    {
-      url: `${SITE_URL}/guia-predimensionamiento-nec`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
   ];
 }

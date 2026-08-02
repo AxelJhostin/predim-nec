@@ -78,21 +78,25 @@ Seguir la modularización ya hecha en el repo:
 
 ```
 src/
-  calculations/     # dominio puro por módulo (beam, column, … + futuros)
-  project/          # persistencia local / migraciones
-  presets/          # ejemplos y plantillas
-  components/forms/ # UI por módulo
-  app/              # rutas SEO + home CivilKit
+  calculations/       # dominio puro por módulo (+ tests)
+  project/            # persistencia local / migraciones PreDim
+  presets/            # ejemplos y plantillas PreDim
+  components/tools/   # UI ToolkitShell (Geo, Unidades, Tributarias, …)
+  components/forms/   # formularios PreDim (beam/column/slab)
+  lib/modules.ts      # catálogo SSOT → home, guía, sitemap
+  app/                # rutas SEO + home CivilKit
 ```
 
-### Reglas al añadir un módulo
-1. `src/calculations/<modulo>.ts` + tests.  
-2. Registrar en `calculations/registry.ts` si aplica.  
-3. Formulario en `components/forms/`.  
-4. Página indexable `app/<slug-seo>/page.tsx`.  
-5. Entrada en home CivilKit + `sitemap.ts`.  
-6. Disclaimer (`src/lib/scope.ts`).  
-7. `npm run check`.
+### Reglas al añadir un módulo (herramienta CivilKit)
+1. `src/calculations/<modulo>.ts` + tests; export en `calculations/index.ts`.  
+2. `src/components/tools/<Modulo>Tool.tsx` con `ToolkitShell` + `tools/primitives`.  
+3. Página indexable `app/<slug-seo>/page.tsx` (`createPageMetadata`).  
+4. Entrada `live` en `lib/modules.ts` (home + sitemap se derivan del catálogo).  
+5. FAQ en `lib/moduleFaqs.ts`; ruta en `public/sw.js` + bump `CACHE_VERSION`.  
+6. `npm run check` (incluye test de consistencia del catálogo).  
+
+**Solo PreDim (nuevo elemento):** además `calculations/registry.ts` + form en
+`components/forms/` + tab en `StructuralDashboard`.
 
 ### Branding
 - Suite: CivilKit EC.  
@@ -220,6 +224,7 @@ Estado rápido al inicio de cada sesión:
 | 2026-08-02 | SEO pack: OG, FAQ módulos, /aprender ×5, docs Search Console |
 | 2026-08-02 | Hub /norma-nec (enlaces oficiales MIT/MIDUVI) + más artículos Aprender |
 | 2026-08-02 | Módulo Cálculo para civil (`/calculo-civil`) + artículo Aprender |
+| 2026-08-02 | README arquitectura + primitives tools + sitemap desde catálogo |
 
 ---
 

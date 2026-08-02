@@ -11,10 +11,8 @@ import {
   type FunctionPresetId,
 } from "@/calculations/calculusCivil";
 import { ToolkitShell } from "@/components/ToolkitShell";
+import { NumberField, inputClass } from "@/components/tools/primitives";
 import { moduleFaqs } from "@/lib/moduleFaqs";
-
-const inputClass =
-  "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 font-mono text-sm text-slate-900 outline-none focus:border-sky-600 focus:ring-4 focus:ring-sky-100";
 
 export function CalculusCivilTool() {
   const presets = listFunctionPresets();
@@ -292,36 +290,3 @@ export function CalculusCivilTool() {
   );
 }
 
-function NumberField({
-  label,
-  unit,
-  value,
-  onChange,
-  step = "0.1",
-}: {
-  label: string;
-  unit: string;
-  value: number;
-  onChange: (value: number) => void;
-  step?: string;
-}) {
-  return (
-    <label className="block text-xs font-semibold uppercase tracking-[0.11em] text-slate-600">
-      <span className="flex items-center justify-between gap-2">
-        {label}
-        {unit ? (
-          <span className="font-mono text-[10px] font-medium normal-case text-slate-400">
-            {unit}
-          </span>
-        ) : null}
-      </span>
-      <input
-        className={inputClass}
-        type="number"
-        step={step}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
-    </label>
-  );
-}
